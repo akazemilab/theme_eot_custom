@@ -73,7 +73,7 @@ page() { curl -s --max-time 30 -H "Host: $1" http://127.0.0.1:8069/ || true; }
 wait_for() {  # host website_id
     for _ in $(seq 1 45); do
         out=$(page "$1")
-        if echo "$out" | grep -q "data-website-id=\"$2\""; then
+        if grep -q "data-website-id=\"$2\"" <<<"$out"; then
             printf '%s' "$out"
             return 0
         fi
@@ -84,8 +84,8 @@ wait_for() {  # host website_id
 echo "Waiting for Odoo to serve both websites"
 W1=$(wait_for www.eot.ir 1) || { echo "!! www.eot.ir did not render website 1" >&2; exit 1; }
 W3=$(wait_for www.sepehrtherapy.ir 3) || { echo "!! www.sepehrtherapy.ir did not render website 3" >&2; exit 1; }
-echo "$W1" | grep -q 'name="eot-theme"' || { echo "!! theme marker missing on website 1" >&2; exit 1; }
-if echo "$W3" | grep -q 'name="eot-theme"'; then
+grep -q 'name="eot-theme"' <<<"$W1" || { echo "!! theme marker missing on website 1" >&2; exit 1; }
+if grep -q 'name="eot-theme"' <<<"$W3"; then
     echo "!! theme marker LEAKED to website 3" >&2
     exit 1
 fi
