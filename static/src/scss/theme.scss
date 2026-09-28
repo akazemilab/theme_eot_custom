@@ -30,7 +30,12 @@
 // with `git revert`.
 // -----------------------------------------------------------------------
 
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+// The Vazirmatn webfont is loaded with a <link> tag in the page head
+// (views/theme_marker.xml), NOT with an @import here. Odoo's asset bundler
+// hoists @import statements to the top of the combined bundle by splitting
+// on ";" - the Google Fonts URL contains semicolons (wght@400;500;...), so
+// the @import got cut in half, and that broken fragment at the top made
+// browsers discard the ENTIRE frontend stylesheet (0 rules parsed).
 
 // Bootstrap's own runtime custom properties (unlike .btn-primary's colors,
 // these genuinely are consumed via var() at every usage site - .text-primary,

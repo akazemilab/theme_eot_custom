@@ -10,4 +10,17 @@
             <meta name="eot-theme" content="theme_eot_custom"/>
         </xpath>
     </template>
+
+    <!--
+        Persian webfont (Vazirmatn). Loaded as a <link> rather than an SCSS
+        @import: see the note in static/src/scss/theme.scss for why an
+        @import of this URL broke the whole frontend stylesheet.
+    -->
+    <template id="theme_font" name="EOT Theme: Vazirmatn font" inherit_id="website.layout">
+        <xpath expr="//head/meta[last()]" position="after">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap"/>
+        </xpath>
+    </template>
 </odoo>
