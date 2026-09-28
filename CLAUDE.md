@@ -127,6 +127,45 @@ Rules:
     `website.rewrite`: Odoo serves an existing page before it looks at
     redirect records (controllers/redirects.py).
 
+23. **No `filter` / `backdrop-filter` / `transform` on `#top`.** Any of
+    them makes the header the containing block of Odoo's *fixed* mobile
+    offcanvas menu: the closed menu widened every page on phones
+    (702px scroll width in a 375px viewport) and would open trapped inside
+    the header (milestone 8).
+24. **`#wrap .container::before { display: table }` is ID-scoped.** A
+    class-scoped reset (`.eot-pg .container::before`) loses to it, so the
+    phantom grid item from #12 comes back. Anchor resets on `#wrapwrap`
+    (see the top of the homepage section in theme.scss).
+25. **Check class names across all three stylesheets before adding one.**
+    theme.scss's first `.eot-dot` collided with library.scss's glossary
+    separator. Theme-wide atoms now use distinct names (`.eot-pdot`).
+26. **Site-wide heading colour vs. dark surfaces.** `h1..h6` get the ink
+    colour globally; headings inside teal/dark surfaces must `color:
+    inherit` (pages.scss does this for .eot-hero, dark cards, bands).
+27. **Untranslated core UI strings**: literal template text, t-call
+    attribute strings (`additional_title`, `title=`), Python `_()` strings
+    and portal.entry record names have no fa.po entry upstream for many
+    portal/auth screens. Patch templates in views/i18n.xml (copy the element
+    from the Odoo 20 source on eot-odoo-prod, change only the wording) and
+    record names in a migration (fa_IR key only). An xpath replaces only its
+    FIRST match - match on exact class/text, never a shared attribute
+    (`data-bs-dismiss` hit a modal's close button first).
+28. **`website.layout` builds `<title>` from `additional_title`**, falling
+    back to the main object's/view's name ("Login", "My Portal"). Set
+    `additional_title` in Persian for system pages.
+
+## Verifying a design deploy (milestone 8)
+- The built-in browser can only reach the live domains. Rehearse on the
+  clone first (no 500s, `m8_portal.py`-style signed-in render with a
+  clone-only portal user), then deploy and audit live.
+- Audit from the DOM, not screenshots: load each page in a same-origin
+  iframe at 1280px and 375px and check scrollWidth, every text node's WCAG
+  contrast against its real background, English text, broken images and
+  heading fonts. Screenshots after a programmatic scroll are often stale.
+- Account pages can't be viewed live without an account: render them on the
+  clone, save stripped snapshots under static/ temporarily, audit them with
+  the live stylesheets injected, then delete the snapshots.
+
 ## Tools added in milestone 6
     scripts/rehearse.sh [ref] [db] [cleanup-script]
                                   restore the latest backup into a scratch DB,
