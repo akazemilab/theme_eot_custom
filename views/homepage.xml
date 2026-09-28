@@ -3,17 +3,39 @@
     <!--
         Milestone 3 - homepage content (minimal, founder-focused).
 
-        Replaces the page's oe_structure wrap wholesale: this page (key
-        "website.خانه") is a full standalone website-builder page, not a
-        shared layout template, so a full content replacement is the task
-        itself, not the sweeping-layout-edit the README warns against.
+        Website 1's homepage (ir.ui.view id 1297, website.page id 5, url
+        "/") is a full standalone website-builder page with key
+        "website.خانه" - NOT the generic "website.homepage" template, and
+        it has no ir.model.data external id of its own (confirmed: no row
+        in ir.model.data for model=ir.ui.view res_id=1297). <template
+        inherit_id="..."> resolves via an external id lookup, so it cannot
+        target this view by its key string directly.
+
+        Fix: give the existing view a stable external id ourselves (a
+        standard Odoo technique for naming a pre-existing record - this
+        is metadata only, it does not touch the view's own content/history)
+        and inherit from that. If website 1's homepage is ever recreated
+        under a different database id, this res_id needs updating to match.
+
+        Replaces the page's oe_structure wrap wholesale: this page is a
+        full standalone website-builder page, not a shared layout
+        template, so a full content replacement is the task itself, not
+        the sweeping-layout-edit the README warns against.
 
         Content matches the approved mockup: institute intro first, Dr.
         Kazemi founder section second, then role cards, books, articles,
         closing institute banner. Deliberately minimal per the agreed plan
         - a full redesign pass follows once every other page exists.
     -->
-    <template id="homepage_content" name="EOT Homepage: content" inherit_id="website.خانه">
+    <record id="eot_home_view_ref" model="ir.model.data">
+        <field name="name">eot_home_view_ref</field>
+        <field name="module">theme_eot_custom</field>
+        <field name="model">ir.ui.view</field>
+        <field name="res_id">1297</field>
+        <field name="noupdate" eval="True"/>
+    </record>
+
+    <template id="homepage_content" name="EOT Homepage: content" inherit_id="theme_eot_custom.eot_home_view_ref">
         <xpath expr="//div[@id='wrap']" position="replace">
             <div id="wrap" class="oe_structure">
 
