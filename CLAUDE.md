@@ -16,7 +16,9 @@ with `ssh eot-odoo-prod` (dedicated key). The `eot` toolkit on the VPS
 
     eot deploy <ref>      deploy; on failure prints the real ParseError
     eot check [url]       page + assets + "does the CSS actually parse"
-    eot placeholders      scan every sitemap page for demo placeholders
+    eot placeholders      scan every sitemap page for demo placeholders + broken pages
+    eot links [url]       internal links on a page that are dead (e.g. unpublished)
+    eot verify [url]      run after EVERY deploy: check + links + placeholders
     eot find "text"       which view contains a string
     eot view ID | eot sql "..." | eot log | eot status | eot text URL
 

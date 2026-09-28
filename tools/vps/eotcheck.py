@@ -10,6 +10,8 @@ here on the VPS and return a verdict, not raw HTML/CSS.
   placeholders [BASE] crawl the sitemap and grep rendered pages for demo
                       placeholders (555-555, yourcompany, lorem ipsum, ...);
                       also lists sitemap pages that don't return 200.
+  links [URL]         every internal link on a page -> HTTP status; lists
+                      only the broken ones (dead links, unpublished pages).
   text URL [N]        visible text of a page (first N chars, default 1500).
 """
 import re
@@ -168,6 +170,40 @@ class Text(HTMLParser):
             self.out.append(d.strip())
 
 
+class Links(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.hrefs = []
+
+    def handle_starttag(self, tag, a):
+        if tag == "a":
+            h = dict(a).get("href")
+            if h and not h.startswith(("#", "mailto:", "tel:", "javascript:")):
+                self.hrefs.append(h)
+
+
+def cmd_links(url=BASE + "/"):
+    page = get(url)
+    p = Links()
+    p.feed(page.text)
+    host = urlparse(page.url).netloc
+    targets = [urljoin(page.url, h).split("#")[0] for h in p.hrefs]
+    targets = [t for t in dict.fromkeys(targets) if urlparse(t).netloc == host]
+    bad = []
+    for t in targets:
+        try:
+            code = S.head(t, timeout=TIMEOUT, allow_redirects=True).status_code
+            if code == 405:
+                code = get(t).status_code
+        except Exception as e:  # noqa: BLE001
+            code = f"ERR {e}"
+        if code != 200:
+            bad.append(f"  {code} {unquote(urlparse(t).path)}")
+    print(f"{len(targets)} internal links on {unquote(urlparse(page.url).path)}: "
+          + ("ALL OK" if not bad else f"{len(bad)} BROKEN"))
+    print("\n".join(bad))
+
+
 def cmd_text(url, n=1500):
     t = Text()
     t.feed(get(url).text)
@@ -175,7 +211,7 @@ def cmd_text(url, n=1500):
 
 
 if __name__ == "__main__":
-    cmds = {"check": cmd_check, "placeholders": cmd_placeholders, "text": cmd_text}
+    cmds = {"check": cmd_check, "placeholders": cmd_placeholders, "links": cmd_links, "text": cmd_text}
     if len(sys.argv) < 2 or sys.argv[1] not in cmds:
         print(__doc__)
         sys.exit(1)

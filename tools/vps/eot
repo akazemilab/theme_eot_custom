@@ -19,6 +19,9 @@ case "${1:-help}" in
   check)        shift; $PY check "$@" ;;
   placeholders) shift; $PY placeholders "$@" ;;
   text)         shift; $PY text "$@" ;;
+  links)        shift; $PY links "$@" ;;
+  verify)       # everything to run after a deploy, one call
+    shift; $PY check "$@" | tail -4; $PY links "$@"; $PY placeholders ;;
 
   sql)          # eot sql "select ..."   (query also accepted on stdin)
     shift; if [ $# -gt 0 ]; then printf '%s\n' "$*" | sql; else sql; fi ;;
@@ -59,6 +62,8 @@ case "${1:-help}" in
     cat <<'EOF'
 eot check [URL]          page + assets: status/type, CSS actually parses (rule count)
 eot placeholders [BASE]  crawl sitemap, find demo placeholders on rendered pages
+eot links [URL]          internal links on a page that don't return 200
+eot verify [URL]         post-deploy bundle: check + links + placeholders
 eot text URL [N]         visible text of a page
 eot find "text"          which active views (website 1 / generic) contain text
 eot view ID [lang]       arch of a view
