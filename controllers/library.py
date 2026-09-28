@@ -64,7 +64,7 @@ def length_bucket(minutes):
 
 
 def _is_library_site():
-    return request.website and request.website.id == WEBSITE_ID
+    return request.env.website and request.env.website.id == WEBSITE_ID
 
 
 def _site_env(env):
