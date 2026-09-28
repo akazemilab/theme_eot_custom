@@ -85,6 +85,11 @@
         route also serves staff sign-in.
     -->
     <template id="login_fa" name="EOT: sign-in form in Persian" inherit_id="web.login">
+        <!-- Browser tab title: website.layout falls back to this view's name
+             ("Login") when no additional_title is set. -->
+        <xpath expr="//t[@t-set='head']" position="before">
+            <t t-set="additional_title">ورود به سیستم</t>
+        </xpath>
         <xpath expr="//input[@name='login']" position="attributes">
             <attribute name="placeholder">ایمیل خود را وارد کنید</attribute>
         </xpath>
@@ -97,6 +102,12 @@
         <xpath expr="//p[hasclass('alert-danger')]/t[@t-out='error']" position="replace">
             <t t-if="error in ('Wrong login/password', 'نام وردو/گذرواژه اشتباه')">نام کاربری یا گذرواژه اشتباه است</t>
             <t t-else="" t-out="error"/>
+        </xpath>
+    </template>
+
+    <template id="reset_password_title_fa" name="EOT: reset password tab title in Persian" inherit_id="auth_signup.reset_password">
+        <xpath expr="//t[@t-call='web.login_layout']" position="before">
+            <t t-set="additional_title">بازنشانی گذرواژه</t>
         </xpath>
     </template>
 
@@ -193,6 +204,9 @@
     </template>
 
     <template id="portal_addresses_fa" name="EOT: addresses page in Persian" inherit_id="portal.my_addresses">
+        <xpath expr="//t[@t-set='additional_title']" position="replace">
+            <t t-set="additional_title">نشانی‌های من</t>
+        </xpath>
         <xpath expr="//h5[contains(., 'Delivery addresses')]" position="replace">
             <h5 class="mb-0">نشانی‌های ارسال</h5>
         </xpath>
@@ -315,6 +329,19 @@
         </xpath>
         <xpath expr="//t[@name='save_address_label']" position="replace">
             <t name="save_address_label">ذخیره</t>
+        </xpath>
+    </template>
+
+    <!-- Browser tab titles of the portal pages (additional_title) -->
+    <template id="portal_my_home_title_fa" name="EOT: account home tab title in Persian" inherit_id="portal.portal_my_home">
+        <xpath expr="//t[@t-call='portal.portal_layout']" position="attributes">
+            <attribute name="additional_title.translate">حساب من</attribute>
+        </xpath>
+    </template>
+
+    <template id="portal_address_management_title_fa" name="EOT: address form tab title in Persian" inherit_id="portal.address_management">
+        <xpath expr="//t[@t-call='portal.portal_layout']" position="attributes">
+            <attribute name="additional_title.translate">مدیریت نشانی</attribute>
         </xpath>
     </template>
 </odoo>

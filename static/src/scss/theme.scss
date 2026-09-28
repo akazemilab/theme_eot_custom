@@ -197,6 +197,20 @@ summary:focus-visible {
     --btn-active-border-color: var(--eot-field);
 }
 
+// Odoo's website palette still colours outline-secondary orange (2.5:1 on
+// mist, seen on the address form's "انصراف"); make it a neutral outline.
+#wrapwrap .btn-outline-secondary {
+    --btn-color: var(--eot-ink);
+    --btn-bg: #FFFFFF;
+    --btn-border-color: var(--eot-field);
+    --btn-hover-color: var(--eot-ink);
+    --btn-hover-bg: var(--eot-mist-2);
+    --btn-hover-border-color: var(--eot-teal);
+    --btn-active-color: var(--eot-ink);
+    --btn-active-bg: #E6F2F3;
+    --btn-active-border-color: var(--eot-teal);
+}
+
 #wrapwrap .btn-danger,
 #wrapwrap .btn-outline-danger {
     --btn-color: var(--eot-danger);
@@ -990,6 +1004,11 @@ summary:focus-visible {
     }
 
     form { display: flex; flex-direction: column; }
+    // website.ui.scss caps these forms at 300px with a 50px margin; inside
+    // the card they should use its full width.
+    .oe_login_form,
+    .oe_signup_form,
+    .oe_reset_password_form { max-width: none; margin: 0; }
     .mb-3 { margin-bottom: 1.125rem !important; }
     .form-label { margin-bottom: .5rem; }
     .btn-link.btn-sm { font-size: .875rem; min-height: 0; padding: 0; }
