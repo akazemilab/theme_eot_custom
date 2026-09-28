@@ -169,6 +169,16 @@
          time by website/models/ir_qweb.py (add_form_signature).
          ================================================================ -->
     <template id="page_contact" name="EOT page: contact" inherit_id="theme_eot_custom.eot_pv_contact">
+        <!--
+            The old view's header (outside #wrap) called
+            request.env['website.visitor']._get_visitor_from_request(),
+            which moved to ir.http in Odoo 20 (page 500'd), and fed a
+            data-for prefill whose email_to was the company's personal
+            address. Neither is wanted: remove all three nodes.
+        -->
+        <xpath expr="//t[@t-set='logged_partner']" position="replace"/>
+        <xpath expr="//t[@t-set='contactus_form_values']" position="replace"/>
+        <xpath expr="//span[@data-for='contactus_form']" position="replace"/>
         <xpath expr="//div[@id='wrap']" position="replace">
             <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
                 <div class="container">
