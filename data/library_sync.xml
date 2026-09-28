@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Library data sync (models/library.py, BlogBlog._eot_library_sync).
+        Runs on every upgrade but only does work when LIBRARY_VERSION was
+        raised; the one-time publish/menu step is guarded by a system
+        parameter. Website 1 blogs only.
+    -->
+    <function model="blog.blog" name="_eot_library_sync"/>
+</odoo>

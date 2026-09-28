@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Milestone 5 - library pages: books, articles, glossary.
+
+        Rendered by controllers/library.py with plain values prepared in
+        Python (the templates hold no business logic). Styles:
+        static/src/scss/library.scss; filters: static/src/js/library.js.
+        Each page type keeps a fixed set of blocks (see the approved
+        "standard schema" mockups), so every book/article/term renders
+        the same way.
+    -->
+
+    <!-- ============================================================ parts -->
+
+    <template id="lib_icon_back" name="EOT Library: icon forward (RTL)">
+        <svg class="eot-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </template>
+    <template id="lib_icon_prev" name="EOT Library: icon backward (RTL)">
+        <svg class="eot-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </template>
+    <template id="lib_icon_chevron" name="EOT Library: icon chevron">
+        <svg class="eot-icon eot-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </template>
+    <template id="lib_icon_search" name="EOT Library: icon search">
+        <svg class="eot-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    </template>
+    <template id="lib_icon_clock" name="EOT Library: icon clock">
+        <svg class="eot-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    </template>
+    <template id="lib_icon_list" name="EOT Library: icon list">
+        <svg class="eot-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+    </template>
+
+    <!-- Typographic book cover: title + shelf colour. Spine on the right
+         (Persian books bind on the right). c = card dict from the controller. -->
+    <template id="lib_cover" name="EOT Library: book cover">
+        <span t-attf-class="eot-cover eot-shelf-#{c['shelf']} #{c['size']} #{cover_class or ''}" aria-hidden="true">
+            <span class="eot-cover-spine"/>
+            <span class="eot-cover-frame"/>
+            <span class="eot-cover-brand">هیجان اندیشه</span>
+            <span class="eot-cover-title" t-out="c['name']"/>
+            <span class="eot-cover-foot"><span class="eot-cover-rule"/><span>کاظمی حقیقی</span></span>
+        </span>
+    </template>
+
+    <template id="lib_meter" name="EOT Library: length meter">
+        <span class="eot-meter" aria-hidden="true"><t t-foreach="ticks" t-as="on"><span t-att-class="'on' if on else None"/></t></span>
+    </template>
+
+    <!-- ============================================================ books -->
+
+    <template id="lib_books" name="EOT Library: books index">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-books">
+                <section class="eot-books-hero">
+                    <div class="container eot-hero-row">
+                        <div class="eot-hero-text">
+                            <span class="eot-kicker">کتابخانه هیجان اندیشه</span>
+                            <h1>کتاب‌ها و آثار بلند</h1>
+                            <p>آثار دکتر ناصرالدین کاظمی حقیقی در روان‌شناسی تعاملی، استعداد و تیزهوشی، خلاقیت، و روان‌شناسی جامعه، سازمان و فرهنگ؛ هر کتاب با فهرست کامل فصل‌ها و متن آنلاین.</p>
+                        </div>
+                        <div class="eot-stats">
+                            <div><span class="eot-stat-n" t-out="book_total"/><span>کتاب و اثر بلند</span></div>
+                            <div><span class="eot-stat-n" t-out="chapter_total"/><span>فصل آنلاین</span></div>
+                            <div><span class="eot-stat-n" t-out="shelf_total"/><span>قفسه موضوعی</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <nav class="eot-shelfbar" aria-label="قفسه‌ها">
+                    <div class="container eot-chip-row">
+                        <a t-foreach="shelves" t-as="s" t-att-href="'#shelf-%s' % s['key']" class="eot-chip">
+                            <span t-attf-class="eot-swatch eot-shelf-#{s['key']}"/>
+                            <t t-out="s['label']"/>
+                            <span class="eot-muted" t-out="fa(len(s['books']))"/>
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="container">
+                    <section t-foreach="shelves" t-as="s" t-att-id="'shelf-%s' % s['key']" class="eot-shelf">
+                        <header class="eot-shelf-head">
+                            <span t-attf-class="eot-shelf-num eot-ink-#{s['key']}">قفسه <t t-out="s['num']"/></span>
+                            <h2 t-out="s['label']"/>
+                        </header>
+                        <div class="eot-cover-grid">
+                            <a t-foreach="s['books']" t-as="b" t-att-href="b['url']" class="eot-book-tile">
+                                <t t-call="theme_eot_custom.lib_cover" c="b"/>
+                                <span class="eot-book-tile-title" t-out="b['name']"/>
+                                <span class="eot-muted" t-out="b['count_label']"/>
+                            </a>
+                        </div>
+                    </section>
+
+                    <a t-if="glossary" href="/فرهنگنامه" class="eot-ref-band">
+                        <span class="eot-ref-text">
+                            <span class="eot-kicker eot-kicker-sand">اثر مرجع</span>
+                            <span class="eot-ref-title" t-out="glossary.name"/>
+                            <span class="eot-ref-sub"><t t-out="glossary.eot_description"/> — <t t-out="glossary_count"/> مدخل</span>
+                        </span>
+                        <span class="eot-btn eot-btn-ink">ورود به فرهنگنامه <t t-call="theme_eot_custom.lib_icon_back"/></span>
+                    </a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="lib_book" name="EOT Library: book">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-book">
+                <section class="container eot-book-hero">
+                    <div class="eot-cover-stage">
+                        <t t-call="theme_eot_custom.lib_cover" c="card" cover_class="'eot-cover-lg'"/>
+                    </div>
+                    <div class="eot-book-info">
+                        <nav aria-label="مسیر" class="eot-crumbs">
+                            <a href="/">خانه</a><span>/</span><a href="/کتب">کتاب‌ها</a><span>/</span><span t-out="book.name"/>
+                        </nav>
+                        <a t-att-href="'/کتب#shelf-%s' % book.eot_shelf" class="eot-chip eot-chip-sm">
+                            <span t-attf-class="eot-swatch eot-shelf-#{book.eot_shelf}"/>قفسه <t t-out="shelf_label"/>
+                        </a>
+                        <h1 t-out="book.name"/>
+                        <p t-if="book.eot_subtitle" class="eot-book-subtitle" t-out="book.eot_subtitle"/>
+                        <p class="eot-byline">نوشته <strong t-out="book.eot_authors"/></p>
+                        <p class="eot-lead" t-out="book.eot_description"/>
+                        <dl class="eot-facts">
+                            <div><dt>فصل</dt><dd t-out="chapter_count"/></div>
+                            <div t-if="has_parts"><dt>بخش</dt><dd t-out="part_count"/></div>
+                            <div t-if="reading"><dt>زمان مطالعه</dt><dd t-out="reading"/></div>
+                            <div><dt>متن کامل رایگان</dt><dd>آنلاین</dd></div>
+                        </dl>
+                        <div class="eot-actions">
+                            <a t-att-href="first['url']" class="eot-btn eot-btn-primary">
+                                <t t-if="single">مطالعه متن کامل</t>
+                                <t t-else="">شروع مطالعه از «<t t-out="first['name']"/>»</t>
+                                <t t-call="theme_eot_custom.lib_icon_back"/>
+                            </a>
+                            <a t-if="not single" href="#toc" class="eot-btn eot-btn-outline"><t t-call="theme_eot_custom.lib_icon_list"/>فهرست مطالب</a>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="container eot-book-body">
+                    <section t-if="not single" id="toc" class="eot-toc">
+                        <div class="eot-toc-head">
+                            <h2>فهرست مطالب</h2>
+                            <span class="eot-muted"><t t-if="has_parts"><t t-out="part_count"/> بخش · </t><t t-out="chapter_count"/> فصل</span>
+                        </div>
+                        <div t-foreach="parts" t-as="p" class="eot-toc-part">
+                            <div t-if="has_parts" class="eot-toc-part-head">
+                                <span class="eot-toc-part-num">بخش <t t-out="p['num']"/></span>
+                                <h3 t-out="p['name']"/>
+                                <span class="eot-muted" t-out="p['meta']"/>
+                            </div>
+                            <ol class="eot-toc-list">
+                                <li t-foreach="p['chapters']" t-as="c">
+                                    <a t-att-href="c['url']">
+                                        <span class="eot-toc-n" t-out="c['n']"/>
+                                        <span class="eot-toc-t" t-out="c['name']"/>
+                                        <t t-call="theme_eot_custom.lib_icon_chevron"/>
+                                    </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+
+                    <aside class="eot-aside">
+                        <div t-if="has_parts" class="eot-card">
+                            <h2>ساختار کتاب</h2>
+                            <div t-foreach="parts" t-as="p" class="eot-bar-row">
+                                <div class="eot-bar-label"><span t-out="p['name']"/><span class="eot-muted"><t t-out="p['count']"/> فصل</span></div>
+                                <div class="eot-bar"><span t-attf-class="eot-shelf-#{book.eot_shelf}" t-att-style="'width: %s' % p['bar']"/></div>
+                            </div>
+                        </div>
+                        <div t-if="same_shelf" class="eot-card">
+                            <h2>از همین قفسه</h2>
+                            <a t-foreach="same_shelf" t-as="s" t-att-href="s['url']" class="eot-mini-book">
+                                <t t-call="theme_eot_custom.lib_cover" c="s" cover_class="'eot-cover-xs'"/>
+                                <span><strong t-out="s['name']"/><span class="eot-muted" t-out="s['count_label']"/></span>
+                            </a>
+                        </div>
+                        <div t-if="related_articles" class="eot-card">
+                            <h2>مقاله‌های مرتبط</h2>
+                            <a t-foreach="related_articles" t-as="a" t-att-href="a['url']" class="eot-mini-link">
+                                <strong t-out="a['name']"/>
+                                <span class="eot-muted">مقاله · <t t-out="a['minutes']"/> دقیقه</span>
+                            </a>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="lib_chapter" name="EOT Library: book chapter">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-chapter">
+                <div class="eot-readbar">
+                    <div class="container eot-readbar-row">
+                        <a t-att-href="book.eot_url()" class="eot-readbar-book">
+                            <t t-call="theme_eot_custom.lib_cover" c="card" cover_class="'eot-cover-xxs'"/>
+                            <span><span class="eot-muted">کتاب</span><strong t-out="book.name"/></span>
+                        </a>
+                        <span class="eot-muted">فصل <t t-out="position"/></span>
+                    </div>
+                    <div class="eot-progress"><span t-att-style="'width: %s' % progress"/></div>
+                </div>
+                <div class="container eot-reader">
+                    <article class="eot-reader-main">
+                        <header class="eot-reader-head">
+                            <span t-if="post.eot_part" class="eot-kicker eot-kicker-sand" t-out="post.eot_part"/>
+                            <h1><span t-if="post.eot_number" class="eot-chapter-n"><t t-out="fa(post.eot_number)"/>.</span> <t t-out="post.eot_title or post.name"/></h1>
+                            <span class="eot-meta"><t t-call="theme_eot_custom.lib_icon_clock"/><t t-out="minutes"/> مطالعه</span>
+                        </header>
+                        <div class="eot-prose" t-out="post.content"/>
+                        <nav class="eot-pager" aria-label="فصل قبلی و بعدی">
+                            <a t-if="prev" t-att-href="prev['url']" class="eot-pager-prev">
+                                <t t-call="theme_eot_custom.lib_icon_prev"/>
+                                <span><span class="eot-muted">فصل قبلی</span><strong t-out="prev['name']"/></span>
+                            </a>
+                            <span t-else=""/>
+                            <a t-if="next" t-att-href="next['url']" class="eot-pager-next">
+                                <span><span class="eot-muted">فصل بعدی</span><strong t-out="next['name']"/></span>
+                                <t t-call="theme_eot_custom.lib_icon_back"/>
+                            </a>
+                            <a t-else="" t-att-href="book.eot_url()" class="eot-pager-next">
+                                <span><span class="eot-muted">پایان کتاب</span><strong>بازگشت به صفحه کتاب</strong></span>
+                                <t t-call="theme_eot_custom.lib_icon_back"/>
+                            </a>
+                        </nav>
+                    </article>
+                    <aside class="eot-aside eot-chapter-list">
+                        <div class="eot-card">
+                            <h2>فهرست فصل‌ها</h2>
+                            <ol>
+                                <li t-foreach="chapters" t-as="c">
+                                    <a t-att-href="c['url']" t-att-aria-current="'page' if c['current'] else None" t-att-class="'current' if c['current'] else None">
+                                        <span class="eot-toc-n" t-out="c['n']"/><span t-out="c['name']"/>
+                                    </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ articles -->
+
+    <template id="lib_article_row" name="EOT Library: article row">
+        <a t-att-href="r['url']" class="eot-article-item" data-eot-item="" t-att-data-topic="r['topic']" t-att-data-bucket="r['bucket']">
+            <span class="eot-article-main">
+                <span class="eot-article-title" t-att-dir="'ltr' if r['ltr'] else None" t-out="r['name']"/>
+                <span t-if="r['excerpt']" class="eot-article-excerpt" t-att-dir="'ltr' if r['ltr'] else None" t-out="r['excerpt']"/>
+            </span>
+            <span class="eot-article-meta">
+                <span class="eot-meter-row"><t t-call="theme_eot_custom.lib_meter" ticks="r['ticks']"/><strong><t t-out="r['minutes']"/> دقیقه</strong></span>
+                <span class="eot-muted" t-out="r['topic']"/>
+            </span>
+        </a>
+    </template>
+
+    <template id="lib_articles" name="EOT Library: articles index">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-articles" data-eot-filter="">
+                <section class="container eot-articles-hero">
+                    <div>
+                        <span class="eot-kicker">نوشته‌های پژوهشی و تخصصی</span>
+                        <h1>مقالات</h1>
+                        <p class="eot-lead" t-out="blog.eot_description"/>
+                    </div>
+                    <div class="eot-big-count"><span t-out="total"/><span>مقاله</span></div>
+                </section>
+
+                <section class="eot-toolbar">
+                    <div class="container">
+                        <label class="eot-search">
+                            <t t-call="theme_eot_custom.lib_icon_search"/>
+                            <span class="visually-hidden">جستجو در مقالات</span>
+                            <input type="search" data-eot-search="" placeholder="جستجو در عنوان و خلاصه مقاله‌ها" autocomplete="off"/>
+                        </label>
+                        <div class="eot-filter-row">
+                            <div class="eot-chip-row" role="group" aria-label="موضوع">
+                                <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="" aria-pressed="true">همه موضوع‌ها</button>
+                                <button t-foreach="topics" t-as="t" type="button" class="eot-chip" data-eot-dim="topic" t-att-data-eot-val="t['name']" aria-pressed="false">
+                                    <t t-out="t['name']"/> <span class="eot-muted" t-out="t['count']"/>
+                                </button>
+                            </div>
+                            <div class="eot-segment" role="group" aria-label="طول مقاله">
+                                <button type="button" data-eot-dim="bucket" data-eot-val="" aria-pressed="true">همه</button>
+                                <button type="button" data-eot-dim="bucket" data-eot-val="short" aria-pressed="false">کوتاه <span class="eot-muted" t-out="buckets['short']"/></button>
+                                <button type="button" data-eot-dim="bucket" data-eot-val="medium" aria-pressed="false">متوسط <span class="eot-muted" t-out="buckets['medium']"/></button>
+                                <button type="button" data-eot-dim="bucket" data-eot-val="long" aria-pressed="false">بلند <span class="eot-muted" t-out="buckets['long']"/></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container eot-featured" data-eot-hide-when-filtered="">
+                    <h2>پژوهش‌های بلند</h2>
+                    <div class="eot-featured-grid">
+                        <a t-foreach="featured" t-as="f" t-att-href="f['url']" class="eot-featured-card">
+                            <span class="eot-featured-n"><span t-out="f['minutes']"/><span>دقیقه مطالعه</span></span>
+                            <span class="eot-featured-text">
+                                <strong t-att-dir="'ltr' if f['ltr'] else None" t-out="f['name']"/>
+                                <span t-out="f['topic']"/>
+                            </span>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="container eot-article-list">
+                    <div class="eot-list-head">
+                        <h2>همه مقاله‌ها</h2>
+                        <span class="eot-muted"><span data-eot-count="" t-out="total"/> مقاله</span>
+                    </div>
+                    <t t-foreach="rows" t-as="r"><t t-call="theme_eot_custom.lib_article_row"/></t>
+                    <p class="eot-empty" data-eot-empty="" hidden="">مقاله‌ای با این مشخصات پیدا نشد.</p>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="lib_article" name="EOT Library: article">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-article">
+                <div class="eot-progress eot-progress-top" aria-hidden="true"><span data-eot-read-progress=""/></div>
+                <header class="container eot-article-head">
+                    <nav aria-label="مسیر" class="eot-crumbs">
+                        <a href="/">خانه</a><span>/</span><a href="/مقالات">مقالات</a><t t-if="post.eot_topic"><span>/</span><span t-out="post.eot_topic"/></t>
+                    </nav>
+                    <h1 t-att-dir="'ltr' if post.eot_ltr else None" t-out="post.eot_title or post.name"/>
+                    <div class="eot-article-facts">
+                        <span>نوشته <strong t-out="post.author_name or 'دکتر ناصرالدین کاظمی حقیقی'"/></span>
+                        <span class="eot-meta"><t t-call="theme_eot_custom.lib_icon_clock"/><t t-out="reading"/> مطالعه</span>
+                        <span class="eot-meta"><t t-call="theme_eot_custom.lib_meter" ticks="row['ticks']"/><t t-out="length_label"/></span>
+                    </div>
+                </header>
+                <div t-attf-class="container eot-article-body #{'has-toc' if toc else ''}">
+                    <nav t-if="toc" class="eot-page-toc" aria-label="در این مقاله">
+                        <span class="eot-page-toc-title">در این مقاله</span>
+                        <a t-foreach="toc" t-as="h" t-att-href="'#%s' % h['id']" t-out="h['label']"/>
+                    </nav>
+                    <article class="eot-article-text">
+                        <div class="eot-prose" t-att-dir="'ltr' if post.eot_ltr else None" t-out="post.content"/>
+                    </article>
+                    <aside class="eot-aside">
+                        <div t-if="terms" class="eot-card eot-card-sand">
+                            <h2>واژه‌های این مقاله در فرهنگنامه</h2>
+                            <a t-foreach="terms" t-as="t" t-att-href="t['url']" class="eot-term-link">
+                                <strong t-out="t['name']"/><span t-if="t['english']" dir="ltr" lang="en" t-out="t['english']"/>
+                            </a>
+                        </div>
+                        <a t-if="book" t-att-href="book['url']" class="eot-card eot-mini-book">
+                            <t t-call="theme_eot_custom.lib_cover" c="book" cover_class="'eot-cover-xs'"/>
+                            <span><span class="eot-muted">کتاب مرتبط</span><strong t-out="book['name']"/></span>
+                        </a>
+                    </aside>
+                </div>
+                <section t-if="related" class="eot-related">
+                    <div class="container">
+                        <h2>مقاله‌های هم‌موضوع</h2>
+                        <div class="eot-related-grid">
+                            <a t-foreach="related" t-as="r" t-att-href="r['url']" class="eot-related-card">
+                                <strong t-att-dir="'ltr' if r['ltr'] else None" t-out="r['name']"/>
+                                <span t-if="r['excerpt']" t-att-dir="'ltr' if r['ltr'] else None" t-out="r['excerpt']"/>
+                                <span class="eot-muted"><t t-out="r['topic']"/> · <t t-out="r['minutes']"/> دقیقه</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ glossary -->
+
+    <template id="lib_glossary" name="EOT Library: glossary index">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-glossary" data-eot-filter="">
+                <section class="eot-glossary-hero">
+                    <div class="container">
+                        <div class="eot-hero-row">
+                            <div class="eot-hero-text">
+                                <span class="eot-kicker eot-kicker-sand">اثر مرجع · فارسی و انگلیسی</span>
+                                <h1 t-out="blog.name"/>
+                                <p class="eot-lead" t-out="blog.eot_description"/>
+                            </div>
+                            <div class="eot-stats eot-stats-sand">
+                                <div><span class="eot-stat-n" t-out="total"/><span>مدخل</span></div>
+                                <div><span class="eot-stat-n" t-out="fa(len(cats))"/><span>حوزه موضوعی</span></div>
+                            </div>
+                        </div>
+                        <label class="eot-search eot-search-lg">
+                            <t t-call="theme_eot_custom.lib_icon_search"/>
+                            <span class="visually-hidden">جستجو در فرهنگنامه</span>
+                            <input type="search" data-eot-search="" placeholder="جستجوی مدخل یا معادل انگلیسی" autocomplete="off"/>
+                        </label>
+                    </div>
+                </section>
+
+                <nav class="eot-letterbar" aria-label="حروف الفبا">
+                    <div class="container">
+                        <div class="eot-letters">
+                            <t t-foreach="letters" t-as="l">
+                                <a t-if="l['on']" t-att-href="'#%s' % l['anchor']" t-att-aria-label="'حرف %s، %s مدخل' % (l['c'], l['count'])" t-out="l['c']"/>
+                                <span t-else="" class="off" aria-hidden="true" t-out="l['c']"/>
+                            </t>
+                        </div>
+                        <div class="eot-chip-row eot-chip-row-sm" role="group" aria-label="حوزه موضوعی">
+                            <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="" aria-pressed="true">همه حوزه‌ها</button>
+                            <button t-foreach="cats" t-as="c" type="button" class="eot-chip" data-eot-dim="topic" t-att-data-eot-val="c['name']" aria-pressed="false">
+                                <t t-out="c['name']"/> <span class="eot-muted" t-out="c['count']"/>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container eot-dictionary">
+                    <section t-foreach="groups" t-as="g" t-att-id="g['anchor']" class="eot-letter-group" data-eot-group="">
+                        <div class="eot-letter-big"><span t-out="g['c']"/><span class="eot-muted"><t t-out="g['count']"/> مدخل</span></div>
+                        <div class="eot-entry-grid">
+                            <a t-foreach="g['items']" t-as="e" t-att-href="e['url']" class="eot-entry" data-eot-item="" t-att-data-topic="e['topic']">
+                                <strong t-out="e['name']"/>
+                                <span t-if="e['english']" dir="ltr" lang="en" t-out="e['english']"/>
+                            </a>
+                        </div>
+                    </section>
+                    <p class="eot-empty" data-eot-empty="" hidden="">مدخلی با این مشخصات پیدا نشد.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="lib_term" name="EOT Library: glossary term">
+        <t t-call="website.layout">
+            <div id="wrap" class="eot-lib eot-lib-term">
+                <div class="eot-term-bar">
+                    <div class="container eot-term-bar-row">
+                        <nav aria-label="مسیر" class="eot-crumbs">
+                            <a href="/">خانه</a><span>/</span><a href="/فرهنگنامه">فرهنگنامه</a><span>/</span><a t-att-href="'/فرهنگنامه#%s' % letter_anchor" t-out="post.eot_letter"/>
+                        </nav>
+                        <div class="eot-letters eot-letters-sm" aria-label="حروف الفبا">
+                            <t t-foreach="letters" t-as="l">
+                                <a t-if="l['on']" t-att-href="'/فرهنگنامه#%s' % l['anchor']" t-att-class="'current' if l['current'] else None" t-out="l['c']"/>
+                                <span t-else="" class="off" aria-hidden="true" t-out="l['c']"/>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <div class="container eot-term-body">
+                    <article class="eot-term-main">
+                        <header class="eot-headword">
+                            <div t-if="post.eot_topic" class="eot-term-cats">
+                                <span class="eot-chip eot-chip-sm eot-chip-ochre" t-out="post.eot_topic"/>
+                                <t t-if="post.eot_subtopic and post.eot_subtopic != post.eot_topic">
+                                    <t t-call="theme_eot_custom.lib_icon_chevron"/><span t-out="post.eot_subtopic"/>
+                                </t>
+                            </div>
+                            <h1 t-out="post.eot_title or post.name"/>
+                            <div t-if="english" class="eot-english" dir="ltr" lang="en">
+                                <t t-foreach="english" t-as="e"><span t-out="e"/><span t-if="not e_last" class="eot-dot">·</span></t>
+                            </div>
+                            <div class="eot-term-meta">
+                                <span>مدخل فرهنگنامه · نویسنده: <strong>دکتر ناصرالدین کاظمی حقیقی</strong></span>
+                                <span><t t-out="reading"/> مطالعه</span>
+                            </div>
+                        </header>
+                        <div class="eot-prose eot-term-text" t-out="post.content"/>
+                        <nav class="eot-pager" aria-label="مدخل قبلی و بعدی">
+                            <a t-if="prev" t-att-href="prev['url']" class="eot-pager-prev">
+                                <t t-call="theme_eot_custom.lib_icon_prev"/>
+                                <span><span class="eot-muted">مدخل قبلی</span><strong t-out="prev['name']"/></span>
+                            </a>
+                            <span t-else=""/>
+                            <a t-if="next" t-att-href="next['url']" class="eot-pager-next">
+                                <span><span class="eot-muted">مدخل بعدی</span><strong t-out="next['name']"/></span>
+                                <t t-call="theme_eot_custom.lib_icon_back"/>
+                            </a>
+                        </nav>
+                    </article>
+                    <aside class="eot-aside">
+                        <div t-if="linked or same" class="eot-card eot-card-sand">
+                            <h2>مدخل‌های مرتبط</h2>
+                            <t t-if="linked">
+                                <span class="eot-card-label">پیوند شده در متن</span>
+                                <a t-foreach="linked" t-as="r" t-att-href="r['url']" class="eot-term-link"><strong t-out="r['name']"/><span t-if="r['english']" dir="ltr" lang="en" t-out="r['english']"/></a>
+                            </t>
+                            <t t-if="same">
+                                <span class="eot-card-label">هم‌حوزه: <t t-out="post.eot_topic"/></span>
+                                <a t-foreach="same" t-as="r" t-att-href="r['url']" class="eot-term-link"><strong t-out="r['name']"/><span t-if="r['english']" dir="ltr" lang="en" t-out="r['english']"/></a>
+                            </t>
+                        </div>
+                        <a t-att-href="'/فرهنگنامه#%s' % letter_anchor" class="eot-card eot-card-link">
+                            <span><strong>همه مدخل‌های حرف «<t t-out="post.eot_letter"/>»</strong><span class="eot-muted"><t t-out="letter_count"/> مدخل</span></span>
+                            <t t-call="theme_eot_custom.lib_icon_back"/>
+                        </a>
+                    </aside>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
