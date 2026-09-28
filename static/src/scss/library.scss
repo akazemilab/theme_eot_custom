@@ -32,6 +32,9 @@ $eot-shelves: (
     font-size: 16px;
 
     [hidden] { display: none !important; }
+    // Odoo gives .container clearfix ::before/::after (display: table).
+    // Inside grid/flex layouts they become phantom items and shift columns.
+    .container::before, .container::after { content: none; display: none; }
     a { text-decoration: none; }
     h1, h2, h3 { font-family: $eot-display; color: $eot-ink; }
     .eot-muted { color: $eot-muted; font-weight: 400; }
