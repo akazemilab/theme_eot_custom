@@ -438,7 +438,7 @@ $eot-shelves: (
         grid-template-columns: minmax(0, 1fr);
         @media (min-width: 992px) {
             grid-template-columns: minmax(0, 720px) minmax(0, 1fr);
-            &.has-toc { grid-template-columns: 240px minmax(0, 720px) minmax(0, 1fr); }
+            &.has-toc { grid-template-columns: 220px minmax(0, 680px) minmax(0, 1fr); }
         }
     }
     .eot-page-toc {
@@ -566,7 +566,7 @@ $eot-shelves: (
         .eot-stats { gap: 1.75rem; .eot-stat-n { font-size: 2.25rem; } }
         .eot-pager { grid-template-columns: minmax(0, 1fr); }
         .eot-ref-band { padding: 1.5rem; }
-        .eot-toolbar { position: static; }
+        .eot-toolbar, .eot-letterbar, .eot-shelfbar { position: static; }
         .eot-article-item .eot-article-meta { flex-basis: 100%; flex-direction: row; gap: 1rem; padding-top: 0; }
         .eot-prose { font-size: 1.0625rem; }
         .eot-facts > div { flex-basis: 45%; }

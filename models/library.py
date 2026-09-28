@@ -31,7 +31,7 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 WEBSITE_ID = 1
-LIBRARY_VERSION = 1
+LIBRARY_VERSION = 2
 PARAM_VERSION = 'theme_eot_custom.library_version'
 PARAM_PUBLISHED = 'theme_eot_custom.library_published'
 
@@ -230,6 +230,12 @@ class BlogBlog(models.Model):
                 vals = {'eot_kind': 'book', 'eot_slug': slug, 'eot_shelf': shelf,
                         'eot_order': order, 'eot_description': desc,
                         'eot_authors': authors, 'eot_subtitle': subtitle}
+            # Odoo's URL matcher rejects slugs holding Persian marks (tashdid,
+            # hamza above); give such blogs a clean seo_name so their stock
+            # /blog/... URLs (and feeds) resolve.
+            if re.search(r'[\u064b-\u065f\u0670\u0654]', blog.name or ''):
+                clean = re.sub(r'[\u064b-\u065f\u0670\u0654]', '', blog.name)
+                vals['seo_name'] = self.env['ir.http']._slugify(clean.replace('ۀ', 'ه'))
             blog.write(vals)
 
     @api.model
@@ -407,6 +413,13 @@ class BlogPost(models.Model):
         for el in root.xpath('.//p'):
             if _text(el) == 'دانلود مقاله':
                 el.drop_tree()
+
+        # Known typos from the old import (first letter lost).
+        for el in root.iter():
+            for attr in ('text', 'tail'):
+                val = getattr(el, attr)
+                if val and val.lstrip().startswith('رحوزه پرورشی'):
+                    setattr(el, attr, val.replace('رحوزه پرورشی', 'در حوزه پرورشی', 1))
 
         # Links: old-site links -> new URLs, or plain text when unknown.
         for a in root.xpath('.//a[@href]'):

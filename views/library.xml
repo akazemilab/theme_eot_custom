@@ -344,10 +344,6 @@
                         <a t-foreach="toc" t-as="h" t-att-href="'#%s' % h['id']" t-out="h['label']"/>
                     </nav>
                     <article class="eot-article-text">
-                        <div t-if="post.eot_excerpt" class="eot-summary">
-                            <span class="eot-kicker eot-kicker-sand">خلاصه</span>
-                            <p t-att-dir="'ltr' if post.eot_ltr else None" t-out="post.eot_excerpt"/>
-                        </div>
                         <div class="eot-prose" t-att-dir="'ltr' if post.eot_ltr else None" t-out="post.content"/>
                     </article>
                     <aside class="eot-aside">
