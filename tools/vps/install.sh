@@ -4,8 +4,8 @@
 set -euo pipefail
 T=/root/eot-tools
 mkdir -p "$T"
-if [ -d "$T/repo/.git" ]; then git -C "$T/repo" pull -q --ff-only
-else git clone -q --depth 50 https://github.com/akazemilab/theme_eot_custom "$T/repo"; fi
+if [ -d "$T/repo/.git" ]; then git -C "$T/repo" fetch -q origin main && git -C "$T/repo" checkout -q -B main origin/main
+else git clone -q --depth 50 -b main https://github.com/akazemilab/theme_eot_custom "$T/repo"; fi
 [ -d "$T/venv" ] || python3 -m venv "$T/venv"
 "$T/venv/bin/pip" install -q tinycss2 requests
 chmod +x "$T/repo/tools/vps/eot"

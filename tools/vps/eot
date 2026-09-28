@@ -50,7 +50,7 @@ case "${1:-help}" in
   ssh)          shift; prod "$@" ;;
 
   update)       # pull the latest toolkit from GitHub (source of truth: theme repo tools/vps)
-    git -C "$SRC/../.." pull -q --ff-only && git -C "$SRC/../.." log --oneline -1 ;;
+    git -C "$SRC/../.." fetch -q origin main && git -C "$SRC/../.." checkout -q -B main origin/main && git -C "$SRC/../.." log --oneline -1 ;;
 
   help|*)
     cat <<'EOF'
