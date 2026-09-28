@@ -442,6 +442,13 @@ def _sitemap_blog_post_filtered(env, rule, qs):
             yield rec
 
 
+def _sitemap_blog_filtered(env, rule, qs):
+    # Website 1: /blog and every blog listing redirect to the library pages.
+    if _site_env(env):
+        return
+    yield from WebsiteBlog.sitemap_blog(env, rule, qs)
+
+
 class EotWebsiteBlog(WebsiteBlog):
     """Library blogs keep one address each: their stock /blog URLs 301 to
     the library pages (website 1 only; other websites are unaffected)."""
@@ -454,7 +461,7 @@ class EotWebsiteBlog(WebsiteBlog):
                 return request.redirect(target.eot_url(), code=301, local=True)
         return super().blog_post(blog, blog_post, tag_id=tag_id, page=page, enable_editor=enable_editor, **post)
 
-    @http.route()
+    @http.route(sitemap=_sitemap_blog_filtered)
     def blog(self, blog=None, tag=None, page=1, search=None, **opt):
         if _is_library_site():
             if blog and blog.sudo().eot_kind:
