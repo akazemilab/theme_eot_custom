@@ -169,4 +169,118 @@
             </section>
         </xpath>
     </template>
+
+    <!--
+        Milestone 8: account portal strings with no fa_IR entry upstream
+        (portal, auth_passkey_portal; checked in the Odoo 20 source on
+        eot-odoo-prod). Elements whose text follows an icon are replaced
+        whole, copied from that source with only the wording changed:
+        position="replace" cannot target a bare text node (CLAUDE.md).
+    -->
+    <template id="portal_breadcrumbs_fa" name="EOT: portal breadcrumbs in Persian" inherit_id="portal.portal_breadcrumbs">
+        <xpath expr="//li[@t-if=&quot;page_name == 'my_addresses'&quot;]" position="replace">
+            <li t-if="page_name == 'my_addresses'" class="breadcrumb-item active">نشانی‌ها</li>
+        </xpath>
+        <xpath expr="//a[@href='/my/addresses']" position="replace">
+            <a href="/my/addresses" aria-label="نشانی‌ها" title="نشانی‌ها">نشانی‌ها</a>
+        </xpath>
+        <xpath expr="//li[@t-if=&quot;page_name == 'my_details'&quot;]" position="replace">
+            <li t-if="page_name == 'my_details'" class="breadcrumb-item active">اطلاعات حساب</li>
+        </xpath>
+        <xpath expr="//li[@t-if=&quot;page_name == 'address_form'&quot;]" position="replace">
+            <li t-if="page_name == 'address_form'" class="breadcrumb-item active">جزئیات</li>
+        </xpath>
+    </template>
+
+    <template id="portal_addresses_fa" name="EOT: addresses page in Persian" inherit_id="portal.my_addresses">
+        <xpath expr="//h5[contains(., 'Delivery addresses')]" position="replace">
+            <h5 class="mb-0">نشانی‌های ارسال</h5>
+        </xpath>
+        <xpath expr="//a[@class='o_address_card_add_new btn btn-outline-primary btn-sm']" position="replace">
+            <a
+                role="button"
+                t-att-href="new_address_url"
+                t-att-data-address-type="address_type"
+                class="o_address_card_add_new btn btn-outline-primary btn-sm"
+                title="افزودن نشانی"
+                aria-label="افزودن نشانی"
+            >
+                <i class="oi me-1" data-icon="add"/>افزودن
+            </a>
+        </xpath>
+        <xpath expr="//h5[contains(., 'Billing addresses')]" position="replace">
+            <h5 class="mb-0">نشانی‌های صورتحساب</h5>
+        </xpath>
+        <xpath expr="//a[contains(@t-attf-class, 'o_add_billing_address_btn')]" position="replace">
+            <a
+                role="button"
+                t-att-href="new_address_url"
+                t-att-data-address-type="address_type"
+                t-attf-class="o_address_card_add_new o_add_billing_address_btn btn btn-outline-primary btn-sm {{'d-none' if use_delivery_as_billing else ''}}"
+                title="افزودن نشانی"
+                aria-label="افزودن نشانی"
+            >
+                <i class="oi me-1" data-icon="add"/>افزودن
+            </a>
+        </xpath>
+    </template>
+
+    <template id="portal_address_card_fa" name="EOT: address card in Persian" inherit_id="portal.address_card">
+        <xpath expr="//span[@t-if='is_user_address']" position="replace">
+            <span
+                t-if="is_user_address"
+                t-att-class=" badge_classes "
+            >
+                نشانی اصلی
+            </span>
+        </xpath>
+    </template>
+
+    <template id="portal_address_fields_fa" name="EOT: address form in Persian" inherit_id="portal.address_form_fields">
+        <xpath expr="//label[@for='o_name']" position="replace">
+            <label class="col-form-label" for="o_name">نام</label>
+        </xpath>
+        <xpath expr="//select[@name='country_id']/option[@value='']" position="replace">
+            <option value="">کشور...</option>
+        </xpath>
+    </template>
+
+    <template id="portal_my_details_fa" name="EOT: account details in Persian" inherit_id="portal.portal_my_details">
+        <xpath expr="//t[@t-call='portal.portal_layout']" position="attributes">
+            <attribute name="additional_title.translate">اطلاعات حساب</attribute>
+        </xpath>
+        <xpath expr="//h3[hasclass('mb-3')]" position="replace">
+            <h3 class="mb-3">اطلاعات حساب</h3>
+        </xpath>
+    </template>
+
+    <template id="portal_security_fa" name="EOT: security page in Persian" inherit_id="portal.portal_my_security">
+        <xpath expr="//button[@data-bs-dismiss='modal']" position="replace">
+            <button type="button" class="btn" data-bs-dismiss="modal">
+                انصراف
+            </button>
+        </xpath>
+    </template>
+
+    <template id="portal_passkeys_fa" name="EOT: passkeys section in Persian" inherit_id="auth_passkey_portal.passkeys_portal_hook">
+        <xpath expr="//section[@name='portal_passkey_management']/h4" position="replace">
+            <h4>
+                کلیدهای عبور
+            </h4>
+        </xpath>
+        <xpath expr="//section[@name='portal_passkey_management']//thead/tr" position="replace">
+            <tr>
+                <th>نام</th>
+                <th>ایجاد</th>
+                <th>آخرین استفاده</th>
+                <th/>
+                <th/>
+            </tr>
+        </xpath>
+        <xpath expr="//button[@id='portal_passkey_add']" position="replace">
+            <button type="button" class="btn btn-light mt-1" id="portal_passkey_add">
+                افزودن کلید عبور
+            </button>
+        </xpath>
+    </template>
 </odoo>

@@ -11,7 +11,19 @@
    the existing library items, the same way those are stored (manual_url).
    Before this, services and trust pages were reachable only from the
    footer. Skipped for any url already in website 1's menu.
+
+3. Persian names for the account-portal tiles (portal.entry records from
+   the portal / portal_discuss modules). Odoo 20's fa.po has no entry for
+   these names, so the tiles showed "Addresses", "Connection & Security",
+   "Discuss". Matched by url, only the fa_IR key is added.
 """
+
+PORTAL_ENTRY_FA = {
+    # url: (name, description or None to leave as is)
+    '/my/addresses': ('نشانی‌ها', None),
+    '/my/security': ('ارتباط و امنیت', None),
+    '/my/conversations': ('گفتگوها', 'دسترسی به گفتگوهای شما'),
+}
 
 MENU_ITEMS = [
     # (url, label, sequence)
@@ -87,3 +99,19 @@ def migrate(cr, version):
             "UPDATE website_menu SET parent_path = %s WHERE id = %s",
             ("%s%s/" % (top_path, new_id), new_id),
         )
+
+    # 3. portal tile names ----------------------------------------------------
+    for url, (name, desc) in PORTAL_ENTRY_FA.items():
+        cr.execute(
+            "UPDATE portal_entry SET name = name || jsonb_build_object('fa_IR', %s::text) WHERE url = %s",
+            (name, url),
+        )
+        if desc:
+            cr.execute(
+                """
+                UPDATE portal_entry
+                   SET description = COALESCE(description, '{}'::jsonb) || jsonb_build_object('fa_IR', %s::text)
+                 WHERE url = %s
+                """,
+                (desc, url),
+            )

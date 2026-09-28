@@ -12,7 +12,7 @@ to websites whose theme is this module (website_id 1). See README.md.
     'author': 'Emotion of Thought Institution',
     'website': 'https://www.eot.ir',
     'license': 'LGPL-3',
-    'depends': ['website', 'website_blog', 'auth_signup', 'auth_passkey'],
+    'depends': ['website', 'website_blog', 'auth_signup', 'auth_passkey', 'auth_passkey_portal'],
     'data': [
         'views/theme_marker.xml',
         'views/header.xml',
