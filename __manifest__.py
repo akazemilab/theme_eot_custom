@@ -8,7 +8,7 @@ Loaded through Odoo's theme mechanism, so its views and assets apply only
 to websites whose theme is this module (website_id 1). See README.md.
 """,
     'category': 'Theme/Corporate',
-    'version': '20.0.6.0.0',
+    'version': '20.0.7.0.0',
     'author': 'Emotion of Thought Institution',
     'website': 'https://www.eot.ir',
     'license': 'LGPL-3',

@@ -241,6 +241,89 @@
                     </div>
                 </section>
 
+                <!-- Sister brands (milestone 7). Endorsed architecture from
+                     EOT_Brand_Strategy.docx: EOT gives the overview and the
+                     decision, each brand's own site handles the transaction.
+                     Only verified live URLs are linked; talentschool.ir and
+                     iranandish.ir are under development and are not linked. -->
+                <section id="eot-family" class="eot-family py-5 py-lg-6" aria-labelledby="eot-family-title">
+                    <div class="container">
+                        <div class="eot-family-head mb-4 mb-lg-5">
+                            <span class="eot-eyebrow d-block mb-2">مجموعه هیجان اندیشه</span>
+                            <h2 id="eot-family-title" class="mb-3">به دنبال چه هستید؟</h2>
+                            <p class="mb-0">هیجان اندیشه خانه دانش و آموزش روان‌شناسی است. درمان، آزمون، یادگیری عمومی و کارورزی هر کدام مرکز تخصصی خود را دارند؛ اینجا مسیر درست را پیدا کنید و کار را در سایت همان مرکز انجام دهید.</p>
+                        </div>
+                        <div class="row g-3 g-lg-4">
+
+                            <div class="col-md-6">
+                                <article class="eot-family-card h-100">
+                                    <h3 class="eot-family-goal">رزرو جلسه درمان</h3>
+                                    <p class="eot-family-lead">درمان فردی و گروه‌های درمانی با روان‌شناسانی که پیش از رزرو، نامشان را می‌بینید.</p>
+                                    <div class="eot-family-actions">
+                                        <a href="https://www.sepehrtherapy.ir/appointment" target="_blank" rel="noopener" class="btn btn-primary px-4">رزرو در سپهر<svg class="eot-ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17M8 7h9v9"/></svg></a>
+                                        <a href="/مشاوره-روانشناسی-آنلاین" class="btn btn-outline-primary px-4">انتخاب درمانگر</a>
+                                    </div>
+                                    <p class="eot-family-note">در وضعیت اضطراری منتظر نوبت نمانید: <a href="tel:123">اورژانس اجتماعی ۱۲۳</a></p>
+                                    <div class="eot-family-brand">
+                                        <img src="/theme_eot_custom/static/src/img/brands/sepehr.webp" width="48" height="48" alt="نشان سپهر هیجان اندیش" loading="lazy"/>
+                                        <div><strong>سپهر هیجان اندیش</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
+                                    </div>
+                                </article>
+                            </div>
+
+                            <div class="col-md-6">
+                                <article class="eot-family-card h-100">
+                                    <h3 class="eot-family-goal">انجام آزمون و ارزیابی</h3>
+                                    <p class="eot-family-lead">آزمون‌های استعداد، شخصیت و شغلی برای بزرگسال، نوجوان و کودک. آزمون را در استعدادیاب می‌دهید و نتیجه را همان‌جا می‌گیرید.</p>
+                                    <div class="eot-family-mh">
+                                        <a href="https://www.talentsearch.ir/assessments" target="_blank" rel="noopener" class="eot-family-mh-title">آزمون‌های سلامت روان</a>
+                                        <p class="mb-0">سنجش افسردگی، اضطراب و فرسودگی برای آگاهی از وضعیت خودتان است، نه تشخیص قطعی. اگر نتیجه نگرانتان کرد، <a href="https://www.sepehrtherapy.ir/appointment" target="_blank" rel="noopener">با یک روان‌شناس صحبت کنید</a>.</p>
+                                    </div>
+                                    <div class="eot-family-actions">
+                                        <a href="https://www.talentsearch.ir/" target="_blank" rel="noopener" class="btn btn-primary px-4">شروع در استعدادیاب<svg class="eot-ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17M8 7h9v9"/></svg></a>
+                                        <a href="/آزمون-روانشناسی" class="btn btn-outline-primary px-4">راهنمای آزمون‌ها</a>
+                                    </div>
+                                    <div class="eot-family-brand">
+                                        <img src="/theme_eot_custom/static/src/img/brands/talentsearch.webp" width="48" height="48" alt="نشان استعدادیاب" loading="lazy"/>
+                                        <div><strong>استعدادیاب</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
+                                    </div>
+                                </article>
+                            </div>
+
+                            <div class="col-md-6">
+                                <article class="eot-family-card h-100">
+                                    <h3 class="eot-family-goal">یادگیری در زمان خودتان</h3>
+                                    <p class="eot-family-lead">دوره‌های خودآموز روان‌شناسی برای زندگی روزمره، با سرعتی که خودتان تعیین می‌کنید.</p>
+                                    <span class="eot-soon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>سایت مدرسه استعداد در حال راه‌اندازی است</span>
+                                    <div class="eot-family-actions">
+                                        <a href="/یادگیری-خودیار-روانشناسی" class="btn btn-outline-primary px-4">مسیرهای خودآموز فعلی</a>
+                                    </div>
+                                    <div class="eot-family-brand">
+                                        <img src="/theme_eot_custom/static/src/img/brands/talentschool.webp" width="48" height="48" alt="نشان مدرسه استعداد" loading="lazy"/>
+                                        <div><strong>مدرسه استعداد</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
+                                    </div>
+                                </article>
+                            </div>
+
+                            <div class="col-md-6">
+                                <article class="eot-family-card h-100">
+                                    <h3 class="eot-family-goal">کارورزی روان‌شناسی و مشاوره</h3>
+                                    <p class="eot-family-lead">کارورزی آنلاین روان‌شناسی و مشاوره، در قالب یک دوره حرفه‌ای ۲۸ ماهه.</p>
+                                    <span class="eot-soon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>سایت ایران اندیش در حال راه‌اندازی است</span>
+                                    <div class="eot-family-actions">
+                                        <a href="/کارورزی-روانشناسی-آنلاین" class="btn btn-outline-primary px-4">جزئیات کارورزی</a>
+                                    </div>
+                                    <div class="eot-family-brand">
+                                        <img src="/theme_eot_custom/static/src/img/brands/iranandish.webp" width="48" height="48" alt="نشان ایران اندیش" loading="lazy"/>
+                                        <div><strong>مرکز خدمات روان‌شناسی و مشاوره ایران اندیش</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
+                                    </div>
+                                </article>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Closing institute banner -->
                 <section class="pb-5 pb-lg-6">
                     <div class="container">
