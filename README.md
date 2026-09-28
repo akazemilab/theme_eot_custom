@@ -12,7 +12,7 @@ The database (`eot_main`) holds two websites:
 | id | website | touched by this module? |
 |----|---------|-------------------------|
 | 1  | eot.ir (هیجان اندیشه) | **yes** |
-| 3  | sepehrtherapy.ir (duplicate copy) | **never** |
+| 3  | sepehrtherapy.ir (duplicate copy) | deleted in milestone 6 (owner's instruction) |
 
 Scoping comes from Odoo's own theme mechanism, not from hand-set `website_id`s:
 

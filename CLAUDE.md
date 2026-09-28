@@ -7,7 +7,9 @@ Odoo 20 theme for eot.ir (website_id 1, db eot_main, server eot-odoo-prod
 - **Deploys are LIVE.** www.eot.ir, eot.ir and odoo.innerquest.me all serve
   from eot-odoo-prod. There is no staging copy. A milestone branch deployed
   "for review" is public. Verify immediately after every deploy.
-- website 3 (sepehrtherapy duplicate) must stay untouched; deploy.sh checks it.
+- Website 3 (the sepehrtherapy.ir duplicate) was deleted in milestone 6 on the
+  owner's instruction; eot_main now holds website 1 only. deploy.sh checks that
+  no theme view exists outside website 1.
 
 ## Token efficiency: do the heavy work on the VPS
 Claude reaches the VPS (95.38.234.86) with `vps_exec`; the VPS reaches prod
@@ -103,6 +105,33 @@ Rules:
     `/blog/...` routes and sitemap entries for those blogs are then
     redirected/filtered out (see #16) so they don't compete with the new
     canonical URLs.
+
+18. **A builder page's old arch can break outside `#wrap`.** Replacing
+    `#wrap` leaves the rest of the old view (e.g. `t-set`s at the top of
+    `t-call="website.layout"`) in force. The old contact view called
+    `request.env['website.visitor']._get_visitor_from_request()` (moved to
+    `ir.http` in Odoo 20) and 500'd. Rehearse every page and xpath away
+    leftovers you don't need.
+19. **`odoo-bin shell` must run as the odoo user with its own HOME**:
+    `sudo -u odoo env HOME=/opt/odoo ...`, never `sudo -E` (keeps root's HOME,
+    so Odoo looks for the filestore under /root and attachment deletes fail).
+20. **Website forms**: a hidden `email_to` input gets its security signature
+    added at render time (website/models/ir_qweb.py `add_form_signature`), so
+    a static recipient works. There is no outgoing mail server on eot_main
+    yet: submissions are stored as `mail.mail` in state "exception" until one
+    is configured.
+21. **The prod service's cron touches every database on the server**, including
+    a rehearsal clone (harmless version-mismatch tracebacks in the log). Drop
+    the clone as soon as the rehearsal is done.
+22. **Redirect a URL that is still a page with a controller route**, not a
+    `website.rewrite`: Odoo serves an existing page before it looks at
+    redirect records (controllers/redirects.py).
+
+## Tools added in milestone 6
+    scripts/rehearse.sh [ref]     restore the latest backup into eot_m6test, upgrade
+                                  from a worktree, run the cleanup, serve on :8070
+    scripts/gen_catalogs.py       regenerate views/pages_catalog.xml from
+                                  data/m6_catalog_source.json
 
 ## Owner's standing rules
 - No placeholders anywhere on the site (demo phones, yourcompany emails,
