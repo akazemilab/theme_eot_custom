@@ -89,9 +89,12 @@ class EotLibrary(http.Controller):
             [('blog_id', 'in', blogs.ids), ('is_published', '=', True)], order=order)
 
     def _item(self, blogs, slug):
-        _name, pid = request.env['ir.http']._unslug(slug)
-        if not pid:
+        # Own parsing: Odoo's _unslug rejects slugs holding Persian marks
+        # (tashdid, hamza above), which its own _slugify keeps.
+        m = re.search(r'(?:^|-)(\d+)$', slug or '')
+        if not m:
             raise NotFound()
+        pid = int(m.group(1))
         post = request.env['blog.post'].sudo().with_context(lang='fa_IR').browse(pid).exists()
         if not post or post.blog_id not in blogs or not post.is_published:
             raise NotFound()
