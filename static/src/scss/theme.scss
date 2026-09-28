@@ -30,7 +30,12 @@
 // with `git revert`.
 // -----------------------------------------------------------------------
 
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+// The Vazirmatn webfont is loaded with a <link> tag in the page head
+// (views/theme_marker.xml), NOT with an @import here. Odoo's asset bundler
+// hoists @import statements to the top of the combined bundle by splitting
+// on ";" - the Google Fonts URL contains semicolons (wght@400;500;...), so
+// the @import got cut in half, and that broken fragment at the top made
+// browsers discard the ENTIRE frontend stylesheet (0 rules parsed).
 
 // Bootstrap's own runtime custom properties (unlike .btn-primary's colors,
 // these genuinely are consumed via var() at every usage site - .text-primary,
@@ -79,12 +84,13 @@ button {
 // Overriding the Bootstrap 5 CSS custom properties .btn-primary already
 // sets (see var(--btn-bg) etc. in the compiled frontend CSS) rather than
 // background-color directly, so hover/active/disabled states stay correct.
+//
+// Scoped under #wrapwrap (Odoo's page wrapper) so the rule outranks Odoo's
+// color-combination rules like ".o_cc1 .btn-primary": a plain .btn-primary
+// lost to those, which left e.g. the header's "تماس با ما" button purple.
 .btn-primary,
-.o_colored_level .o_cc1 .btn-fill-primary,
-.o_colored_level .o_cc2 .btn-fill-primary,
-.o_colored_level .o_cc3 .btn-fill-primary,
-.o_colored_level .o_cc4 .btn-fill-primary,
-.o_colored_level .o_cc5 .btn-fill-primary {
+#wrapwrap .btn-primary,
+#wrapwrap .btn-fill-primary {
     --btn-bg: var(--eot-primary);
     --btn-border-color: var(--eot-primary);
     --btn-hover-bg: var(--eot-primary-hover);
@@ -92,6 +98,22 @@ button {
     --btn-active-bg: var(--eot-primary-active);
     --btn-active-border-color: var(--eot-primary-active);
     --btn-disabled-bg: var(--eot-primary);
+    --btn-disabled-border-color: var(--eot-primary);
+    border-radius: 999px;
+}
+
+// Outline variant: without this it kept Odoo's default purple palette.
+.btn-outline-primary,
+#wrapwrap .btn-outline-primary {
+    --btn-color: var(--eot-primary);
+    --btn-border-color: var(--eot-primary);
+    --btn-hover-color: #FFFFFF;
+    --btn-hover-bg: var(--eot-primary);
+    --btn-hover-border-color: var(--eot-primary);
+    --btn-active-color: #FFFFFF;
+    --btn-active-bg: var(--eot-primary-active);
+    --btn-active-border-color: var(--eot-primary-active);
+    --btn-disabled-color: var(--eot-primary);
     --btn-disabled-border-color: var(--eot-primary);
     border-radius: 999px;
 }
@@ -184,4 +206,77 @@ select:focus-visible {
 .o_header_mobile .navbar-toggler,
 .o_header_mobile .navbar-toggler-icon {
     color: var(--eot-ink);
+}
+
+// Homepage (milestone 3) --------------------------------------------------
+// Minimal, founder-focused homepage: institute intro, then Dr. Kazemi,
+// role cards, books, articles, closing banner. See views/homepage.xml.
+// Scoped to elements only the homepage content uses, so this adds nothing
+// to other page types.
+
+.eot-eyebrow {
+    font-weight: 700;
+    font-size: .875rem;
+    letter-spacing: .02em;
+    color: var(--eot-primary);
+}
+
+.eot-home-hero {
+    background-color: var(--eot-paper);
+}
+
+.eot-home-h1 {
+    font-weight: 800;
+    color: var(--eot-ink);
+}
+
+.eot-pillar,
+.eot-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E7E2D6;
+    border-radius: 1.25rem;
+}
+
+.eot-founder-photo {
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 380 / 430;
+    object-fit: cover;
+    object-position: center 12%;
+    border-radius: 1.75rem;
+}
+
+.eot-book-card,
+.eot-article-row {
+    background-color: var(--eot-paper);
+    border: 1px solid #E7E2D6;
+    border-radius: 1.125rem;
+    color: var(--eot-ink);
+    transition: border-color .15s ease, color .15s ease;
+}
+
+.eot-book-card:hover,
+.eot-article-row:hover {
+    border-color: var(--eot-primary);
+    color: var(--eot-primary);
+}
+
+.eot-article-row {
+    background-color: #FFFFFF;
+
+    .eot-arrow {
+        flex-shrink: 0;
+        color: var(--eot-primary);
+    }
+}
+
+.eot-institute-banner {
+    background-color: var(--eot-primary-dark);
+    color: var(--eot-footer-text);
+    border-radius: 1.5rem;
+
+    p {
+        color: var(--eot-footer-text);
+        max-width: 780px;
+    }
 }
