@@ -68,7 +68,7 @@ def _is_library_site():
 
 
 def _site_env(env):
-    website = env['website'].get_current_website()
+    website = env.website
     return website and website.id == WEBSITE_ID
 
 
