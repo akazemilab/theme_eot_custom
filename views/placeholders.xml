@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Remove Odoo demo placeholders from website 1.
+
+        Policy (owner's rule): never show placeholders on the site. If a real
+        value is wanted later it is added deliberately, not left as a demo.
+
+        website.header_text_element (a stock Odoo template) hard-codes a demo
+        phone (+1 555-555-5556) and email (info@yourcompany.example.com) in
+        each of its layout variants; website 1's header renders it, so the
+        fake phone showed on every page. Each xpath below removes the first
+        remaining matching link, so the repeated expressions walk through all
+        variants (3 phone links, 2 email links).
+
+        To find any new placeholders on rendered pages: `eot placeholders`
+        on the VPS.
+    -->
+    <template id="header_text_element_no_placeholders"
+              name="EOT: remove demo phone/email from header text element"
+              inherit_id="website.header_text_element">
+        <xpath expr="(//a[@href='tel:+1 555-555-5556'])[1]" position="replace"/>
+        <xpath expr="(//a[@href='tel:+1 555-555-5556'])[1]" position="replace"/>
+        <xpath expr="(//a[@href='tel:+1 555-555-5556'])[1]" position="replace"/>
+        <xpath expr="(//a[@href='mailto:info@yourcompany.example.com'])[1]" position="replace"/>
+        <xpath expr="(//a[@href='mailto:info@yourcompany.example.com'])[1]" position="replace"/>
+    </template>
+</odoo>

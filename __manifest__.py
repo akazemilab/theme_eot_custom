@@ -16,6 +16,7 @@ to websites whose theme is this module (website_id 1). See README.md.
     'data': [
         'views/theme_marker.xml',
         'views/header.xml',
+        'views/placeholders.xml',
         'views/homepage.xml',
     ],
     'assets': {
