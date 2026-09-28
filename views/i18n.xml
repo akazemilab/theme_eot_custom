@@ -18,6 +18,16 @@
     <template id="user_sign_in_fa"
               name="EOT: 'Sign in' in Persian"
               inherit_id="portal.user_sign_in">
-        <xpath expr="//a[@t-attf-href='/web/login']/text()" position="replace">ورود</xpath>
+        <!--
+            Odoo 20's actual portal.user_sign_in arch does NOT carry the
+            "t-if=request.session.profile_session" debug-marker span some
+            other Odoo versions' source has (confirmed: reproducing it here
+            threw "'Session' object has no attribute 'profile_session'" -
+            AttributeError on every page). Replace the <a> with just the
+            translated text, nothing else.
+        -->
+        <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
+            <a t-attf-href="/web/login" t-attf-class="#{_link_class}">ورود</a>
+        </xpath>
     </template>
 </odoo>
