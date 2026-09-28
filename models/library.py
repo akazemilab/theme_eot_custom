@@ -193,6 +193,7 @@ class BlogBlog(models.Model):
     # ------------------------------------------------------------------
     @api.model
     def _eot_library_sync(self):
+        self = self.with_context(tracking_disable=True, mail_notrack=True, mail_create_nolog=True)
         ICP = self.env['ir.config_parameter'].sudo()
         done = int(ICP.get_param(PARAM_VERSION, '0') or 0)
         blogs = self._eot_library_blogs()
@@ -235,10 +236,10 @@ class BlogBlog(models.Model):
     def _eot_publish(self, blogs):
         Post = self.env['blog.post'].with_context(active_test=False)
         posts = Post.search([('blog_id', 'in', blogs.ids)])
-        keep = posts
+        keep = posts.filtered(lambda p: p.eot_words > 0)
         # Duplicate article titles: publish only the longest copy.
         groups = {}
-        for p in posts.filtered(lambda p: p.blog_id.eot_kind == 'articles'):
+        for p in keep.filtered(lambda p: p.blog_id.eot_kind == 'articles'):
             key = fa_sort_key(p.with_context(lang='fa_IR').name)
             groups.setdefault(key, []).append(p)
         for dupes in groups.values():
@@ -250,6 +251,8 @@ class BlogBlog(models.Model):
         (posts - keep).write({'is_published': False})
 
         # Header menu: replace the stock "بلاگ" (/blog) entry with the library.
+        # manual_url (not url): writing url would link the menu to the old,
+        # unpublished website.page at the same address and hide the entry.
         Menu = self.env['website.menu']
         top = self.env['website'].browse(WEBSITE_ID).menu_id
         if not top:
@@ -261,9 +264,11 @@ class BlogBlog(models.Model):
             if url in existing:
                 continue
             if i == 0 and blog_menu:
-                blog_menu[:1].write({'name': name, 'url': url, 'sequence': seq})
+                blog_menu[:1].write({'manual_url': url, 'page_id': False, 'sequence': seq})
+                for lang in ('en_US', 'fa_IR'):
+                    blog_menu[:1].with_context(lang=lang).write({'name': name})
             else:
-                Menu.create({'name': name, 'url': url, 'parent_id': top.id,
+                Menu.create({'name': name, 'manual_url': url, 'parent_id': top.id,
                              'website_id': WEBSITE_ID, 'sequence': seq})
 
 

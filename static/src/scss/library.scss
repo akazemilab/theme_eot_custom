@@ -1,0 +1,572 @@
+// Library pages (milestone 5): books, articles, glossary.
+// Everything is scoped under .eot-lib, which only the library templates
+// (views/library.xml) render. Three identities on one palette:
+//   books    - "library": deep teal hero, shelves, typographic covers
+//   articles - "journal": white page, big type, length meter
+//   glossary - "dictionary": sand ground, headwords, English equivalents
+
+$eot-teal: #07707F;
+$eot-teal-dark: #054952;
+$eot-deep: #0B3B44;
+$eot-ink: #1D2B2E;
+$eot-sand: #E4D6A0;
+$eot-sand-bg: #F1EAD3;
+$eot-paper: #FAF8F3;
+$eot-cream: #FBF8F0;
+$eot-ochre: #7A6230;
+$eot-line: #E7E2D6;
+$eot-line-sand: #E0D6BC;
+$eot-muted: #5E6B6D;
+$eot-body: #33403F;
+$eot-display: 'Estedad', 'Vazirmatn', sans-serif;
+
+$eot-shelves: (
+    gifted: ($eot-deep, $eot-sand),
+    interactive: ($eot-teal, $eot-paper),
+    creativity: ($eot-ochre, $eot-paper),
+    society: ($eot-ink, $eot-sand),
+);
+
+#wrapwrap .eot-lib {
+    color: $eot-ink;
+    font-size: 16px;
+
+    [hidden] { display: none !important; }
+    a { text-decoration: none; }
+    h1, h2, h3 { font-family: $eot-display; color: $eot-ink; }
+    .eot-muted { color: $eot-muted; font-weight: 400; }
+    .eot-icon { flex-shrink: 0; }
+
+    .eot-kicker {
+        display: inline-block;
+        font-family: $eot-display;
+        font-weight: 700;
+        font-size: .875rem;
+        color: $eot-teal;
+    }
+    .eot-kicker-sand { color: $eot-ochre; }
+    .eot-lead { font-size: 1.125rem; line-height: 2; color: $eot-body; margin: 0; }
+
+    .eot-crumbs {
+        display: flex; flex-wrap: wrap; gap: .5rem;
+        font-size: .875rem; color: $eot-muted;
+        a { color: $eot-muted; }
+        a:hover { color: $eot-teal; }
+    }
+
+    // buttons & chips -----------------------------------------------------
+    .eot-btn {
+        display: inline-flex; align-items: center; gap: .625rem;
+        border-radius: 999px; padding: .8rem 1.6rem;
+        font-weight: 700; font-size: 1rem; line-height: 1.4;
+        border: 1.5px solid transparent;
+        transition: background-color .15s ease, color .15s ease;
+    }
+    .eot-btn-primary { background: $eot-teal; color: #fff; }
+    .eot-btn-primary:hover { background: $eot-teal-dark; color: #fff; }
+    .eot-btn-outline { border-color: $eot-ink; color: $eot-ink; }
+    .eot-btn-outline:hover { background: $eot-ink; color: #fff; }
+    .eot-btn-ink { background: $eot-ink; color: #fff; }
+
+    .eot-chip-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+    .eot-chip {
+        display: inline-flex; align-items: center; gap: .5rem;
+        border: 1px solid $eot-line; background: #fff; color: $eot-ink;
+        border-radius: 999px; padding: .5rem 1rem;
+        font-size: .875rem; font-weight: 500; line-height: 1.5;
+        cursor: pointer; font-family: inherit;
+    }
+    .eot-chip:hover { border-color: $eot-teal; color: $eot-teal; }
+    .eot-chip[aria-pressed="true"] { background: $eot-ink; border-color: $eot-ink; color: #fff; }
+    .eot-chip[aria-pressed="true"] .eot-muted { color: #C9D3D4; }
+    .eot-chip-sm { padding: .3rem .85rem; font-size: .8125rem; font-weight: 600; }
+    .eot-chip-ochre, .eot-chip-ochre:hover { background: $eot-ochre; border-color: $eot-ochre; color: $eot-paper; }
+    .eot-swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+    .eot-segment {
+        display: inline-flex; border: 1px solid $eot-line; border-radius: 999px; overflow: hidden; background: #fff;
+        button {
+            border: 0; background: transparent; padding: .5rem 1rem; font-size: .875rem;
+            font-family: inherit; color: $eot-ink; cursor: pointer;
+        }
+        button + button { border-right: 1px solid $eot-line; }
+        button[aria-pressed="true"] { background: $eot-sand-bg; font-weight: 700; }
+    }
+
+    .eot-search {
+        display: flex; align-items: center; gap: .75rem;
+        height: 52px; padding: 0 1.1rem; margin: 0;
+        background: #fff; border: 1.5px solid #D9D2C0; border-radius: 14px; color: $eot-muted;
+        input {
+            flex-grow: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+            font-family: inherit; font-size: 1rem; color: $eot-ink;
+        }
+        &:focus-within { border-color: $eot-teal; }
+    }
+    .eot-search-lg { height: 60px; max-width: 820px; border-color: #D8CBA3; input { font-size: 1.0625rem; } }
+
+    .eot-stats {
+        display: flex; gap: 2.5rem;
+        > div { display: flex; flex-direction: column; gap: .25rem; }
+        .eot-stat-n { font-family: $eot-display; font-weight: 800; font-size: 2.75rem; line-height: 1; color: $eot-sand; }
+        span:last-child { font-size: .875rem; color: #9FB7BB; }
+    }
+    .eot-stats-sand {
+        .eot-stat-n { color: $eot-ochre; font-weight: 900; }
+        span:last-child { color: $eot-muted; }
+    }
+    .eot-hero-row {
+        display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 2rem 4rem;
+    }
+    .eot-hero-text { display: flex; flex-direction: column; gap: 1rem; max-width: 780px; }
+
+    .eot-meta { display: inline-flex; align-items: center; gap: .4rem; }
+
+    // cards / aside -------------------------------------------------------
+    .eot-aside { display: flex; flex-direction: column; gap: 1.25rem; }
+    .eot-card {
+        display: flex; flex-direction: column; gap: 1rem;
+        background: #fff; border: 1px solid $eot-line; border-radius: 20px; padding: 1.5rem;
+        color: $eot-ink;
+        h2 { font-size: 1.125rem; font-weight: 700; margin: 0; }
+    }
+    .eot-card-sand { background: $eot-sand-bg; border-color: $eot-sand-bg; }
+    .eot-card-label { font-size: .75rem; font-weight: 700; color: $eot-ochre; margin-top: .25rem; }
+    .eot-card-link { flex-direction: row; align-items: center; justify-content: space-between; color: $eot-teal;
+        > span { display: flex; flex-direction: column; gap: .15rem; color: $eot-ink; } }
+    .eot-term-link {
+        display: flex; justify-content: space-between; align-items: baseline; gap: .75rem;
+        padding-bottom: .6rem; border-bottom: 1px solid #DCCFA8; color: $eot-ink;
+        span { font-size: .8125rem; color: $eot-muted; }
+        &:hover strong { color: $eot-teal; }
+    }
+    .eot-mini-book { display: flex; flex-direction: row; align-items: center; gap: 1rem; color: $eot-ink;
+        > span:last-child { display: flex; flex-direction: column; gap: .15rem; line-height: 1.6; }
+        &:hover strong { color: $eot-teal; } }
+    .eot-mini-link { display: flex; flex-direction: column; gap: .2rem; color: $eot-ink; line-height: 1.7;
+        & + .eot-mini-link { padding-top: .8rem; border-top: 1px solid $eot-line; }
+        &:hover strong { color: $eot-teal; } }
+
+    .eot-empty { padding: 3rem 0; text-align: center; color: $eot-muted; }
+
+    // pager -----------------------------------------------------------------
+    .eot-pager {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 3rem 0 4rem;
+        a {
+            display: flex; align-items: center; gap: .9rem; color: $eot-ink;
+            border: 1px solid $eot-line-sand; border-radius: 16px; padding: 1rem 1.25rem; background: #fff;
+            > span { display: flex; flex-direction: column; gap: .1rem; line-height: 1.6; }
+            strong { font-family: $eot-display; font-weight: 700; }
+            &:hover { border-color: $eot-teal; }
+        }
+        .eot-pager-next { justify-content: flex-end; text-align: left; > span { align-items: flex-end; } }
+    }
+
+    // reading text ----------------------------------------------------------
+    .eot-prose {
+        font-size: 1.125rem; line-height: 2.1; color: $eot-ink; overflow-wrap: anywhere;
+        p { margin: 0 0 1.25rem; }
+        h2 { font-size: 1.625rem; font-weight: 800; line-height: 1.6; margin: 2.5rem 0 1rem; scroll-margin-top: 110px; }
+        h3 { font-size: 1.3rem; font-weight: 700; margin: 2rem 0 .75rem; }
+        h4 { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 .5rem; }
+        a { color: $eot-teal; border-bottom: 1.5px dotted $eot-teal; }
+        a:hover { color: $eot-teal-dark; }
+        ul, ol { padding-right: 1.75rem; padding-left: 0; margin: 0 0 1.25rem; }
+        li { margin-bottom: .4rem; }
+        blockquote { margin: 0 0 .5rem; padding: 0; border: 0; font-size: inherit;
+            p { margin: 0; } }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .95rem; display: block; overflow-x: auto; }
+        th, td { border: 1px solid $eot-line; padding: .5rem .75rem; vertical-align: top; }
+        img { max-width: 100%; height: auto; border-radius: 12px; }
+        sup { font-size: .7em; }
+        [dir="ltr"] { text-align: left; }
+        h2.eot-refs {
+            font-size: 1.375rem; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 2px solid $eot-ink;
+        }
+        h2.eot-refs ~ p { font-size: .875rem; line-height: 1.8; color: #4A5557; margin-bottom: .5rem; }
+    }
+
+    .eot-progress { height: 4px; background: #EFEAE0;
+        > span { display: block; height: 4px; background: $eot-teal; width: 0; } }
+
+    // =====================================================================
+    // Books
+    // =====================================================================
+    @each $key, $c in $eot-shelves {
+        .eot-shelf-#{$key} { background-color: nth($c, 1); }
+        .eot-ink-#{$key} { color: nth($c, 1); }
+        .eot-cover.eot-shelf-#{$key} {
+            --eot-cover-ink: #{nth($c, 2)};
+        }
+    }
+
+    .eot-cover {
+        position: relative; display: flex; flex-direction: column; justify-content: space-between;
+        aspect-ratio: 2 / 3; width: 100%; box-sizing: border-box; overflow: hidden;
+        padding: 12% 11% 10% 9%;
+        border-radius: 3px 10px 10px 3px;
+        box-shadow: 0 1px 2px rgba(11, 59, 68, .18), 0 14px 28px -12px rgba(11, 59, 68, .45);
+        color: var(--eot-cover-ink, #{$eot-sand});
+        > span { position: relative; }
+        .eot-cover-spine { position: absolute; top: 0; bottom: 0; right: 0; width: 6%; background: rgba(0, 0, 0, .22); }
+        .eot-cover-frame { position: absolute; top: 4%; bottom: 4%; right: 11%; left: 5%; border: 1px solid currentColor; opacity: .35; }
+        .eot-cover-brand { font-size: .6875rem; font-weight: 600; opacity: .8; }
+        .eot-cover-title { font-family: $eot-display; font-weight: 800; font-size: 1.25rem; line-height: 1.4; }
+        .eot-cover-foot { display: flex; flex-direction: column; gap: .5rem; font-size: .6875rem; opacity: .85; }
+        .eot-cover-rule { width: 28px; height: 2px; background: currentColor; }
+    }
+    .eot-cover.eot-cover-m .eot-cover-title { font-size: 1.0625rem; }
+    .eot-cover.eot-cover-s .eot-cover-title { font-size: .9375rem; }
+    .eot-cover.eot-cover-lg {
+        width: 290px; max-width: 100%; padding: 40px 34px 34px 28px; border-radius: 4px 14px 14px 4px;
+        box-shadow: 0 2px 4px rgba(29, 43, 46, .2), 0 30px 50px -18px rgba(29, 43, 46, .55);
+        .eot-cover-title { font-size: 2.1rem; }
+        .eot-cover-brand, .eot-cover-foot { font-size: .8125rem; }
+    }
+    .eot-cover.eot-cover-xs, .eot-cover.eot-cover-xxs {
+        width: 48px; flex-shrink: 0; padding: 6px 7px 6px 5px; border-radius: 2px 6px 6px 2px;
+        justify-content: center; box-shadow: 0 8px 14px -8px rgba(29, 43, 46, .6);
+        .eot-cover-brand, .eot-cover-foot, .eot-cover-frame { display: none; }
+        .eot-cover-title { font-size: 7px; line-height: 1.4; text-align: center; }
+    }
+    .eot-cover.eot-cover-xxs { width: 30px; .eot-cover-title { display: none; } }
+
+    // books index
+    .eot-books-hero {
+        background: $eot-deep; color: #D8E6E8; padding: 4rem 0 3.5rem;
+        h1 { color: #fff; font-weight: 800; font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: 1.25; margin: 0; }
+        p { color: #D8E6E8; font-size: 1.125rem; line-height: 1.9; margin: 0; }
+        .eot-kicker { color: $eot-sand; }
+    }
+    .eot-shelfbar {
+        background: #fff; border-bottom: 1px solid $eot-line; padding: 1rem 0;
+        position: sticky; top: 0; z-index: 5;
+    }
+    .eot-shelf { padding: 3rem 0 2.5rem; border-bottom: 1px solid $eot-line; scroll-margin-top: 80px; }
+    .eot-shelf-head {
+        display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2rem;
+        h2 { margin: 0; font-weight: 800; font-size: clamp(1.5rem, 3vw, 1.875rem); }
+    }
+    .eot-shelf-num { font-family: $eot-display; font-weight: 800; font-size: .9375rem; background: none !important; }
+    .eot-cover-grid {
+        display: grid; gap: 2.5rem 1.25rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        @media (min-width: 576px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        @media (min-width: 992px) { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3rem 2rem; }
+        @media (min-width: 1200px) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    }
+    .eot-book-tile {
+        display: flex; flex-direction: column; gap: .5rem; color: $eot-ink;
+        .eot-cover { margin-bottom: .5rem; transition: transform .2s ease; }
+        .eot-book-tile-title { font-family: $eot-display; font-weight: 700; font-size: 1rem; line-height: 1.5; }
+        .eot-muted { font-size: .8125rem; }
+        &:hover .eot-cover { transform: translateY(-4px); }
+        &:hover .eot-book-tile-title { color: $eot-teal; }
+    }
+    .eot-ref-band {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem;
+        margin: 3.5rem 0 4.5rem; padding: 2rem 2.5rem; border-radius: 20px;
+        background: $eot-sand-bg; color: $eot-ink;
+        .eot-ref-text { display: flex; flex-direction: column; gap: .4rem; }
+        .eot-ref-title { font-family: $eot-display; font-weight: 800; font-size: 1.625rem; }
+        .eot-ref-sub { color: #4A5557; }
+        &:hover .eot-btn-ink { background: $eot-teal; }
+    }
+
+    // book page
+    .eot-book-hero {
+        display: flex; flex-wrap: wrap; gap: 2.5rem 4.5rem; padding-top: 2.5rem; padding-bottom: 4rem;
+    }
+    .eot-cover-stage {
+        flex: 0 0 440px; max-width: 100%; background: $eot-sand-bg; border-radius: 24px;
+        display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem;
+        @media (max-width: 991.98px) { flex-basis: 100%; padding: 2.5rem 1rem; .eot-cover-lg { width: 220px; } }
+    }
+    .eot-book-info {
+        flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1.1rem;
+        h1 { margin: .25rem 0 0; font-weight: 800; font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.2; }
+        .eot-book-subtitle { margin: 0; font-family: $eot-display; font-weight: 600; font-size: 1.375rem; color: #4A5557; }
+        .eot-byline { margin: 0; strong { color: $eot-teal; } }
+        .eot-lead { max-width: 700px; }
+    }
+    .eot-facts {
+        display: flex; flex-wrap: wrap; width: 100%; margin: .5rem 0 0;
+        border-top: 1px solid $eot-line; border-bottom: 1px solid $eot-line;
+        > div { flex: 1 1 140px; padding: 1rem 1.25rem; display: flex; flex-direction: column-reverse; gap: .1rem; }
+        > div:first-child { padding-right: 0; }
+        > div + div { border-right: 1px solid $eot-line; }
+        dt { font-size: .8125rem; color: $eot-muted; font-weight: 400; }
+        dd { margin: 0; font-family: $eot-display; font-weight: 800; font-size: 1.625rem; }
+    }
+    .eot-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem; }
+    .eot-book-body {
+        display: grid; gap: 3rem 4.5rem; padding-bottom: 5rem;
+        grid-template-columns: minmax(0, 1fr);
+        @media (min-width: 992px) { grid-template-columns: minmax(0, 1fr) 360px; }
+    }
+    .eot-toc-head {
+        display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+        padding-bottom: 1.1rem; border-bottom: 2px solid $eot-ink;
+        h2 { margin: 0; font-weight: 800; font-size: 2rem; }
+    }
+    .eot-toc-part { padding-top: 2rem; }
+    .eot-toc-part-head {
+        display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem 1rem;
+        padding-bottom: .8rem; border-bottom: 1px solid #D9D2C0;
+        h3 { margin: 0; flex-grow: 1; font-weight: 700; font-size: 1.375rem; }
+        .eot-muted { font-size: .8125rem; }
+    }
+    .eot-toc-part-num { font-family: $eot-display; font-weight: 800; font-size: .875rem; color: $eot-ochre; min-width: 56px; }
+    .eot-toc-list {
+        list-style: none; margin: 0; padding: 0;
+        a {
+            display: flex; align-items: center; gap: 1rem; min-height: 48px; padding: .4rem 0;
+            border-bottom: 1px solid #EFEAE0; color: $eot-ink; line-height: 1.7;
+        }
+        a:hover { color: $eot-teal; }
+        .eot-chevron { color: $eot-teal; }
+    }
+    .eot-toc-n { font-family: $eot-display; font-weight: 600; color: #7D8688; min-width: 56px; flex-shrink: 0; }
+    .eot-toc-t { flex-grow: 1; }
+    .eot-bar-row { display: flex; flex-direction: column; gap: .4rem; }
+    .eot-bar-label { display: flex; justify-content: space-between; gap: .75rem; font-size: .875rem; }
+    .eot-bar { height: 6px; background: $eot-sand-bg; border-radius: 3px;
+        > span { display: block; height: 6px; border-radius: 3px; } }
+
+    // chapter page
+    .eot-readbar {
+        background: #fff; border-bottom: 1px solid $eot-line; position: sticky; top: 0; z-index: 5;
+    }
+    .eot-readbar-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: .6rem; padding-bottom: .6rem; font-size: .875rem; }
+    .eot-readbar-book { display: flex; align-items: center; gap: .75rem; color: $eot-ink;
+        > span:last-child { display: flex; flex-direction: column; line-height: 1.5; }
+        &:hover strong { color: $eot-teal; } }
+    .eot-reader {
+        display: grid; gap: 3rem 4.5rem; padding-top: 3rem;
+        grid-template-columns: minmax(0, 1fr);
+        @media (min-width: 992px) { grid-template-columns: minmax(0, 720px) 320px; justify-content: space-between; }
+    }
+    .eot-reader-head {
+        display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2rem;
+        h1 { margin: 0; font-weight: 800; font-size: clamp(1.875rem, 4vw, 2.75rem); line-height: 1.45; }
+        .eot-meta { color: $eot-muted; font-size: .875rem; }
+    }
+    .eot-chapter-n { color: $eot-ochre; }
+    .eot-chapter-list {
+        @media (min-width: 992px) { position: sticky; top: 80px; align-self: start; max-height: calc(100vh - 100px); }
+        .eot-card { max-height: inherit; }
+        ol { list-style: none; margin: 0; padding: 0; overflow-y: auto; max-height: 60vh; }
+        a { display: flex; gap: .5rem; padding: .45rem .5rem; border-radius: 10px; color: $eot-ink; font-size: .9375rem; line-height: 1.6; }
+        a:hover { background: $eot-paper; }
+        a.current { background: #E3F1F2; color: $eot-teal; font-weight: 700; }
+        .eot-toc-n { min-width: 32px; }
+    }
+
+    // =====================================================================
+    // Articles
+    // =====================================================================
+    &.eot-lib-articles, &.eot-lib-article { background: #fff; }
+    .eot-articles-hero {
+        display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1.5rem 4rem;
+        padding-top: 4rem; padding-bottom: 2.5rem; border-bottom: 1px solid $eot-ink;
+        > div:first-child { display: flex; flex-direction: column; gap: 1rem; max-width: 820px; }
+        h1 { margin: 0; font-weight: 900; font-size: clamp(3.5rem, 9vw, 5.5rem); line-height: 1; }
+    }
+    .eot-big-count { display: flex; align-items: baseline; gap: .6rem;
+        span:first-child { font-family: $eot-display; font-weight: 900; font-size: clamp(3.5rem, 9vw, 5.5rem); line-height: 1; color: $eot-sand; }
+        span:last-child { color: $eot-muted; } }
+    .eot-toolbar {
+        padding: 1.5rem 0; border-bottom: 1px solid $eot-line; background: #fff;
+        position: sticky; top: 0; z-index: 5;
+        .container { display: flex; flex-direction: column; gap: 1rem; }
+    }
+    .eot-filter-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; }
+    .eot-meter { display: inline-flex; gap: 3px;
+        span { width: 14px; height: 6px; border-radius: 2px; background: $eot-line; }
+        span.on { background: $eot-teal; } }
+    .eot-meter-row { display: inline-flex; align-items: center; gap: .6rem; font-size: .875rem; }
+    .eot-featured {
+        padding-top: 3rem;
+        h2 { font-size: 1.375rem; font-weight: 800; margin: 0 0 1.5rem; }
+    }
+    .eot-featured-grid {
+        display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr);
+        @media (min-width: 768px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    .eot-featured-card {
+        display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem;
+        min-height: 240px; padding: 2rem; border-radius: 20px; background: $eot-deep; color: #fff;
+        .eot-featured-n { display: flex; align-items: baseline; gap: .5rem;
+            span:first-child { font-family: $eot-display; font-weight: 900; font-size: 4rem; line-height: 1; color: $eot-sand; }
+            span:last-child { font-size: .875rem; color: #9FB7BB; } }
+        .eot-featured-text { display: flex; flex-direction: column; gap: .6rem;
+            strong { font-family: $eot-display; font-weight: 700; font-size: 1.375rem; line-height: 1.6; }
+            span { font-size: .8125rem; color: #9FB7BB; } }
+        &:hover { background: $eot-teal-dark; color: #fff; }
+    }
+    .eot-article-list { padding-top: 2.5rem; padding-bottom: 5rem; }
+    .eot-list-head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding-bottom: .9rem; border-bottom: 2px solid $eot-ink;
+        h2 { margin: 0; font-size: 1.375rem; font-weight: 800; }
+    }
+    .eot-article-item {
+        display: flex; flex-wrap: wrap; gap: .75rem 3rem; align-items: flex-start;
+        padding: 1.6rem 0; border-bottom: 1px solid $eot-line; color: $eot-ink;
+        .eot-article-main { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: .5rem; }
+        .eot-article-title { font-family: $eot-display; font-weight: 700; font-size: 1.375rem; line-height: 1.6; }
+        .eot-article-excerpt { font-size: .9375rem; line-height: 1.9; color: #4A5557;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .eot-article-meta { flex: 0 0 210px; display: flex; flex-direction: column; gap: .6rem; padding-top: .5rem; font-size: .8125rem; }
+        &:hover .eot-article-title { color: $eot-teal; }
+    }
+
+    // article page
+    .eot-progress-top { position: sticky; top: 0; z-index: 5; }
+    .eot-article-head {
+        display: flex; flex-direction: column; align-items: center; gap: 1.25rem; text-align: center;
+        padding-top: 3rem; padding-bottom: 2.75rem; border-bottom: 1px solid $eot-line;
+        h1 { margin: 0; max-width: 960px; font-weight: 800; font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.45; }
+    }
+    .eot-article-facts { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .75rem 1.75rem;
+        color: #4A5557; font-size: .9375rem; strong { color: $eot-teal; } }
+    .eot-article-body {
+        display: grid; gap: 2.5rem 4rem; padding-top: 3.5rem; padding-bottom: 4rem;
+        grid-template-columns: minmax(0, 1fr);
+        @media (min-width: 992px) {
+            grid-template-columns: minmax(0, 720px) minmax(0, 1fr);
+            &.has-toc { grid-template-columns: 240px minmax(0, 720px) minmax(0, 1fr); }
+        }
+    }
+    .eot-page-toc {
+        display: flex; flex-direction: column; gap: .15rem;
+        @media (min-width: 992px) { position: sticky; top: 90px; align-self: start; max-height: calc(100vh - 110px); overflow-y: auto; }
+        @media (max-width: 991.98px) { background: $eot-paper; border-radius: 16px; padding: 1rem 1.25rem; }
+        .eot-page-toc-title { font-family: $eot-display; font-weight: 700; font-size: .875rem; color: $eot-muted; padding-bottom: .5rem; }
+        a { font-size: .9375rem; line-height: 1.6; color: $eot-ink; padding: .4rem .8rem; border-radius: 10px; }
+        a:hover { color: $eot-teal; }
+        a.active { background: #E3F1F2; color: $eot-teal; font-weight: 700; }
+    }
+    .eot-summary {
+        background: $eot-paper; border-radius: 18px; padding: 1.5rem 1.75rem; margin-bottom: 2rem;
+        display: flex; flex-direction: column; gap: .5rem;
+        p { margin: 0; font-size: 1.0625rem; line-height: 2.05; }
+    }
+    .eot-related {
+        background: $eot-paper; padding: 3.5rem 0 4.5rem;
+        h2 { font-size: 1.625rem; font-weight: 800; margin: 0 0 1.5rem; }
+    }
+    .eot-related-grid {
+        display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr);
+        @media (min-width: 768px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    .eot-related-card {
+        display: flex; flex-direction: column; gap: .85rem; padding: 1.6rem; border-radius: 18px;
+        background: #fff; border: 1px solid $eot-line; color: $eot-ink;
+        strong { font-family: $eot-display; font-weight: 700; font-size: 1.1875rem; line-height: 1.6; }
+        > span:not(.eot-muted) { font-size: .875rem; line-height: 1.8; color: #4A5557;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .eot-muted { font-size: .8125rem; margin-top: auto; }
+        &:hover { border-color: $eot-teal; }
+    }
+
+    // =====================================================================
+    // Glossary
+    // =====================================================================
+    &.eot-lib-glossary, &.eot-lib-term { background: $eot-cream; }
+    .eot-glossary-hero {
+        background: $eot-sand-bg; padding: 3.75rem 0 3rem;
+        .container { display: flex; flex-direction: column; gap: 1.75rem; }
+        h1 { margin: 0; font-weight: 900; font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.25; }
+        .eot-lead { color: #4A5557; }
+    }
+    .eot-letterbar {
+        background: #fff; border-bottom: 1px solid $eot-line; padding: .9rem 0;
+        position: sticky; top: 0; z-index: 5;
+        .container { display: flex; flex-direction: column; gap: .75rem; }
+    }
+    .eot-letters {
+        display: flex; flex-wrap: wrap; gap: 4px;
+        @media (min-width: 1200px) { justify-content: space-between; }
+        a, span {
+            width: 36px; height: 42px; border-radius: 10px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: $eot-display; font-weight: 800; font-size: 1.125rem;
+        }
+        a { background: #F6F1E3; color: $eot-ink; }
+        a:hover, a.current { background: $eot-ochre; color: #fff; }
+        span.off { color: #C9C3B3; font-weight: 500; }
+    }
+    .eot-letters-sm { gap: 2px; @media (min-width: 1200px) { justify-content: flex-start; }
+        a, span { width: 26px; height: 32px; border-radius: 8px; font-size: .875rem; }
+        a { background: transparent; } }
+    .eot-chip-row-sm .eot-chip { padding: .35rem .85rem; font-size: .8125rem; border-color: $eot-line-sand; }
+    .eot-dictionary { padding-bottom: 5rem; }
+    .eot-letter-group {
+        display: flex; flex-wrap: wrap; gap: 1rem 3rem; padding: 2.25rem 0;
+        border-bottom: 1px solid $eot-line-sand; scroll-margin-top: 150px;
+    }
+    .eot-letter-big {
+        flex: 0 0 120px; display: flex; flex-direction: column; gap: .25rem;
+        span:first-child { font-family: $eot-display; font-weight: 900; font-size: 6rem; line-height: 1; color: $eot-ochre; }
+        @media (max-width: 767.98px) { flex-basis: 100%; flex-direction: row; align-items: baseline; gap: 1rem;
+            span:first-child { font-size: 3.5rem; } }
+    }
+    .eot-entry-grid {
+        flex: 1 1 0; min-width: 0; display: grid; gap: 0 2rem; align-content: start;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        @media (min-width: 576px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (min-width: 992px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        @media (min-width: 1200px) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    .eot-entry {
+        display: flex; flex-direction: column; justify-content: center; gap: 1px;
+        min-height: 56px; padding: .35rem 0; border-bottom: 1px solid #EDE5CF; color: $eot-ink;
+        strong { font-family: $eot-display; font-weight: 600; font-size: 1.0625rem; line-height: 1.5; }
+        span { font-size: .8125rem; color: #6B7476; text-align: right; }
+        &:hover strong { color: $eot-teal; }
+    }
+
+    // term page
+    .eot-term-bar { background: #fff; border-bottom: 1px solid $eot-line; }
+    .eot-term-bar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 2rem; padding-top: .75rem; padding-bottom: .75rem; }
+    .eot-term-body {
+        display: grid; gap: 3rem 4.5rem; padding-top: 3.5rem;
+        grid-template-columns: minmax(0, 1fr);
+        @media (min-width: 992px) { grid-template-columns: minmax(0, 1fr) 360px; }
+    }
+    .eot-headword {
+        display: flex; flex-direction: column; gap: 1rem; padding-bottom: 2.25rem; margin-bottom: 2.25rem;
+        border-bottom: 3px double #D8CBA3;
+        h1 { margin: 0; font-weight: 900; font-size: clamp(2.75rem, 7vw, 5rem); line-height: 1.2; }
+    }
+    .eot-term-cats { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .875rem; color: #4A5557;
+        .eot-chevron { color: #8A9294; width: 14px; height: 14px; } }
+    .eot-english { text-align: right; font-size: 1.5rem; font-weight: 500; color: $eot-ochre;
+        .eot-dot { color: #C9B98A; margin: 0 .5rem; } }
+    .eot-term-meta { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .875rem; color: $eot-muted;
+        strong { color: $eot-teal; font-weight: 600; } }
+    .eot-term-text {
+        max-width: 820px;
+        section { margin-bottom: 2.25rem; }
+        section h2 { margin-top: 0; font-size: 1.625rem; color: $eot-ochre; }
+        .contributor { font-size: .875rem; color: $eot-muted; }
+        section.eot-sec-en {
+            background: #fff; border: 1px solid $eot-line; border-radius: 20px; padding: 1.75rem 2rem;
+            h2 { font-size: 1.25rem; text-align: right; }
+            p { font-size: 1.0625rem; line-height: 1.85; color: $eot-body; text-align: left; }
+        }
+    }
+
+    // small screens -----------------------------------------------------------
+    @media (max-width: 767.98px) {
+        .eot-stats { gap: 1.75rem; .eot-stat-n { font-size: 2.25rem; } }
+        .eot-pager { grid-template-columns: minmax(0, 1fr); }
+        .eot-ref-band { padding: 1.5rem; }
+        .eot-toolbar { position: static; }
+        .eot-article-item .eot-article-meta { flex-basis: 100%; flex-direction: row; gap: 1rem; padding-top: 0; }
+        .eot-prose { font-size: 1.0625rem; }
+        .eot-facts > div { flex-basis: 45%; }
+        .eot-facts > div:nth-child(3) { border-right: 0; padding-right: 0; }
+    }
+}
