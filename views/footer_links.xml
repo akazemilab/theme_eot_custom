@@ -6,7 +6,8 @@
         website.template_footer_centered, view 1604), whose #footer is
         empty apart from the copyright bar below it. Before this, nothing on
         the site linked to the legal, trust or service pages.
-        Styles: .eot-footer-cols in static/src/scss/pages.scss.
+        Styles: .eot-footer-cols in static/src/scss/theme.scss. Milestone 8
+        adds the emergency-line callout (same wording as the homepage).
     -->
     <template id="footer_link_columns"
               name="EOT Footer: link columns"
@@ -47,6 +48,10 @@
                             <a href="/راهنمای-سایت">راهنمای سایت</a>
                         </nav>
                     </div>
+                    <p class="eot-fc-crisis">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A12B2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+                        <span>در وضعیت اضطراری منتظر نوبت نمانید: <a href="tel:123">اورژانس اجتماعی ۱۲۳</a></span>
+                    </p>
                 </div>
             </section>
         </xpath>

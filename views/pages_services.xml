@@ -185,8 +185,8 @@
                         </div>
                         <div class="eot-stack">
                             <div class="eot-glass"><span class="eot-glass-big">۹</span><span><strong>روان‌شناس و مشاور</strong><small>انتخاب مستقیم درمانگر</small></span></div>
-                            <div class="eot-glass"><span class="eot-glass-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E4D6A0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></span><span><strong>آنلاین</strong><small>برگزاری جلسه بدون نیاز به مراجعه حضوری</small></span></div>
-                            <div class="eot-glass"><span class="eot-glass-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E4D6A0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span><strong>رزرو زمان</strong><small>تقویم آنلاین؛ انتخاب روز و ساعت مناسب</small></span></div>
+                            <div class="eot-glass"><span class="eot-glass-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFE38A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></span><span><strong>آنلاین</strong><small>برگزاری جلسه بدون نیاز به مراجعه حضوری</small></span></div>
+                            <div class="eot-glass"><span class="eot-glass-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFE38A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span><strong>رزرو زمان</strong><small>تقویم آنلاین؛ انتخاب روز و ساعت مناسب</small></span></div>
                         </div>
                     </div>
                 </section>
@@ -250,7 +250,7 @@
                             <p class="eot-lead" style="font-size: .9rem;">هزینه و زمان جلسه ممکن است در آینده تغییر کند؛ مبلغ و زمان نهایی همان اطلاعاتی است که هنگام رزرو در سامانه سپهر هیجان اندیش نمایش داده می‌شود.</p>
                         </div>
                         <aside class="eot-note eot-note-icon">
-                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7A6230" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#005C65" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
                             <p><strong>توجه:</strong> این سرویس برای رزرو جلسه برنامه‌ریزی‌شده روان‌شناسی است و برای شرایط اورژانسی یا خطر فوری طراحی نشده است. <a href="/ایمنی-روانشناختی" class="eot-link">راهنمای ایمنی ←</a></p>
                         </aside>
                     </div>
@@ -298,7 +298,7 @@
                                 <p class="eot-lead" style="font-size: .925rem;">تاریخ، زمان و هزینه زیر بر اساس اطلاعات فعلی سامانه ثبت‌نام است؛ اطلاعات نهایی در صفحه هر رویداد نمایش داده می‌شود.</p>
                             </div>
                             <label class="eot-search">جستجو در کلاس‌ها
-                                <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E6B6D" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" data-eot-search="" placeholder="عنوان، موضوع یا محتوای کلاس" autocomplete="off"/></span>
+                                <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A5F62" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" data-eot-search="" placeholder="عنوان، موضوع یا محتوای کلاس" autocomplete="off"/></span>
                             </label>
                         </div>
                         <div class="eot-chip-row" role="group" aria-label="نوع برنامه">
@@ -367,7 +367,7 @@
                             <dl class="eot-meta eot-meta-3">
                                 <div><dt>تاریخ شروع</dt><dd>شنبه ۱۴۰۵/۰۷/۱۱</dd></div>
                                 <div><dt>زمان</dt><dd>شنبه‌ها ۱۶:۳۰ تا ۱۷:۴۵</dd></div>
-                                <div><dt>هزینه فعلی دوره</dt><dd class="eot-num-font" style="color: #E4D6A0;">۱٬۹۸۰٬۰۰۰ تومان</dd></div>
+                                <div><dt>هزینه فعلی دوره</dt><dd class="eot-num-font" style="color: #FFE38A;">۱٬۹۸۰٬۰۰۰ تومان</dd></div>
                             </dl>
                             <a href="https://sepehrtherapy.ir/event/online-couples-relationship-course-1405-07-11-106/register" target="_blank" rel="noopener" class="eot-btn eot-btn-sand">جزئیات و ثبت‌نام</a>
                         </article>

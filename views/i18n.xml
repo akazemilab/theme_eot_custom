@@ -76,4 +76,97 @@
             <a class="o_skip_to_content btn btn-primary rounded-0 visually-hidden-focusable position-absolute start-0" href="#wrap" groups="!base.group_user">پرش به محتوای اصلی</a>
         </xpath>
     </template>
+
+    <!--
+        Milestone 8: remaining English on the sign-in and search pages.
+        All literal template text or Python strings with no fa.po entry
+        upstream (checked in the Odoo 20 source on eot-odoo-prod).
+        Appearance/wording only - no logic changes: the same /web/login
+        route also serves staff sign-in.
+    -->
+    <template id="login_fa" name="EOT: sign-in form in Persian" inherit_id="web.login">
+        <xpath expr="//input[@name='login']" position="attributes">
+            <attribute name="placeholder">ایمیل خود را وارد کنید</attribute>
+        </xpath>
+        <xpath expr="//input[@name='password']" position="attributes">
+            <attribute name="placeholder">گذرواژه خود را وارد کنید</attribute>
+        </xpath>
+        <!-- Core fa_IR translation of "Wrong login/password" has a typo
+             ("نام وردو"); show a correct sentence for either form, pass
+             every other error through unchanged. -->
+        <xpath expr="//p[hasclass('alert-danger')]/t[@t-out='error']" position="replace">
+            <t t-if="error in ('Wrong login/password', 'نام وردو/گذرواژه اشتباه')">نام کاربری یا گذرواژه اشتباه است</t>
+            <t t-else="" t-out="error"/>
+        </xpath>
+    </template>
+
+    <template id="login_oauth_fa" name="EOT: sign-in alternatives divider in Persian" inherit_id="web.login_oauth">
+        <xpath expr="//div[hasclass('o_login_auth')]/em" position="replace">
+            <em class="d-block my-3 small text-center text-muted">یا</em>
+        </xpath>
+    </template>
+
+    <template id="login_passkey_fa" name="EOT: passkey button in Persian" inherit_id="auth_passkey.auth_passkey_login_oauth">
+        <xpath expr="//t[@t-set='passkey_body']" position="replace">
+            <t t-set="passkey_body">ورود با کلید عبور</t>
+        </xpath>
+    </template>
+
+    <template id="search_results_fa" name="EOT: search results page in Persian" inherit_id="website.list_hybrid">
+        <xpath expr="//t[@t-if='not results']" position="replace">
+            <t t-if="not results">
+                <div class="text-center">
+                    <div class="mt-5 mb-3"><t t-call="website.empty_search_svg"/></div>
+                    <t t-if="search">برای «<t t-out="search"/>» نتیجه‌ای پیدا نشد.</t>
+                    <t t-else="">عبارتی برای جستجو وارد کنید.</t>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-elif='fuzzy_search']" position="replace">
+            <t t-elif="fuzzy_search">
+                <div class="alert alert-warning mt8" role="alert">
+                    برای «<t t-out="search"/>» نتیجه‌ای پیدا نشد. نتایج «<t t-out="fuzzy_search"/>» نمایش داده شده است.
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//h2[hasclass('text-muted')]" position="replace">
+            <h2 class="small fw-normal text-muted">
+                <t t-out="{'Blog Articles': 'مطالب کتابخانه', 'Pages': 'صفحات', 'Blogs': 'بخش‌های کتابخانه'}.get(bucket['groupName'], bucket['groupName'])"/> · <t t-out="bucket['searchCount']"/> نتیجه
+            </h2>
+        </xpath>
+        <xpath expr="//button[hasclass('o_load_more')]" position="replace">
+            <button class="o_load_more btn btn-light" t-att-data-search-type="group_result[0]">نمایش بیشتر</button>
+        </xpath>
+    </template>
+
+    <!--
+        404: core's page is English ("Error 404", "We couldn't find the
+        page you're looking for!") with a stock illustration. Replace the
+        body with a Persian page in the site's style. Links are to pages
+        that exist and are published (checked with `eot links`).
+    -->
+    <template id="page_404_fa" name="EOT: 404 page" inherit_id="http_routing.404">
+        <xpath expr="//div[@id='wrap']/div[hasclass('oe_structure')]" position="replace">
+            <section class="eot-404 eot-grid-bg">
+                <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f3"/></div>
+                <div class="container">
+                    <span class="eot-404-code" aria-hidden="true">۴۰۴</span>
+                    <h1>این صفحه پیدا نشد</h1>
+                    <p>نشانی‌ای که باز کرده‌اید وجود ندارد یا جابه‌جا شده است. از یکی از بخش‌های اصلی سایت ادامه دهید یا از جستجو استفاده کنید.</p>
+                    <div class="eot-actions">
+                        <a href="/" class="btn btn-primary">صفحه اصلی</a>
+                        <a href="/website/search" class="btn btn-outline-primary">جستجو در سایت</a>
+                    </div>
+                    <nav class="eot-404-links" aria-label="بخش‌های اصلی">
+                        <a href="/کتب">کتاب‌ها</a>
+                        <a href="/مقالات">مقالات</a>
+                        <a href="/فرهنگنامه">فرهنگنامه</a>
+                        <a href="/خدمات">خدمات</a>
+                        <a href="/about">درباره هیجان اندیشه</a>
+                        <a href="/contactus">تماس با ما</a>
+                    </nav>
+                </div>
+            </section>
+        </xpath>
+    </template>
 </odoo>

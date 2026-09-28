@@ -28,313 +28,224 @@
         template, so a full content replacement is the task itself, not
         the sweeping-layout-edit the README warns against.
 
-        Content matches the approved mockup: institute intro first, Dr.
-        Kazemi founder section second, then role cards, books, articles,
-        closing institute banner. Deliberately minimal per the agreed plan
-        - a full redesign pass follows once every other page exists.
+        Milestone 8 redesign (approved "Direction I" on the canvas: day
+        version, Talkspace palette, Direction D fonts). Sections, top to
+        bottom: hero (no photo; colour field + grid, stats strip, three
+        pillars), sister-brand strip, founder, "by EOT" paths, books band,
+        articles, closing statement. Copy is verbatim from the previous
+        homepage. Styles: .eot-h-* in static/src/scss/theme.scss.
     -->
     <template id="homepage_content" name="EOT Homepage: content" inherit_id="theme_eot_custom.eot_home_view_ref">
         <xpath expr="//div[@id='wrap']" position="replace">
-            <div id="wrap" class="oe_structure">
+            <div id="wrap" class="oe_structure eot-h">
 
-                <!-- Institute intro (هیجان اندیشه) -->
-                <section class="eot-home-hero py-5 py-lg-6 text-center">
-                    <div class="container" style="max-width: 900px;">
-                        <span class="eot-eyebrow d-block mb-3">علم • تجربه • رشد انسانی</span>
-                        <h1 class="eot-home-h1 mb-4">مؤسسه تعاملی هیجان اندیشه</h1>
-                        <p class="lead mb-4 mx-auto" style="max-width: 760px;">
-                            نهادی علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی؛ با تمرکز بر
-                            پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی. این
-                            مجموعه (شماره ثبت ۴۵۴۷۷) بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است.
-                        </p>
-                        <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
-                            <a href="/about" class="btn btn-primary rounded-pill px-4 py-2">بیشتر با هیجان اندیشه آشنا شوید</a>
-                            <a href="#founder" class="btn btn-outline-dark rounded-pill px-4 py-2">آشنایی با بنیان‌گذار</a>
+                <!-- Hero: no photo. Colour field + grid, stats strip, pillars. -->
+                <section class="eot-h-hero eot-grid-bg">
+                    <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f2"/><span class="eot-f3"/><span class="eot-f4"/></div>
+                    <div class="container">
+                        <div class="eot-h-hero-in">
+                            <span class="eot-tag"><span class="eot-dot"/>علم • تجربه • رشد انسانی</span>
+                            <h1 class="eot-h-title">مؤسسه تعاملی <span class="eot-hl">هیجان اندیشه</span></h1>
+                            <p class="eot-h-lead">نهادی علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی. این مجموعه (شماره ثبت ۴۵۴۷۷) بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است.</p>
+                            <div class="eot-actions">
+                                <a href="/about" class="btn btn-primary">بیشتر با هیجان اندیشه آشنا شوید</a>
+                                <a href="#founder" class="btn btn-outline-primary">آشنایی با بنیان‌گذار</a>
+                            </div>
+                            <dl class="eot-h-stats">
+                                <div><dt>۲۰</dt><dd>کتاب و اثر بلند</dd></div>
+                                <div><dt>۱۴۲</dt><dd>مقاله منتشرشده</dd></div>
+                                <div><dt>۴ دهه</dt><dd>تجربه علمی و حرفه‌ای</dd></div>
+                            </dl>
                         </div>
-                        <div class="row g-3 text-start">
-                            <div class="col-md-4">
-                                <div class="eot-pillar h-100 p-4">
-                                    <h3 class="h6 mb-2">مشاوره</h3>
-                                    <p class="small text-muted mb-0">کاربرد دانش روان‌شناسی برای شناخت، تصمیم‌گیری، حمایت و مداخله حرفه‌ای.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="eot-pillar h-100 p-4">
-                                    <h3 class="h6 mb-2">آموزش</h3>
-                                    <p class="small text-muted mb-0">تبدیل مفاهیم علمی به یادگیری روشن، ساختاریافته و قابل استفاده.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="eot-pillar h-100 p-4">
-                                    <h3 class="h6 mb-2">پژوهش</h3>
-                                    <p class="small text-muted mb-0">توسعه دانش، ابزارهای سنجش و محتوای تخصصی در حوزه‌های روان‌شناسی و نخبگی.</p>
-                                </div>
+                        <div class="eot-h-pillars">
+                            <div class="eot-glass eot-top eot-c-pink"><span class="eot-idx">۰۱</span><h2>مشاوره</h2><p>کاربرد دانش روان‌شناسی برای شناخت، تصمیم‌گیری، حمایت و مداخله حرفه‌ای.</p></div>
+                            <div class="eot-glass eot-top eot-c-mint"><span class="eot-idx">۰۲</span><h2>آموزش</h2><p>تبدیل مفاهیم علمی به یادگیری روشن، ساختاریافته و قابل استفاده.</p></div>
+                            <div class="eot-glass eot-top eot-c-blue"><span class="eot-idx">۰۳</span><h2>پژوهش</h2><p>توسعه دانش، ابزارهای سنجش و محتوای تخصصی در حوزه‌های روان‌شناسی و نخبگی.</p></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sister-brand strip -->
+                <section class="eot-h-brands" aria-label="مجموعه هیجان اندیشه">
+                    <div class="container">
+                        <span class="eot-h-brands-label">مجموعه هیجان اندیشه</span>
+                        <ul>
+                            <li><img src="/theme_eot_custom/static/src/img/brands/sepehr.webp" width="36" height="36" alt="" loading="lazy"/>سپهر هیجان اندیش</li>
+                            <li><img src="/theme_eot_custom/static/src/img/brands/talentsearch.webp" width="36" height="36" alt="" loading="lazy"/>استعدادیاب</li>
+                            <li><img src="/theme_eot_custom/static/src/img/brands/talentschool.webp" width="36" height="36" alt="" loading="lazy"/>مدرسه استعداد</li>
+                            <li><img src="/theme_eot_custom/static/src/img/brands/iranandish.webp" width="36" height="36" alt="" loading="lazy"/>ایران اندیش</li>
+                        </ul>
+                        <a href="#eot-family" class="eot-tl">به دنبال چه هستید؟<svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
+                    </div>
+                </section>
+
+                <!-- Founder -->
+                <section id="founder" class="eot-h-founder">
+                    <div class="container">
+                        <figure class="eot-h-portrait">
+                            <img src="/web/image/836-bdfdb71c/h33-1.svg" alt="دکتر ناصرالدین کاظمی حقیقی" loading="lazy"/>
+                        </figure>
+                        <div class="eot-h-founder-txt">
+                            <span class="eot-tag"><span class="eot-dot eot-c-pink"/>بنیان‌گذار هیجان اندیشه</span>
+                            <h2 class="eot-h2">دکتر ناصرالدین کاظمی حقیقی</h2>
+                            <p class="eot-h-founder-lead">روان‌شناس، پژوهشگر و نظریه‌پرداز مکتب روان‌شناسی تعاملی و بنیان‌گذار مؤسسه تعاملی هیجان اندیشه.</p>
+                            <p class="eot-muted">فعالیت‌های علمی و حرفه‌ای ایشان با روان‌شناسی تعاملی و موضوعاتی مانند استعداد، خلاقیت، تیزهوشی، آموزش و روان‌شناسی کودکان استثنایی پیوند دارد. مکتب روان‌شناسی تعاملی بر نگاه نظام‌مند به انسان و ارتباط میان اندیشه، هیجان، تجربه و محیط تأکید می‌کند.</p>
+                            <ol class="eot-h-roles">
+                                <li><span class="eot-idx">۰۱</span><strong>بنیان‌گذاری</strong><span>بنیان‌گذار مؤسسه تعاملی هیجان اندیشه و شکل‌دهنده چارچوب روان‌شناسی تعاملی.</span></li>
+                                <li><span class="eot-idx">۰۲</span><strong>تألیف و پژوهش</strong><span>تولید آثار و محتوای تخصصی در روان‌شناسی، استعداد، خلاقیت و آموزش.</span></li>
+                                <li><span class="eot-idx">۰۳</span><strong>آموزش حرفه‌ای</strong><span>پشتیبانی نظری از آموزش‌ها، کارورزی و توسعه مسیرهای حرفه‌ای روان‌شناسی.</span></li>
+                            </ol>
+                            <div class="eot-actions">
+                                <a href="#books" class="btn btn-primary">مطالعه کتاب‌ها</a>
+                                <a href="#articles" class="btn btn-outline-primary">مطالعه مقالات</a>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Dr. Kazemi Haghighi (founder) -->
-                <section id="founder" class="eot-home-founder py-5 py-lg-6">
+                <!-- "by EOT" paths (milestone 7 content, restyled). talentschool.ir
+                     and iranandish.ir are under development and not linked. -->
+                <section id="eot-family" class="eot-h-family" aria-labelledby="eot-family-title">
                     <div class="container">
-                        <div class="row align-items-center g-5">
-                            <div class="col-lg-5 text-center">
-                                <img src="/web/image/836-bdfdb71c/h33-1.svg"
-                                     class="eot-founder-photo img-fluid"
-                                     alt="دکتر ناصرالدین کاظمی حقیقی"/>
-                            </div>
-                            <div class="col-lg-7">
-                                <span class="eot-eyebrow d-block mb-2">بنیان‌گذار هیجان اندیشه</span>
-                                <h2 class="mb-3">دکتر ناصرالدین کاظمی حقیقی</h2>
-                                <p class="lead">
-                                    روان‌شناس، پژوهشگر و نظریه‌پرداز مکتب روان‌شناسی تعاملی و بنیان‌گذار
-                                    مؤسسه تعاملی هیجان اندیشه.
-                                </p>
-                                <p class="text-muted">
-                                    فعالیت‌های علمی و حرفه‌ای ایشان با روان‌شناسی تعاملی و موضوعاتی مانند
-                                    استعداد، خلاقیت، تیزهوشی، آموزش و روان‌شناسی کودکان استثنایی پیوند
-                                    دارد. مکتب روان‌شناسی تعاملی بر نگاه نظام‌مند به انسان و ارتباط میان
-                                    اندیشه، هیجان، تجربه و محیط تأکید می‌کند.
-                                </p>
-                                <div class="d-flex flex-wrap gap-3 mt-4 mb-4">
-                                    <a href="#books" class="btn btn-primary rounded-pill px-4 py-2">مطالعه کتاب‌ها</a>
-                                    <a href="#articles" class="btn btn-outline-dark rounded-pill px-4 py-2">مطالعه مقالات</a>
+                        <div class="eot-h-head">
+                            <span class="eot-tag"><span class="eot-dot eot-c-blue"/>مجموعه هیجان اندیشه</span>
+                            <h2 id="eot-family-title" class="eot-h2">به دنبال چه هستید؟</h2>
+                            <p class="eot-muted">هیجان اندیشه خانه دانش و آموزش روان‌شناسی است. درمان، آزمون، یادگیری عمومی و کارورزی هر کدام مرکز تخصصی خود را دارند؛ اینجا مسیر درست را پیدا کنید و کار را در سایت همان مرکز انجام دهید.</p>
+                        </div>
+                        <div class="eot-h-fgrid">
+                            <article class="eot-glass eot-top eot-c-blue eot-h-fcard">
+                                <div class="eot-h-fcard-top"><img src="/theme_eot_custom/static/src/img/brands/sepehr.webp" width="52" height="52" alt="نشان سپهر هیجان اندیش" loading="lazy"/><span class="eot-idx">۰۱</span></div>
+                                <span class="eot-h-by">سپهر هیجان اندیش · قدرت گرفته از هیجان اندیشه</span>
+                                <h3>رزرو جلسه درمان</h3>
+                                <p>درمان فردی و گروه‌های درمانی با روان‌شناسانی که پیش از رزرو، نامشان را می‌بینید.</p>
+                                <div class="eot-h-fcard-actions">
+                                    <a href="https://www.sepehrtherapy.ir/appointment" target="_blank" rel="noopener" class="btn btn-primary">رزرو در سپهر<svg class="eot-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17M8 7h9v9"/></svg></a>
+                                    <a href="/مشاوره-روانشناسی-آنلاین" class="btn btn-outline-primary">انتخاب درمانگر</a>
                                 </div>
-                                <div class="row g-3 border-top pt-4">
-                                    <div class="col-4">
-                                        <div class="h4 mb-0">۲۰</div>
-                                        <div class="small text-muted">کتاب و اثر بلند</div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="h4 mb-0">۱۴۲</div>
-                                        <div class="small text-muted">مقاله منتشرشده</div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="h4 mb-0">۴ دهه</div>
-                                        <div class="small text-muted">تجربه علمی و حرفه‌ای</div>
-                                    </div>
+                                <p class="eot-h-note">در وضعیت اضطراری منتظر نوبت نمانید: <a href="tel:123" class="eot-danger-link">اورژانس اجتماعی ۱۲۳</a></p>
+                            </article>
+                            <article class="eot-glass eot-top eot-c-pink eot-h-fcard">
+                                <div class="eot-h-fcard-top"><img src="/theme_eot_custom/static/src/img/brands/talentsearch.webp" width="52" height="52" alt="نشان استعدادیاب" loading="lazy"/><span class="eot-idx">۰۲</span></div>
+                                <span class="eot-h-by">استعدادیاب · قدرت گرفته از هیجان اندیشه</span>
+                                <h3>انجام آزمون و ارزیابی</h3>
+                                <p>آزمون‌های استعداد، شخصیت و شغلی برای بزرگسال، نوجوان و کودک. آزمون را در استعدادیاب می‌دهید و نتیجه را همان‌جا می‌گیرید.</p>
+                                <div class="eot-h-mh">
+                                    <a href="https://www.talentsearch.ir/assessments" target="_blank" rel="noopener">آزمون‌های سلامت روان</a>
+                                    <p>سنجش افسردگی، اضطراب و فرسودگی برای آگاهی از وضعیت خودتان است، نه تشخیص قطعی. اگر نتیجه نگرانتان کرد، <a href="https://www.sepehrtherapy.ir/appointment" target="_blank" rel="noopener">با یک روان‌شناس صحبت کنید</a>.</p>
                                 </div>
-                            </div>
+                                <div class="eot-h-fcard-actions">
+                                    <a href="https://www.talentsearch.ir/" target="_blank" rel="noopener" class="btn btn-primary">شروع در استعدادیاب<svg class="eot-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17M8 7h9v9"/></svg></a>
+                                    <a href="/آزمون-روانشناسی" class="btn btn-outline-primary">راهنمای آزمون‌ها</a>
+                                </div>
+                            </article>
+                            <article class="eot-glass eot-top eot-c-lemon eot-h-fcard">
+                                <div class="eot-h-fcard-top"><img src="/theme_eot_custom/static/src/img/brands/talentschool.webp" width="52" height="52" alt="نشان مدرسه استعداد" loading="lazy"/><span class="eot-idx">۰۳</span></div>
+                                <span class="eot-h-by">مدرسه استعداد · قدرت گرفته از هیجان اندیشه</span>
+                                <h3>یادگیری در زمان خودتان</h3>
+                                <p>دوره‌های خودآموز روان‌شناسی برای زندگی روزمره، با سرعتی که خودتان تعیین می‌کنید.</p>
+                                <span class="eot-tag eot-tag-sm"><span class="eot-dot eot-c-lemon"/>سایت مدرسه استعداد در حال راه‌اندازی است</span>
+                                <div class="eot-h-fcard-actions">
+                                    <a href="/یادگیری-خودیار-روانشناسی" class="btn btn-outline-primary">مسیرهای خودآموز فعلی</a>
+                                </div>
+                            </article>
+                            <article class="eot-glass eot-top eot-c-mint eot-h-fcard">
+                                <div class="eot-h-fcard-top"><img src="/theme_eot_custom/static/src/img/brands/iranandish.webp" width="52" height="52" alt="نشان ایران اندیش" loading="lazy"/><span class="eot-idx">۰۴</span></div>
+                                <span class="eot-h-by">مرکز خدمات روان‌شناسی و مشاوره ایران اندیش · قدرت گرفته از هیجان اندیشه</span>
+                                <h3>کارورزی روان‌شناسی و مشاوره</h3>
+                                <p>کارورزی آنلاین روان‌شناسی و مشاوره، در قالب یک دوره حرفه‌ای ۲۸ ماهه.</p>
+                                <span class="eot-tag eot-tag-sm"><span class="eot-dot eot-c-lemon"/>سایت ایران اندیش در حال راه‌اندازی است</span>
+                                <div class="eot-h-fcard-actions">
+                                    <a href="/کارورزی-روانشناسی-آنلاین" class="btn btn-outline-primary">جزئیات کارورزی</a>
+                                </div>
+                            </article>
                         </div>
                     </div>
                 </section>
 
-                <!-- Role cards -->
-                <section class="pb-5 pb-lg-6">
+                <!-- Books band (the page's one teal band) -->
+                <section id="books" class="eot-h-books">
                     <div class="container">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <div class="eot-card h-100 p-4">
-                                    <h3 class="h6 mb-2">بنیان‌گذاری</h3>
-                                    <p class="small text-muted mb-0">بنیان‌گذار مؤسسه تعاملی هیجان اندیشه و شکل‌دهنده چارچوب روان‌شناسی تعاملی.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="eot-card h-100 p-4">
-                                    <h3 class="h6 mb-2">تألیف و پژوهش</h3>
-                                    <p class="small text-muted mb-0">تولید آثار و محتوای تخصصی در روان‌شناسی، استعداد، خلاقیت و آموزش.</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="eot-card h-100 p-4">
-                                    <h3 class="h6 mb-2">آموزش حرفه‌ای</h3>
-                                    <p class="small text-muted mb-0">پشتیبانی نظری از آموزش‌ها، کارورزی و توسعه مسیرهای حرفه‌ای روان‌شناسی.</p>
-                                </div>
-                            </div>
+                        <div class="eot-h-head eot-h-head-row">
+                            <div><span class="eot-h-books-label">کتابخانه هیجان اندیشه</span><h2 class="eot-h2">۲۰ کتاب و اثر بلند</h2></div>
+                            <a href="/کتب" class="btn eot-btn-lemon">مشاهده همه کتاب‌ها</a>
                         </div>
-                    </div>
-                </section>
-
-                <!-- Books -->
-                <section id="books" class="eot-home-books py-5 py-lg-6">
-                    <div class="container">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
-                            <div>
-                                <span class="eot-eyebrow d-block mb-2">کتابخانه هیجان اندیشه</span>
-                                <h2 class="mb-0">۲۰ کتاب و اثر بلند</h2>
-                            </div>
-                            <a href="/کتب" class="btn btn-outline-primary rounded-pill px-4">مشاهده همه کتاب‌ها</a>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <a class="eot-book-card d-block p-4 text-decoration-none" href="/کتب/نخبه-شناسی">
-                                    <h3 class="h6 mb-1">نخبه‌شناسی</h3>
-                                    <span class="small text-muted">۴۶ فصل / بخش</span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="eot-book-card d-block p-4 text-decoration-none" href="/کتب/هیجان-اندیشه">
-                                    <h3 class="h6 mb-1">هیجان اندیشه</h3>
-                                    <span class="small text-muted">۶۵ فصل / بخش</span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="eot-book-card d-block p-4 text-decoration-none" href="/کتب/خودشناسی">
-                                    <h3 class="h6 mb-1">خودشناسی</h3>
-                                    <span class="small text-muted">۹ فصل / بخش</span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="eot-book-card d-block p-4 text-decoration-none" href="/کتب/استعداد-و-تیزهوشی">
-                                    <h3 class="h6 mb-1">استعداد و تیزهوشی</h3>
-                                    <span class="small text-muted">۱۰۱ فصل / بخش</span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="eot-book-card d-block p-4 text-decoration-none" href="/کتب/زمینه-روانشناسی-تعاملی">
-                                    <h3 class="h6 mb-1">زمینه روان‌شناسی تعاملی</h3>
-                                    <span class="small text-muted">۴۵ فصل / بخش</span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="eot-book-card d-block p-4 text-decoration-none" href="/کتب/خلاقیت">
-                                    <h3 class="h6 mb-1">خلاقیت</h3>
-                                    <span class="small text-muted">۳۳ فصل / بخش</span>
-                                </a>
-                            </div>
+                        <div class="eot-h-bgrid">
+                            <a class="eot-h-book" href="/کتب/نخبه-شناسی">
+                                <span class="eot-h-spine eot-c-pink" aria-hidden="true"/>
+                                <span class="eot-h-book-t"><strong>نخبه‌شناسی</strong><span>۴۶ فصل / بخش</span></span>
+                            </a>
+                            <a class="eot-h-book" href="/کتب/هیجان-اندیشه">
+                                <span class="eot-h-spine eot-c-mint" aria-hidden="true"/>
+                                <span class="eot-h-book-t"><strong>هیجان اندیشه</strong><span>۶۵ فصل / بخش</span></span>
+                            </a>
+                            <a class="eot-h-book" href="/کتب/خودشناسی">
+                                <span class="eot-h-spine eot-c-blue" aria-hidden="true"/>
+                                <span class="eot-h-book-t"><strong>خودشناسی</strong><span>۹ فصل / بخش</span></span>
+                            </a>
+                            <a class="eot-h-book" href="/کتب/استعداد-و-تیزهوشی">
+                                <span class="eot-h-spine eot-c-lemon" aria-hidden="true"/>
+                                <span class="eot-h-book-t"><strong>استعداد و تیزهوشی</strong><span>۱۰۱ فصل / بخش</span></span>
+                            </a>
+                            <a class="eot-h-book" href="/کتب/زمینه-روانشناسی-تعاملی">
+                                <span class="eot-h-spine eot-c-orange" aria-hidden="true"/>
+                                <span class="eot-h-book-t"><strong>زمینه روان‌شناسی تعاملی</strong><span>۴۵ فصل / بخش</span></span>
+                            </a>
+                            <a class="eot-h-book" href="/کتب/خلاقیت">
+                                <span class="eot-h-spine eot-c-pink" aria-hidden="true"/>
+                                <span class="eot-h-book-t"><strong>خلاقیت</strong><span>۳۳ فصل / بخش</span></span>
+                            </a>
                         </div>
                     </div>
                 </section>
 
                 <!-- Articles -->
-                <section id="articles" class="py-5 py-lg-6">
+                <section id="articles" class="eot-h-articles">
                     <div class="container">
-                        <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
-                            <div>
-                                <span class="eot-eyebrow d-block mb-2">مقالات دکتر کاظمی حقیقی</span>
-                                <h2 class="mb-0">۱۴۲ مقاله منتشرشده</h2>
-                            </div>
-                            <a href="/مقالات" class="btn btn-outline-primary rounded-pill px-4">مشاهده همه مقالات</a>
+                        <div class="eot-h-head">
+                            <span class="eot-tag"><span class="eot-dot eot-c-orange"/>مقالات دکتر کاظمی حقیقی</span>
+                            <h2 class="eot-h2">۱۴۲ مقاله منتشرشده</h2>
+                            <a href="/مقالات" class="btn btn-primary">مشاهده همه مقالات</a>
                         </div>
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات/هوش-موفق-1983">
-                                    <span>هوش موفق</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات/نظریه-هیجان-اندیشه-1974">
-                                    <span>نظریه هیجان اندیشه</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات/مفهوم-روانشناسی-تعاملی-و-گسترهٔ-آن-1964">
-                                    <span>مفهوم روان‌شناسی تعاملی و گستره آن</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات/نقش-خانواده-در-پیشرفت-تحصیلی-تیزهوشان-1976">
-                                    <span>نقش خانواده در پیشرفت تحصیلی تیزهوشان</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات/هوش-و-خلّاقیّت-در-گستره-تیزهوشی-1984">
-                                    <span>هوش و خلّاقیّت در گستره تیزهوشی</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات/مبانی-نظری-نخبگی-1958">
-                                    <span>مبانی نظری نخبگی</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-                                </a>
-                            </div>
+                        <div class="eot-h-alist">
+                            <a class="eot-h-art" href="/مقالات/هوش-موفق-1983">
+                                <span class="eot-idx">۰۱</span>
+                                <span class="eot-h-art-t">هوش موفق</span>
+                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                            </a>
+                            <a class="eot-h-art" href="/مقالات/نظریه-هیجان-اندیشه-1974">
+                                <span class="eot-idx">۰۲</span>
+                                <span class="eot-h-art-t">نظریه هیجان اندیشه</span>
+                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                            </a>
+                            <a class="eot-h-art" href="/مقالات/مفهوم-روانشناسی-تعاملی-و-گسترهٔ-آن-1964">
+                                <span class="eot-idx">۰۳</span>
+                                <span class="eot-h-art-t">مفهوم روان‌شناسی تعاملی و گستره آن</span>
+                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                            </a>
+                            <a class="eot-h-art" href="/مقالات/نقش-خانواده-در-پیشرفت-تحصیلی-تیزهوشان-1976">
+                                <span class="eot-idx">۰۴</span>
+                                <span class="eot-h-art-t">نقش خانواده در پیشرفت تحصیلی تیزهوشان</span>
+                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                            </a>
+                            <a class="eot-h-art" href="/مقالات/هوش-و-خلّاقیّت-در-گستره-تیزهوشی-1984">
+                                <span class="eot-idx">۰۵</span>
+                                <span class="eot-h-art-t">هوش و خلّاقیّت در گستره تیزهوشی</span>
+                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                            </a>
+                            <a class="eot-h-art" href="/مقالات/مبانی-نظری-نخبگی-1958">
+                                <span class="eot-idx">۰۶</span>
+                                <span class="eot-h-art-t">مبانی نظری نخبگی</span>
+                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                            </a>
                         </div>
                     </div>
                 </section>
 
-                <!-- Sister brands (milestone 7). Endorsed architecture from
-                     EOT_Brand_Strategy.docx: EOT gives the overview and the
-                     decision, each brand's own site handles the transaction.
-                     Only verified live URLs are linked; talentschool.ir and
-                     iranandish.ir are under development and are not linked. -->
-                <section id="eot-family" class="eot-family py-5 py-lg-6" aria-labelledby="eot-family-title">
+                <!-- Closing statement -->
+                <section class="eot-h-close eot-grid-bg">
                     <div class="container">
-                        <div class="eot-family-head mb-4 mb-lg-5">
-                            <span class="eot-eyebrow d-block mb-2">مجموعه هیجان اندیشه</span>
-                            <h2 id="eot-family-title" class="mb-3">به دنبال چه هستید؟</h2>
-                            <p class="mb-0">هیجان اندیشه خانه دانش و آموزش روان‌شناسی است. درمان، آزمون، یادگیری عمومی و کارورزی هر کدام مرکز تخصصی خود را دارند؛ اینجا مسیر درست را پیدا کنید و کار را در سایت همان مرکز انجام دهید.</p>
-                        </div>
-                        <div class="row g-3 g-lg-4">
-
-                            <div class="col-md-6">
-                                <article class="eot-family-card h-100">
-                                    <h3 class="eot-family-goal">رزرو جلسه درمان</h3>
-                                    <p class="eot-family-lead">درمان فردی و گروه‌های درمانی با روان‌شناسانی که پیش از رزرو، نامشان را می‌بینید.</p>
-                                    <div class="eot-family-actions">
-                                        <a href="https://www.sepehrtherapy.ir/appointment" target="_blank" rel="noopener" class="btn btn-primary px-4">رزرو در سپهر<svg class="eot-ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17M8 7h9v9"/></svg></a>
-                                        <a href="/مشاوره-روانشناسی-آنلاین" class="btn btn-outline-primary px-4">انتخاب درمانگر</a>
-                                    </div>
-                                    <p class="eot-family-note">در وضعیت اضطراری منتظر نوبت نمانید: <a href="tel:123">اورژانس اجتماعی ۱۲۳</a></p>
-                                    <div class="eot-family-brand">
-                                        <img src="/theme_eot_custom/static/src/img/brands/sepehr.webp" width="48" height="48" alt="نشان سپهر هیجان اندیش" loading="lazy"/>
-                                        <div><strong>سپهر هیجان اندیش</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
-                                    </div>
-                                </article>
-                            </div>
-
-                            <div class="col-md-6">
-                                <article class="eot-family-card h-100">
-                                    <h3 class="eot-family-goal">انجام آزمون و ارزیابی</h3>
-                                    <p class="eot-family-lead">آزمون‌های استعداد، شخصیت و شغلی برای بزرگسال، نوجوان و کودک. آزمون را در استعدادیاب می‌دهید و نتیجه را همان‌جا می‌گیرید.</p>
-                                    <div class="eot-family-mh">
-                                        <a href="https://www.talentsearch.ir/assessments" target="_blank" rel="noopener" class="eot-family-mh-title">آزمون‌های سلامت روان</a>
-                                        <p class="mb-0">سنجش افسردگی، اضطراب و فرسودگی برای آگاهی از وضعیت خودتان است، نه تشخیص قطعی. اگر نتیجه نگرانتان کرد، <a href="https://www.sepehrtherapy.ir/appointment" target="_blank" rel="noopener">با یک روان‌شناس صحبت کنید</a>.</p>
-                                    </div>
-                                    <div class="eot-family-actions">
-                                        <a href="https://www.talentsearch.ir/" target="_blank" rel="noopener" class="btn btn-primary px-4">شروع در استعدادیاب<svg class="eot-ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17M8 7h9v9"/></svg></a>
-                                        <a href="/آزمون-روانشناسی" class="btn btn-outline-primary px-4">راهنمای آزمون‌ها</a>
-                                    </div>
-                                    <div class="eot-family-brand">
-                                        <img src="/theme_eot_custom/static/src/img/brands/talentsearch.webp" width="48" height="48" alt="نشان استعدادیاب" loading="lazy"/>
-                                        <div><strong>استعدادیاب</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
-                                    </div>
-                                </article>
-                            </div>
-
-                            <div class="col-md-6">
-                                <article class="eot-family-card h-100">
-                                    <h3 class="eot-family-goal">یادگیری در زمان خودتان</h3>
-                                    <p class="eot-family-lead">دوره‌های خودآموز روان‌شناسی برای زندگی روزمره، با سرعتی که خودتان تعیین می‌کنید.</p>
-                                    <span class="eot-soon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>سایت مدرسه استعداد در حال راه‌اندازی است</span>
-                                    <div class="eot-family-actions">
-                                        <a href="/یادگیری-خودیار-روانشناسی" class="btn btn-outline-primary px-4">مسیرهای خودآموز فعلی</a>
-                                    </div>
-                                    <div class="eot-family-brand">
-                                        <img src="/theme_eot_custom/static/src/img/brands/talentschool.webp" width="48" height="48" alt="نشان مدرسه استعداد" loading="lazy"/>
-                                        <div><strong>مدرسه استعداد</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
-                                    </div>
-                                </article>
-                            </div>
-
-                            <div class="col-md-6">
-                                <article class="eot-family-card h-100">
-                                    <h3 class="eot-family-goal">کارورزی روان‌شناسی و مشاوره</h3>
-                                    <p class="eot-family-lead">کارورزی آنلاین روان‌شناسی و مشاوره، در قالب یک دوره حرفه‌ای ۲۸ ماهه.</p>
-                                    <span class="eot-soon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>سایت ایران اندیش در حال راه‌اندازی است</span>
-                                    <div class="eot-family-actions">
-                                        <a href="/کارورزی-روانشناسی-آنلاین" class="btn btn-outline-primary px-4">جزئیات کارورزی</a>
-                                    </div>
-                                    <div class="eot-family-brand">
-                                        <img src="/theme_eot_custom/static/src/img/brands/iranandish.webp" width="48" height="48" alt="نشان ایران اندیش" loading="lazy"/>
-                                        <div><strong>مرکز خدمات روان‌شناسی و مشاوره ایران اندیش</strong><span>قدرت گرفته از هیجان اندیشه</span></div>
-                                    </div>
-                                </article>
-                            </div>
-
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Closing institute banner -->
-                <section class="pb-5 pb-lg-6">
-                    <div class="container">
-                        <div class="eot-institute-banner d-flex flex-wrap align-items-center justify-content-between gap-4 p-4 p-lg-5">
-                            <p class="mb-0">
-                                «مؤسسه تعاملی هیجان اندیشه» (شماره ثبت ۴۵۴۷۷)، نهاد تخصصی برآمده از
-                                مکتب روان‌شناسی تعاملی دکتر کاظمی حقیقی، در حوزه‌های آموزش، تشخیص،
-                                درمان و پژوهش فعالیت می‌کند.
-                            </p>
-                            <a href="/about" class="btn btn-light rounded-pill px-4 py-2 flex-shrink-0">درباره هیجان اندیشه</a>
-                        </div>
+                        <p>«مؤسسه تعاملی هیجان اندیشه» (شماره ثبت ۴۵۴۷۷)، نهاد تخصصی برآمده از مکتب روان‌شناسی تعاملی دکتر کاظمی حقیقی، در حوزه‌های آموزش، تشخیص، درمان و پژوهش فعالیت می‌کند.</p>
+                        <a href="/about" class="btn btn-primary">درباره هیجان اندیشه</a>
                     </div>
                 </section>
 

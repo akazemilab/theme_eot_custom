@@ -1,423 +1,1160 @@
 // theme_eot_custom - frontend styles
 //
 // Bundled into web.assets_frontend only for websites whose theme is
-// theme_eot_custom (website_id 1). Structure as the theme grows:
+// theme_eot_custom (website_id 1).
 //
-//   _header.scss, _footer.scss, _home.scss, ... imported below.
+// Milestone 8 ("front of house"): the approved canvas design "Direction I"
+// - day version, Talkspace palette, Direction D fonts - applied to the
+// whole site. This file holds the design tokens, the global components
+// (buttons, fields, alerts, tags, glass cards), header, footer, homepage,
+// sign-in / reset, account portal, search results and the 404 page.
+// Inner pages and the library keep their own files (pages.scss,
+// library.scss) and take the same palette through their SCSS variables.
 //
-// The custom property is a harmless marker so a deploy can confirm the
-// stylesheet reached website 1's bundle and not website 3's.
-:root {
-    --eot-theme: 1;
-}
-
-// -----------------------------------------------------------------------
-// Why plain CSS overrides instead of Odoo's $o-color-palettes system:
+// Why plain CSS rules instead of Odoo's $o-color-palettes: website
+// palettes are compiled per website into hard-coded selectors and live in
+// that website's own customisation state. Overriding with ordinary rules
+// loaded after Odoo's bundle keeps everything in git and reversible.
 //
-// Odoo's website color palettes are compiled at SCSS build time into
-// hard-coded hex values per selector (.btn-primary, .o_cc1, etc.) - they
-// are NOT driven by a single reassignable custom property at runtime.
-// Which palette is "active" for a given website is website-specific state
-// (written by the Theme tab's configurator into that website's own SCSS
-// customization), separate from this theme module's own files. Touching
-// that per-website state from here would risk exactly the fragile,
-// hard-to-revert edits this project set out to avoid (see README:
-// "never use the UI's Theme/Remove-theme buttons").
-//
-// So this stylesheet reskins with ordinary CSS rules loaded after Odoo's
-// own frontend bundle. Same effect (new brand colors, new typeface), zero
-// interaction with per-website customization state, trivially reversible
-// with `git revert`.
-// -----------------------------------------------------------------------
-
-// The Vazirmatn webfont is loaded with a <link> tag in the page head
-// (views/theme_marker.xml), NOT with an @import here. Odoo's asset bundler
-// hoists @import statements to the top of the combined bundle by splitting
-// on ";" - the Google Fonts URL contains semicolons (wght@400;500;...), so
-// the @import got cut in half, and that broken fragment at the top made
-// browsers discard the ENTIRE frontend stylesheet (0 rules parsed).
-
-// Bootstrap's own runtime custom properties (unlike .btn-primary's colors,
-// these genuinely are consumed via var() at every usage site - .text-primary,
-// .bg-primary-subtle, .border-primary, link color, etc. - confirmed in the
-// compiled frontend CSS, e.g. `.bg-primary-subtle{background-color:
-// var(--primary-bg-subtle) !important}`). Overriding them here reaches
-// every Bootstrap utility class site-wide (badges, alerts, borders, links)
-// with one small block, consistent with the "plain CSS after the bundle"
-// approach above.
-:root,
-[data-bs-theme="light"] {
-    --primary: #07707F;
-    --primary-rgb: 7, 112, 127;
-    --primary-text-emphasis: #054952;
-    --primary-bg-subtle: #E3F1F2;
-    --primary-border-subtle: #B7DDE1;
-    --link-color: #07707F;
-    --link-hover-color: #054952;
-}
+// Webfonts are loaded with <link> tags (views/theme_marker.xml), never an
+// SCSS @import: the bundler splits @import on ";" and a Google Fonts URL
+// contains ";" - the broken fragment made browsers drop the whole sheet.
 
 :root {
-    --eot-primary: #07707F;
-    --eot-primary-dark: #0B3B44;
-    --eot-primary-hover: #06616E;
-    --eot-primary-active: #054F59;
-    --eot-accent: #E4D6A0;
-    --eot-ink: #1D2B2E;
-    --eot-paper: #FAF8F3;
-    --eot-footer-text: #D8E6E8;
-    --eot-footer-muted: #9FB7BB;
+    --eot-theme: 1; // deploy marker checked by `eot check`
+
+    // Palette (Talkspace brand values; lemon is the closest public match)
+    --eot-teal: #005C65;
+    --eot-teal-hover: #004C54;
+    --eot-teal-active: #00424A;
+    --eot-pink: #FFB8B2;
+    --eot-mint: #9DEAB2;
+    --eot-blue: #B9DDFF;
+    --eot-orange: #F2734A;
+    --eot-lemon: #FFE38A;
+    --eot-lemon-hover: #FFD95E;
+
+    // Neutrals
+    --eot-ink: #062E33;       // headings, strong text (14.5:1 on white)
+    --eot-body: #3B5256;      // body copy
+    --eot-muted: #4A5F62;     // secondary text (6.4:1 on white, 5.9:1 on mist)
+    --eot-line: #DCE7E8;
+    --eot-hair: rgba(0, 92, 101, .12);
+    --eot-field: #C5D6D8;
+    --eot-mist: #F6FAFB;
+    --eot-mist-2: #F2F8F8;
+    --eot-danger: #A12B2B;
+    --eot-danger-bg: #FBEDEC;
+
+    // Shape
+    --eot-r-sm: 12px;
+    --eot-r-md: 16px;
+    --eot-r-lg: 20px;
+    --eot-r-xl: 28px;
+    --eot-shadow: 0 18px 44px rgba(6, 46, 51, .07);
+    --eot-shadow-sm: 0 6px 18px rgba(6, 46, 51, .06);
+
+    // Type
+    --eot-font: 'Vazirmatn', 'Odoo Unicode Support Noto', Tahoma, sans-serif;
+    --eot-display: 'Estedad', 'Vazirmatn', 'Odoo Unicode Support Noto', sans-serif;
+
+    // Legacy names still read by older rules / inline styles
+    --eot-primary: var(--eot-teal);
+    --eot-primary-hover: var(--eot-teal-hover);
+    --eot-primary-active: var(--eot-teal-active);
+    --eot-primary-dark: var(--eot-ink);
+    --eot-accent: var(--eot-lemon);
+    --eot-paper: var(--eot-mist);
+    --eot-footer-text: var(--eot-body);
+    --eot-footer-muted: var(--eot-muted);
+
+    // Bootstrap runtime properties (consumed via var() by .text-primary,
+    // .bg-primary-subtle, links, badges ...)
+    --primary: #005C65;
+    --primary-rgb: 0, 92, 101;
+    --primary-text-emphasis: #004C54;
+    --primary-bg-subtle: #E6F2F3;
+    --primary-border-subtle: #B9DDFF;
+    --link-color: #005C65;
+    --link-color-rgb: 0, 92, 101;
+    --link-hover-color: #004C54;
+    --link-hover-color-rgb: 0, 76, 84;
 }
 
-// Typeface -----------------------------------------------------------
-// The site's only loaded webfont (Inter) has no Persian glyphs, so
-// Persian text was falling back to whatever font the visitor's OS
-// happens to ship. Vazirmatn is a proper Persian/Latin webfont for body
-// copy. Headings/numbers use Estedad instead (see below) - a richer
-// display face with better-drawn Persian digits.
+// ---------------------------------------------------------------------------
+// Base
+// ---------------------------------------------------------------------------
 body,
 input,
 textarea,
 select,
 button {
-    font-family: 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
+    font-family: var(--eot-font);
 }
 
-// Headings and standout numbers get the richer display face. Both fonts
-// carry their own Persian digit glyphs for the Persian digit code points
-// (۰-۹) our own content uses, so no extra font-feature-settings are
-// needed; this is what "Estedad" actually looks like on Latin/Western
-// digits too, which is the visible fix for the flat number rendering.
-h1, h2, h3, h4, h5, h6,
-.eot-home-h1,
-.eot-eyebrow {
-    font-family: 'Estedad', 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
-}
-
-// The founder-stats numbers (۲۰ / ۱۴۹ / ۴ دهه) are the clearest example of
-// "number font not good" - give them the display face and tabular spacing
-// even though they're not wrapped in a heading tag.
-.h4 {
-    font-family: 'Estedad', 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
-}
-
-// Buttons --------------------------------------------------------------
-// Overriding the Bootstrap 5 CSS custom properties .btn-primary already
-// sets (see var(--btn-bg) etc. in the compiled frontend CSS) rather than
-// background-color directly, so hover/active/disabled states stay correct.
-//
-// Scoped under #wrapwrap (Odoo's page wrapper) so the rule outranks Odoo's
-// color-combination rules like ".o_cc1 .btn-primary": a plain .btn-primary
-// lost to those, which left e.g. the header's "تماس با ما" button purple.
-.btn-primary,
-#wrapwrap .btn-primary,
-#wrapwrap .btn-fill-primary {
-    --btn-bg: var(--eot-primary);
-    --btn-border-color: var(--eot-primary);
-    --btn-hover-bg: var(--eot-primary-hover);
-    --btn-hover-border-color: var(--eot-primary-hover);
-    --btn-active-bg: var(--eot-primary-active);
-    --btn-active-border-color: var(--eot-primary-active);
-    --btn-disabled-bg: var(--eot-primary);
-    --btn-disabled-border-color: var(--eot-primary);
-    border-radius: 999px;
-}
-
-// Outline variant: without this it kept Odoo's default purple palette.
-.btn-outline-primary,
-#wrapwrap .btn-outline-primary {
-    --btn-color: var(--eot-primary);
-    --btn-border-color: var(--eot-primary);
-    --btn-hover-color: #FFFFFF;
-    --btn-hover-bg: var(--eot-primary);
-    --btn-hover-border-color: var(--eot-primary);
-    --btn-active-color: #FFFFFF;
-    --btn-active-bg: var(--eot-primary-active);
-    --btn-active-border-color: var(--eot-primary-active);
-    --btn-disabled-color: var(--eot-primary);
-    --btn-disabled-border-color: var(--eot-primary);
-    border-radius: 999px;
-}
-
-// Header (#top) ----------------------------------------------------------
-// Targeted by ID: highest practical specificity, independent of whichever
-// internal color-combination class Odoo's builder assigned to this header.
-#top {
-    background-color: #FFFFFF !important;
-    border-bottom: 1px solid #E7E2D6;
-
-    .nav-link,
-    .navbar-brand {
-        color: var(--eot-ink);
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-        color: var(--eot-primary) !important;
-    }
-
-    .o_header_language_selector .dropdown-toggle {
-        color: var(--eot-ink);
-    }
-}
-
-// Mobile offcanvas menu shares the header's look.
-.o_navbar_mobile,
-.offcanvas.o_navbar_mobile {
+#wrapwrap {
+    color: var(--eot-ink);
     background-color: #FFFFFF;
+    text-rendering: optimizeLegibility;
+}
+
+// Persian must never get letter-spacing: it breaks the joins between letters.
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.display-1, .display-2, .display-3, .display-4 {
+    font-family: var(--eot-display);
+    font-weight: 700;
+    letter-spacing: 0;
     color: var(--eot-ink);
 }
 
-// Footer (#bottom) ---------------------------------------------------------
-#bottom {
-    background-color: var(--eot-primary-dark) !important;
-    color: var(--eot-footer-text);
-
-    a {
-        color: var(--eot-footer-text);
-    }
-
-    a:hover {
-        color: var(--eot-accent) !important;
-    }
-
-    .o_footer_copyright {
-        background-color: var(--eot-primary-dark) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
-        color: var(--eot-footer-muted);
-    }
-
-    .o_footer_copyright_name {
-        color: var(--eot-footer-text);
-    }
+::selection {
+    background-color: var(--eot-lemon);
+    color: var(--eot-ink);
 }
 
-// Global polish ------------------------------------------------------
-// Homepage, login/portal and inner/blog pages all render through this
-// same website.layout + web.assets_frontend bundle (checked directly:
-// /, /web/login and /blog all carry the eot-theme marker and use
-// .btn-primary for their primary actions), so the rules above already
-// reach every page type - no separate per-page-type work needed. What's
-// left is small cross-cutting polish:
-
-// Keyboard focus ring in the brand color instead of Bootstrap's default
-// blue, which clashed with the new palette.
 a:focus-visible,
 button:focus-visible,
 .btn:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
-select:focus-visible {
-    outline: 2px solid var(--eot-primary);
+select:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--eot-teal);
     outline-offset: 2px;
 }
 
-// Text selection color.
-::selection {
-    background-color: var(--eot-accent);
-    color: var(--eot-primary-dark);
+// ---------------------------------------------------------------------------
+// Buttons. Scoped under #wrapwrap so they outrank Odoo's colour-combination
+// rules (".o_cc1 .btn-primary"). Bootstrap's own custom properties are set
+// rather than raw colours, so hover/active/disabled states stay coherent.
+// ---------------------------------------------------------------------------
+#wrapwrap .btn {
+    --btn-border-radius: 999px;
+    --btn-font-weight: 600;
+    border-radius: 999px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-height: 44px;
+    padding-inline: 1.375rem;
+    line-height: 1.4;
+    box-shadow: none;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
 }
 
-// Mobile menu toggler icon (hamburger) is drawn as a background-image
-// with currentColor via mask in Odoo's own CSS; setting color here is
-// enough since #top already sets a dark color for its descendants, but
-// the toggler sits in the mobile navbar which isn't inside #top's normal
-// flow on some breakpoints - make it explicit rather than relying on
-// inheritance.
-.o_header_mobile .navbar-toggler,
-.o_header_mobile .navbar-toggler-icon {
-    color: var(--eot-ink);
+#wrapwrap .btn-sm { min-height: 36px; padding-inline: 1rem; font-size: .875rem; }
+#wrapwrap .btn-lg { min-height: 52px; padding-inline: 1.75rem; font-size: 1.0625rem; }
+#wrapwrap .btn-link { min-height: 0; padding-inline: 0; border: 0; color: var(--eot-teal); font-weight: 600; }
+#wrapwrap .btn-link:hover { color: var(--eot-teal-hover); }
+
+.btn-primary,
+#wrapwrap .btn-primary,
+#wrapwrap .btn-fill-primary {
+    --btn-color: #FFFFFF;
+    --btn-bg: var(--eot-teal);
+    --btn-border-color: var(--eot-teal);
+    --btn-hover-color: #FFFFFF;
+    --btn-hover-bg: var(--eot-teal-hover);
+    --btn-hover-border-color: var(--eot-teal-hover);
+    --btn-active-color: #FFFFFF;
+    --btn-active-bg: var(--eot-teal-active);
+    --btn-active-border-color: var(--eot-teal-active);
+    --btn-disabled-color: #FFFFFF;
+    --btn-disabled-bg: var(--eot-teal);
+    --btn-disabled-border-color: var(--eot-teal);
+    border-radius: 999px;
 }
 
-// Homepage (milestone 3) --------------------------------------------------
-// Minimal, founder-focused homepage: institute intro, then Dr. Kazemi,
-// role cards, books, articles, closing banner. See views/homepage.xml.
-// Scoped to elements only the homepage content uses, so this adds nothing
-// to other page types.
-
-.eot-eyebrow {
-    font-weight: 700;
-    font-size: .875rem;
-    letter-spacing: .02em;
-    color: var(--eot-primary);
+.btn-outline-primary,
+#wrapwrap .btn-outline-primary {
+    --btn-color: var(--eot-teal);
+    --btn-bg: #FFFFFF;
+    --btn-border-color: rgba(0, 92, 101, .35);
+    --btn-hover-color: var(--eot-teal);
+    --btn-hover-bg: #E6F2F3;
+    --btn-hover-border-color: var(--eot-teal);
+    --btn-active-color: #FFFFFF;
+    --btn-active-bg: var(--eot-teal);
+    --btn-active-border-color: var(--eot-teal);
+    --btn-disabled-color: var(--eot-teal);
+    --btn-disabled-border-color: rgba(0, 92, 101, .35);
+    border-radius: 999px;
 }
 
-.eot-home-hero {
-    background-color: var(--eot-paper);
+#wrapwrap .btn-secondary,
+#wrapwrap .btn-light {
+    --btn-color: var(--eot-ink);
+    --btn-bg: var(--eot-mist-2);
+    --btn-border-color: var(--eot-line);
+    --btn-hover-color: var(--eot-ink);
+    --btn-hover-bg: #E6F2F3;
+    --btn-hover-border-color: var(--eot-field);
+    --btn-active-color: var(--eot-ink);
+    --btn-active-bg: #DCECEE;
+    --btn-active-border-color: var(--eot-field);
 }
 
-.eot-home-h1 {
-    font-weight: 800;
-    color: var(--eot-ink);
+#wrapwrap .btn-danger,
+#wrapwrap .btn-outline-danger {
+    --btn-color: var(--eot-danger);
+    --btn-bg: #FFFFFF;
+    --btn-border-color: rgba(161, 43, 43, .4);
+    --btn-hover-color: #FFFFFF;
+    --btn-hover-bg: var(--eot-danger);
+    --btn-hover-border-color: var(--eot-danger);
+    --btn-active-color: #FFFFFF;
+    --btn-active-bg: #8A2222;
+    --btn-active-border-color: #8A2222;
 }
 
-.eot-pillar,
-.eot-card {
-    background-color: #FFFFFF;
-    border: 1px solid #E7E2D6;
-    border-radius: 1.25rem;
+#wrapwrap .eot-btn-lemon {
+    --btn-color: var(--eot-ink);
+    --btn-bg: var(--eot-lemon);
+    --btn-border-color: var(--eot-lemon);
+    --btn-hover-color: var(--eot-ink);
+    --btn-hover-bg: var(--eot-lemon-hover);
+    --btn-hover-border-color: var(--eot-lemon-hover);
+    --btn-active-color: var(--eot-ink);
+    --btn-active-bg: var(--eot-lemon-hover);
+    --btn-active-border-color: var(--eot-lemon-hover);
 }
 
-.eot-founder-photo {
-    width: 100%;
-    max-width: 380px;
-    aspect-ratio: 380 / 430;
-    object-fit: cover;
-    object-position: center 12%;
-    border-radius: 1.75rem;
-}
-
-.eot-book-card,
-.eot-article-row {
-    background-color: var(--eot-paper);
-    border: 1px solid #E7E2D6;
-    border-radius: 1.125rem;
-    color: var(--eot-ink);
-    transition: border-color .15s ease, color .15s ease;
-}
-
-.eot-book-card:hover,
-.eot-article-row:hover {
-    border-color: var(--eot-primary);
-    color: var(--eot-primary);
-}
-
-.eot-article-row {
-    background-color: #FFFFFF;
-
-    .eot-arrow {
-        flex-shrink: 0;
-        color: var(--eot-primary);
-    }
-}
-
-.eot-institute-banner {
-    background-color: var(--eot-primary-dark);
-    color: var(--eot-footer-text);
-    border-radius: 1.5rem;
-
-    p {
-        color: var(--eot-footer-text);
-        max-width: 780px;
-    }
-}
-
-// Sister brands (milestone 7) ------------------------------------------
-// "by EOT" portfolio section after the articles on the homepage. Goal-first
-// cards linking out to each brand's own site. See views/homepage.xml.
-.eot-family {
-    background-color: #F1EAD3;
-
-    .eot-family-head {
-        max-width: 760px;
-
-        p {
-            color: #33403F;
-            line-height: 1.9;
-        }
-    }
-}
-
-.eot-family-card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.75rem;
-    background-color: #FFFFFF;
-    border: 1px solid #E7E2D6;
-    border-radius: 1.25rem;
-}
-
-.eot-family-goal {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--eot-primary-dark);
-}
-
-.eot-family-lead {
-    margin: 0;
-    color: #33403F;
-    line-height: 1.9;
-}
-
-.eot-family-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .625rem;
-
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: .5rem;
-        min-height: 44px;
-        font-weight: 700;
-    }
-}
-
-.eot-family-note {
-    margin: 0;
-    font-size: .875rem;
-    color: #5E6B6D;
-}
-
-.eot-family-mh {
-    padding: .875rem 1rem;
-    background-color: #E3F0F1;
-    border-radius: .75rem;
-    font-size: .875rem;
-    line-height: 1.85;
-    color: #33403F;
-
-    .eot-family-mh-title {
-        display: block;
-        margin-bottom: .25rem;
-        font-weight: 800;
+// ---------------------------------------------------------------------------
+// Form fields, alerts, cards, breadcrumbs, pagination, badges, tables
+// ---------------------------------------------------------------------------
+#wrapwrap {
+    .form-control,
+    .form-select {
+        min-height: 48px;
+        border: 1px solid var(--eot-field);
+        border-radius: var(--eot-r-sm);
+        background-color: #FFFFFF;
+        color: var(--eot-ink);
         font-size: 1rem;
-        color: #054952;
+        box-shadow: none;
+        transition: border-color .15s ease, box-shadow .15s ease;
     }
+    textarea.form-control { min-height: 8rem; }
+    .form-control::placeholder { color: #5F7275; opacity: 1; }
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--eot-teal);
+        box-shadow: 0 0 0 4px rgba(0, 92, 101, .12);
+    }
+    .form-control.is-invalid,
+    .was-validated .form-control:invalid { border-color: var(--eot-danger); }
+    .form-label,
+    .col-form-label,
+    label.form-label {
+        font-weight: 600;
+        font-size: .9375rem;
+        color: var(--eot-ink);
+    }
+    .form-text { color: var(--eot-muted); }
+    .form-check-input:checked {
+        background-color: var(--eot-teal);
+        border-color: var(--eot-teal);
+    }
+    .form-check-input:focus { box-shadow: 0 0 0 4px rgba(0, 92, 101, .12); border-color: var(--eot-teal); }
+
+    // Input group with a trailing button (show password, search): round the
+    // outer corners only. Written for LTR; Odoo's RTL bundle (rtlcss) mirrors
+    // the border-radius for Persian pages - do not add a [dir=rtl] override.
+    .input-group > .form-control:not(:last-child) { border-start-end-radius: 0; border-end-end-radius: 0; }
+    .input-group > .btn:last-child {
+        border-radius: 0 var(--eot-r-sm) var(--eot-r-sm) 0;
+        border: 1px solid var(--eot-field);
+        background: var(--eot-mist-2);
+        color: var(--eot-teal);
+        min-width: 48px;
+        padding-inline: .75rem;
+    }
+
+    .alert {
+        border: 0;
+        border-radius: var(--eot-r-sm);
+        border-inline-start: 4px solid var(--eot-teal);
+        background-color: #E6F2F3;
+        color: var(--eot-ink);
+        font-weight: 500;
+        line-height: 1.85;
+    }
+    .alert-danger { border-inline-start-color: var(--eot-danger); background-color: var(--eot-danger-bg); color: #7D1F29; }
+    .alert-success { border-inline-start-color: #1F7A4D; background-color: #E8F7EE; color: #145A38; }
+    .alert-warning { border-inline-start-color: #B7791F; background-color: #FFF6DB; color: #5C4310; }
+    .alert-info { border-inline-start-color: var(--eot-teal); background-color: #EAF4FF; color: var(--eot-ink); }
+
+    .card {
+        border: 1px solid var(--eot-line);
+        border-radius: var(--eot-r-lg);
+        box-shadow: var(--eot-shadow-sm);
+        overflow: hidden;
+    }
+    .card-header,
+    .card-footer {
+        background-color: var(--eot-mist);
+        border-color: var(--eot-line);
+    }
+
+    .breadcrumb {
+        font-size: .875rem;
+        background: transparent;
+        padding: 0;
+        margin-bottom: 0;
+        --breadcrumb-divider-color: var(--eot-muted);
+    }
+    .breadcrumb-item,
+    .breadcrumb-item a { color: var(--eot-muted); text-decoration: none; }
+    .breadcrumb-item a:hover { color: var(--eot-teal); }
+    .breadcrumb-item.active { color: var(--eot-ink); font-weight: 600; }
+
+    .pagination { gap: .375rem; }
+    .page-link {
+        border-radius: 999px !important;
+        border: 1px solid var(--eot-line);
+        color: var(--eot-ink);
+        min-width: 40px;
+        text-align: center;
+    }
+    .page-item.active .page-link { background: var(--eot-teal); border-color: var(--eot-teal); color: #FFFFFF; }
+
+    .badge { border-radius: 999px; font-weight: 600; }
+    .badge.text-bg-primary,
+    .badge.bg-primary { background-color: var(--eot-teal) !important; color: #FFFFFF !important; }
+
+    .table { --table-border-color: var(--eot-line); color: var(--eot-ink); }
+    .table > thead th { font-weight: 600; color: var(--eot-muted); background: var(--eot-mist); }
+
+    .list-group-item { border-color: var(--eot-line); color: var(--eot-ink); }
+    .list-group-item-action:hover { background-color: var(--eot-mist); color: var(--eot-teal); }
+
+    .dropdown-menu {
+        border: 1px solid var(--eot-line);
+        border-radius: var(--eot-r-md);
+        box-shadow: var(--eot-shadow);
+        padding: .5rem;
+    }
+    .dropdown-item { border-radius: 10px; padding: .5rem .875rem; color: var(--eot-ink); }
+    .dropdown-item:hover,
+    .dropdown-item:focus { background-color: var(--eot-mist-2); color: var(--eot-teal); }
+    .dropdown-item.active,
+    .dropdown-item:active { background-color: var(--eot-teal); color: #FFFFFF; }
 }
 
-.eot-soon {
+// ---------------------------------------------------------------------------
+// Shared atoms used by the homepage, auth and portal pages
+// ---------------------------------------------------------------------------
+.eot-grid-bg {
+    background-image:
+        linear-gradient(rgba(0, 92, 101, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 92, 101, .06) 1px, transparent 1px);
+    background-size: 64px 64px;
+}
+
+.eot-tag {
     display: inline-flex;
     align-items: center;
     align-self: flex-start;
-    gap: .375rem;
-    padding: .25rem .75rem;
+    gap: .625rem;
+    padding: .375rem .875rem;
+    border: 1px solid rgba(0, 92, 101, .18);
     border-radius: 999px;
-    background-color: #F1EAD3;
-    color: #7A6230;
+    background: #FFFFFF;
     font-size: .8125rem;
-    font-weight: 700;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--eot-muted);
+}
+.eot-tag-sm { font-size: .75rem; padding: .25rem .75rem; }
+
+.eot-dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3FBF6A;
+    box-shadow: 0 0 0 4px rgba(157, 234, 178, .45);
+}
+.eot-dot.eot-c-pink { background: var(--eot-pink); box-shadow: 0 0 0 4px rgba(255, 184, 178, .5); }
+.eot-dot.eot-c-blue { background: #7FBDF5; box-shadow: 0 0 0 4px rgba(185, 221, 255, .6); }
+.eot-dot.eot-c-lemon { background: #F5C84A; box-shadow: 0 0 0 4px rgba(255, 227, 138, .6); }
+.eot-dot.eot-c-orange { background: var(--eot-orange); box-shadow: 0 0 0 4px rgba(242, 115, 74, .22); }
+
+.eot-idx {
+    font-family: var(--eot-display);
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--eot-teal);
 }
 
-// Brand signature pinned to the bottom of each card so the four cards line
-// up however long their copy is.
-.eot-family-brand {
+.eot-glass {
+    background: rgba(255, 255, 255, .88);
+    border: 1px solid var(--eot-hair);
+    border-radius: var(--eot-r-lg);
+    box-shadow: var(--eot-shadow);
+}
+
+// Coloured top edge for cards: .eot-top + .eot-c-*
+.eot-top { border-top: 4px solid var(--eot-teal); }
+.eot-top.eot-c-pink { border-top-color: var(--eot-pink); }
+.eot-top.eot-c-mint { border-top-color: var(--eot-mint); }
+.eot-top.eot-c-blue { border-top-color: var(--eot-blue); }
+.eot-top.eot-c-lemon { border-top-color: var(--eot-lemon); }
+.eot-top.eot-c-orange { border-top-color: var(--eot-orange); }
+
+.eot-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+.eot-tl {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    font-weight: 600;
+    color: var(--eot-teal);
+    text-decoration: none;
+}
+.eot-tl:hover { color: var(--eot-teal-hover); }
+
+.eot-danger-link { color: var(--eot-danger) !important; font-weight: 700; }
+.eot-muted { color: var(--eot-muted); }
+.eot-ico { flex-shrink: 0; }
+
+// ---------------------------------------------------------------------------
+// Header (#top). IDs outrank whatever colour-combination class the builder
+// put on the header.
+// ---------------------------------------------------------------------------
+#top {
+    background-color: rgba(255, 255, 255, .94) !important;
+    backdrop-filter: saturate(160%) blur(12px);
+    border-bottom: 1px solid var(--eot-hair);
+    box-shadow: none !important;
+
+    .navbar {
+        background: transparent !important;
+        box-shadow: none !important;
+        padding-top: .875rem;
+        padding-bottom: .875rem;
+    }
+
+    .navbar-brand img { max-height: 46px; width: auto; }
+
+    .nav-link {
+        color: var(--eot-body);
+        font-weight: 500;
+        font-size: .9375rem;
+        padding-inline: .875rem !important;
+        border-radius: 999px;
+        transition: color .15s ease, background-color .15s ease;
+    }
+    .nav-link:hover { color: var(--eot-teal) !important; background-color: var(--eot-mist-2); }
+    .nav-link.active {
+        color: var(--eot-ink) !important;
+        font-weight: 600;
+        background-color: var(--eot-mist-2);
+    }
+
+    // Header search: a quiet pill field
+    .o_header_searchbar .o_search_input_group {
+        border-radius: 999px;
+        background: var(--eot-mist-2);
+        border: 1px solid var(--eot-line);
+        overflow: hidden;
+        min-width: 13rem;
+    }
+    .o_header_searchbar .form-control,
+    .o_header_searchbar .oe_search_button {
+        border: 0 !important;
+        background: transparent !important;
+        min-height: 42px;
+        box-shadow: none !important;
+        padding-block: .25rem !important;
+    }
+    .o_header_searchbar .form-control { padding-inline: 1rem !important; font-size: .9375rem; }
+    .o_header_searchbar .oe_search_button { color: var(--eot-teal); min-width: 44px; padding-inline: .875rem !important; }
+
+    // "ورود" link: plain teal text, no box
+    .o_nav_link_btn {
+        border: 0 !important;
+        color: var(--eot-teal) !important;
+        font-weight: 600;
+        background: transparent;
+    }
+    .o_nav_link_btn:hover { background-color: var(--eot-mist-2); }
+
+    // "تماس با ما": the lemon call to action
+    .btn_cta {
+        --btn-color: var(--eot-ink);
+        --btn-bg: var(--eot-lemon);
+        --btn-border-color: var(--eot-lemon);
+        --btn-hover-color: var(--eot-ink);
+        --btn-hover-bg: var(--eot-lemon-hover);
+        --btn-hover-border-color: var(--eot-lemon-hover);
+        --btn-active-color: var(--eot-ink);
+        --btn-active-bg: var(--eot-lemon-hover);
+        --btn-active-border-color: var(--eot-lemon-hover);
+        min-height: 42px;
+        padding-inline: 1.25rem;
+    }
+    .s_text_block .container { padding: 0; }
+
+    // Signed-in user menu
+    .o_header_user_menu > a,
+    .dropdown-toggle { color: var(--eot-ink); }
+}
+
+// Mobile bar + offcanvas menu
+.o_header_mobile .navbar-toggler,
+.o_header_mobile .navbar-toggler-icon,
+#top .o_header_mobile button.nav-link { color: var(--eot-ink); }
+
+.o_navbar_mobile,
+.offcanvas.o_navbar_mobile {
+    background-color: #FFFFFF;
+    color: var(--eot-ink);
+
+    .nav-link { font-size: 1.0625rem; font-weight: 500; color: var(--eot-ink); padding-block: .875rem; }
+    .nav-link.active { color: var(--eot-teal); font-weight: 600; }
+    .nav-item { border-color: var(--eot-line) !important; }
+    .o_search_input_group { border-radius: 999px; overflow: hidden; border: 1px solid var(--eot-line); background: var(--eot-mist-2); }
+    .o_search_input_group .form-control,
+    .o_search_input_group .btn { border: 0 !important; background: transparent !important; }
+    .btn_cta { width: 100%; }
+}
+
+// ---------------------------------------------------------------------------
+// Footer (#bottom): light mist, link columns come from views/footer_links.xml
+// ---------------------------------------------------------------------------
+#bottom {
+    background-color: var(--eot-mist-2) !important;
+    color: var(--eot-body);
+    border-top: 1px solid var(--eot-hair);
+
+    a { color: var(--eot-body); text-decoration: none; }
+    a:hover { color: var(--eot-teal) !important; }
+
+    .o_footer_copyright {
+        background-color: var(--eot-mist-2) !important;
+        border-top: 1px solid var(--eot-hair);
+        color: var(--eot-muted);
+        font-size: .8125rem;
+        padding-block: 1.125rem;
+    }
+    .o_footer_copyright_name { color: var(--eot-muted); }
+}
+
+.eot-footer-cols {
+    padding: 4rem 0 2rem;
+    color: var(--eot-body);
+
+    .container::before, .container::after { content: none; display: none; }
+    .eot-fc-grid { display: grid; gap: 2rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (min-width: 992px) { .eot-fc-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; } }
+    .eot-fc-brand { grid-column: 1 / -1; }
+    @media (min-width: 992px) { .eot-fc-brand { grid-column: auto; } }
+    .eot-fc-brand strong {
+        display: block;
+        font-family: var(--eot-display);
+        font-weight: 700;
+        font-size: 1.375rem;
+        color: var(--eot-ink);
+        margin-bottom: .625rem;
+    }
+    .eot-fc-brand p { margin: 0; font-size: .875rem; line-height: 1.95; color: var(--eot-muted); }
+    nav { display: flex; flex-direction: column; gap: .5rem; font-size: .9375rem; }
+    h2 { font-family: var(--eot-font); font-size: .8125rem; font-weight: 600; color: var(--eot-teal); margin: 0 0 .375rem; }
+
+    .eot-fc-crisis {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin-top: 2.5rem;
+        padding: 1rem 1.375rem;
+        border: 1px solid var(--eot-hair);
+        border-radius: var(--eot-r-md);
+        background: #FFFFFF;
+        font-size: .9375rem;
+        color: var(--eot-ink);
+    }
+    .eot-fc-crisis a { color: var(--eot-danger) !important; font-weight: 700; }
+}
+
+// ---------------------------------------------------------------------------
+// Homepage (.eot-h, views/homepage.xml)
+// ---------------------------------------------------------------------------
+.eot-h {
+    .container::before, .container::after { content: none; display: none; }
+    p { margin: 0; }
+    h1, h2, h3 { margin: 0; }
+    section { position: relative; }
+
+    .eot-h2 { font-size: clamp(1.875rem, 3.4vw, 2.75rem); line-height: 1.35; }
+    .eot-h-head { display: flex; flex-direction: column; gap: 1rem; max-width: 50rem; margin-bottom: 2.75rem; }
+    .eot-h-head .eot-muted { font-size: 1.0625rem; line-height: 2; }
+    .eot-h-head-row { max-width: none; flex-direction: row; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+    .eot-h-head-row > div { display: flex; flex-direction: column; gap: .75rem; }
+}
+
+// Hero -------------------------------------------------------------------
+.eot-h-hero {
+    overflow: hidden;
+    border-bottom: 1px solid var(--eot-hair);
+
+    .container { position: relative; z-index: 1; }
+}
+
+.eot-h-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    span { position: absolute; border-radius: 50%; filter: blur(90px); }
+    .eot-f1 { left: -10%; top: -18%; width: 44vw; height: 44vw; max-width: 640px; max-height: 640px; background: var(--eot-blue); opacity: .55; }
+    .eot-f2 { left: 28%; top: 38%; width: 30vw; height: 30vw; max-width: 440px; max-height: 440px; background: var(--eot-pink); opacity: .4; }
+    .eot-f3 { right: -12%; bottom: -24%; width: 40vw; height: 40vw; max-width: 580px; max-height: 580px; background: var(--eot-mint); opacity: .4; }
+    .eot-f4 { left: 4%; bottom: 2%; width: 22vw; height: 22vw; max-width: 320px; max-height: 320px; background: var(--eot-lemon); opacity: .45; }
+}
+
+.eot-h-hero-in {
+    display: flex;
+    flex-direction: column;
+    gap: 1.625rem;
+    padding: 6.5rem 0 3.5rem;
+}
+
+.eot-h-title {
+    font-size: clamp(2.375rem, 6.2vw, 4.75rem);
+    line-height: 1.25;
+    color: var(--eot-ink);
+}
+
+.eot-hl {
+    color: var(--eot-teal);
+    background: linear-gradient(transparent 64%, var(--eot-lemon) 64%, var(--eot-lemon) 90%, transparent 90%);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.eot-h-lead {
+    max-width: 61rem;
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+    line-height: 2;
+    color: var(--eot-body);
+}
+
+.eot-h-stats {
+    display: flex;
+    max-width: 47.5rem;
+    margin: 1.25rem 0 0;
+    border-top: 1px solid rgba(0, 92, 101, .14);
+
+    > div { flex: 1; padding: 1.25rem 1.75rem 0; }
+    > div:first-child { padding-inline-start: 0; }
+    > div + div { border-inline-start: 1px solid rgba(0, 92, 101, .14); }
+    dt { font-family: var(--eot-display); font-weight: 700; font-size: clamp(1.75rem, 3vw, 2.375rem); line-height: 1.2; color: var(--eot-ink); }
+    dd { margin: .25rem 0 0; font-size: .875rem; color: var(--eot-muted); }
+}
+
+.eot-h-pillars {
+    display: grid;
+    gap: 1rem;
+    padding-bottom: 5.5rem;
+    grid-template-columns: minmax(0, 1fr);
+
+    > div { padding: 1.625rem 1.75rem; display: flex; flex-direction: column; gap: .5rem; }
+    h2 { font-size: 1.375rem; }
+    p { font-size: .9375rem; line-height: 1.95; color: var(--eot-muted); }
+}
+@media (min-width: 768px) { .eot-h-pillars { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+// Sister-brand strip ------------------------------------------------------
+.eot-h-brands {
+    background: var(--eot-mist);
+    border-bottom: 1px solid var(--eot-hair);
+    padding: 2rem 0;
+
+    .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem 2rem; }
+    .eot-h-brands-label { font-size: .875rem; color: var(--eot-muted); }
+    ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 1rem 2.75rem; }
+    li { display: flex; align-items: center; gap: .625rem; font-size: .9375rem; font-weight: 500; color: var(--eot-ink); }
+    img { width: 36px; height: 36px; border-radius: 10px; object-fit: contain; }
+}
+
+// Founder --------------------------------------------------------------
+.eot-h-founder {
+    background: var(--eot-mist-2);
+    padding: 7rem 0;
+
+    > .container { display: grid; gap: 3rem; align-items: center; }
+    @media (min-width: 992px) { > .container { grid-template-columns: 26rem minmax(0, 1fr); gap: 6rem; } }
+}
+
+.eot-h-portrait {
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: var(--eot-r-xl);
+    background: var(--eot-pink);
+    border: 1px solid var(--eot-hair);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    img { width: 100%; max-width: 22rem; height: auto; display: block; }
+}
+
+.eot-h-founder-txt {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .eot-muted { line-height: 2; }
+}
+
+.eot-h-founder-lead {
+    font-size: clamp(1.125rem, 1.8vw, 1.3125rem);
+    font-weight: 500;
+    line-height: 1.85;
+    color: var(--eot-ink);
+}
+
+.eot-h-roles {
+    list-style: none;
+    margin: .25rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--eot-hair);
+
+    li {
+        display: grid;
+        grid-template-columns: 2.75rem minmax(0, 1fr);
+        gap: .25rem 1rem;
+        align-items: baseline;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--eot-hair);
+    }
+    strong { font-weight: 600; color: var(--eot-ink); }
+    li > span:last-child { grid-column: 2; font-size: .9375rem; color: var(--eot-muted); line-height: 1.9; }
+    @media (min-width: 768px) {
+        li { grid-template-columns: 2.75rem 10rem minmax(0, 1fr); }
+        li > span:last-child { grid-column: auto; }
+    }
+}
+
+// "by EOT" paths ---------------------------------------------------------
+.eot-h-family { padding: 7.5rem 0; }
+
+.eot-h-fgrid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) { .eot-h-fgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .eot-h-fgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.eot-h-fcard {
+    display: flex;
+    flex-direction: column;
+    gap: .875rem;
+    padding: 1.75rem;
+
+    h3 { font-size: 1.375rem; }
+    > p { font-size: .9375rem; line-height: 1.95; color: var(--eot-muted); }
+}
+.eot-h-fcard-top {
     display: flex;
     align-items: center;
-    gap: .75rem;
-    margin-top: auto;
-    padding-top: 1rem;
-    border-top: 1px solid #E7E2D6;
+    justify-content: space-between;
 
-    img {
-        flex-shrink: 0;
-        width: 48px;
-        height: 48px;
-        object-fit: contain;
-        border-radius: .625rem;
+    img { width: 52px; height: 52px; border-radius: 14px; object-fit: contain; }
+}
+.eot-h-by { font-size: .8125rem; color: var(--eot-muted); line-height: 1.7; }
+.eot-h-mh {
+    padding: .875rem 1rem;
+    border: 1px solid var(--eot-hair);
+    border-radius: var(--eot-r-sm);
+    background: var(--eot-mist);
+    font-size: .8125rem;
+    line-height: 1.9;
+    color: var(--eot-muted);
+
+    > a { display: block; font-weight: 700; font-size: .9375rem; color: var(--eot-teal); text-decoration: none; margin-bottom: .125rem; }
+    p a { color: var(--eot-teal); font-weight: 600; }
+}
+.eot-h-fcard-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+    margin-top: auto;
+    padding-top: .5rem;
+
+    .btn { width: 100%; }
+}
+.eot-h-note { font-size: .8125rem; color: var(--eot-muted); line-height: 1.8; }
+
+// Books band -------------------------------------------------------------
+.eot-h-books {
+    padding: 7rem 0;
+    background: var(--eot-teal);
+    color: #FFFFFF;
+
+    .eot-h2 { color: #FFFFFF; }
+    .eot-h-books-label { font-size: .875rem; font-weight: 600; color: var(--eot-lemon); }
+}
+
+.eot-h-bgrid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 576px) { .eot-h-bgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 992px) { .eot-h-bgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.eot-h-book {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.625rem 1.75rem;
+    border-radius: var(--eot-r-lg);
+    background: #FFFFFF;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .12);
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+
+    &:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0, 0, 0, .16); }
+    strong { display: block; font-family: var(--eot-display); font-weight: 600; font-size: 1.25rem; color: var(--eot-ink); line-height: 1.5; }
+    .eot-h-book-t > span { font-size: .875rem; color: var(--eot-muted); }
+}
+.eot-h-spine {
+    flex-shrink: 0;
+    width: 56px;
+    height: 72px;
+    border-radius: 6px 12px 12px 6px;
+    border-inline-start: 5px solid var(--eot-ink);
+    background: var(--eot-pink);
+
+    &.eot-c-mint { background: var(--eot-mint); }
+    &.eot-c-blue { background: var(--eot-blue); }
+    &.eot-c-lemon { background: var(--eot-lemon); }
+    &.eot-c-orange { background: var(--eot-orange); }
+}
+
+// Articles ---------------------------------------------------------------
+.eot-h-articles {
+    padding: 7.5rem 0;
+
+    > .container { display: grid; gap: 2.5rem; }
+    @media (min-width: 992px) { > .container { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: 6rem; } }
+    .eot-h-head { margin-bottom: 0; }
+    .eot-h-head .btn { align-self: flex-start; margin-top: .5rem; }
+}
+
+.eot-h-alist { border-top: 1px solid var(--eot-hair); }
+
+.eot-h-art {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) 2.75rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.375rem 0;
+    border-bottom: 1px solid var(--eot-hair);
+    text-decoration: none;
+    color: var(--eot-ink);
+
+    .eot-h-art-t { font-size: 1.125rem; font-weight: 500; line-height: 1.7; }
+    .eot-h-art-go {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--eot-lemon);
+        color: var(--eot-ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform .15s ease;
+    }
+    &:hover { color: var(--eot-teal); }
+    &:hover .eot-h-art-go { transform: scale(1.08); }
+}
+
+// Closing ----------------------------------------------------------------
+.eot-h-close {
+    padding: 7.5rem 0;
+    background-color: var(--eot-mist);
+    border-top: 1px solid var(--eot-hair);
+
+    .container { display: flex; flex-direction: column; align-items: center; gap: 2.25rem; text-align: center; }
+    p {
+        max-width: 62rem;
+        font-family: var(--eot-display);
+        font-weight: 600;
+        font-size: clamp(1.375rem, 2.6vw, 1.875rem);
+        line-height: 1.85;
+        color: var(--eot-ink);
+    }
+}
+
+// Homepage rhythm on small screens
+@media (max-width: 767.98px) {
+    .eot-h-hero-in { padding: 3.5rem 0 2.5rem; gap: 1.25rem; }
+    .eot-h-stats > div { padding-inline: 1rem; }
+    .eot-h-stats dd { font-size: .75rem; }
+    .eot-h-pillars { padding-bottom: 3.5rem; }
+    .eot-h-founder,
+    .eot-h-family,
+    .eot-h-books,
+    .eot-h-articles,
+    .eot-h-close { padding: 4.5rem 0; }
+    .eot-h .eot-actions .btn { flex: 1 1 100%; }
+    .eot-h-brands ul { gap: .875rem 1.5rem; }
+    .eot-h-art { grid-template-columns: 2.25rem minmax(0, 1fr) 2.5rem; }
+    .eot-h-art .eot-h-art-t { font-size: 1rem; }
+}
+
+// ---------------------------------------------------------------------------
+// Sign-in, reset password, 2FA (web.login_layout inside website.layout).
+// The same route serves staff sign-in: appearance only, no logic changes.
+// ---------------------------------------------------------------------------
+#wrapwrap main:has(.oe_website_login_container),
+#wrapwrap main:has(.oe_login_form),
+#wrapwrap main:has(.oe_reset_password_form),
+#wrapwrap main:has(.oe_signup_form) {
+    background-color: var(--eot-mist);
+    background-image:
+        linear-gradient(rgba(0, 92, 101, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 92, 101, .05) 1px, transparent 1px);
+    background-size: 64px 64px;
+}
+
+#wrapwrap .oe_website_login_container {
+    max-width: 30rem;
+    margin: 4.5rem auto 5.5rem;
+    padding: 2.5rem 2.5rem 2rem;
+    background: #FFFFFF;
+    border: 1px solid var(--eot-hair);
+    border-top: 4px solid var(--eot-teal);
+    border-radius: var(--eot-r-xl);
+    box-shadow: var(--eot-shadow);
+
+    // The page title is present but screen-reader only in core; show it.
+    > h1.visually-hidden,
+    > h1 {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 0 1.75rem !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        clip-path: none !important;
+        white-space: normal !important;
+        font-size: 1.75rem;
+        line-height: 1.4;
+        color: var(--eot-ink);
     }
 
-    strong {
-        display: block;
+    form { display: flex; flex-direction: column; }
+    .mb-3 { margin-bottom: 1.125rem !important; }
+    .form-label { margin-bottom: .5rem; }
+    .btn-link.btn-sm { font-size: .875rem; min-height: 0; padding: 0; }
+    .oe_login_buttons { padding-top: 1.25rem !important; gap: .5rem; }
+    .oe_login_buttons .btn-primary { min-height: 50px; font-size: 1rem; }
+    .o_login_auth em {
+        display: flex !important;
+        align-items: center;
+        gap: .75rem;
+        font-style: normal;
+        color: var(--eot-muted) !important;
+    }
+    .o_login_auth em::before,
+    .o_login_auth em::after { content: ""; flex: 1; height: 1px; background: var(--eot-line); }
+    .o_login_auth .list-group { gap: .5rem; }
+    .o_login_auth .list-group-item {
+        border: 1px solid rgba(0, 92, 101, .35) !important;
+        border-radius: 999px !important;
+        min-height: 48px;
+        color: var(--eot-teal);
+        font-weight: 600;
+        justify-content: center;
+    }
+    .o_login_auth .list-group-item:hover { background: #E6F2F3; }
+    .o_login_auth .list-group-item span.mx-auto { margin-inline: 0 !important; }
+    .alert { margin-bottom: 1rem; }
+    .o_caps_lock_warning .d-flex { align-items: center !important; margin-bottom: .5rem; }
+
+    @media (max-width: 575.98px) {
+        margin: 2rem 1rem 3rem;
+        padding: 1.75rem 1.25rem 1.5rem;
+        border-radius: var(--eot-r-lg);
+    }
+}
+
+// Reset-password / signup forms reuse the same card (auth_signup renders
+// them inside .oe_website_login_container as well).
+#wrapwrap .oe_reset_password_form,
+#wrapwrap .oe_signup_form { display: flex; flex-direction: column; }
+#wrapwrap .oe_reset_password_form .clearfix.oe_login_buttons,
+#wrapwrap .oe_signup_form .clearfix.oe_login_buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .75rem;
+    float: none;
+}
+#wrapwrap .oe_reset_password_form .clearfix.oe_login_buttons .btn-link { align-self: center; }
+
+// ---------------------------------------------------------------------------
+// Account portal (/my, /my/home, /my/security, /my/addresses, /my/account)
+// ---------------------------------------------------------------------------
+#wrapwrap .o_portal {
+    .o_portal_navbar,
+    .o_portal_wrap > .container:first-child { padding-top: 0; }
+}
+
+#wrapwrap .o_portal_wrap {
+    background-color: var(--eot-mist);
+    min-height: 60vh;
+    padding-bottom: 4rem;
+}
+
+#wrapwrap .o_portal_navbar {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 1.75rem 0 .5rem !important;
+    box-shadow: none !important;
+}
+
+#wrapwrap .o_portal_my_home,
+#wrapwrap .o_portal_wrap {
+    h1, h2, h3, h4, h5, .h3, .h4 { color: var(--eot-ink); }
+    h3.o_portal_section_title,
+    .o_portal_my_home > h3,
+    .o_portal_my_home h3 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+}
+
+// Home tiles (portal.portal_docs_entry): cards with a coloured top edge
+#wrapwrap .o_portal_docs .o_portal_index_card,
+#wrapwrap .o_portal_docs > .col-md-6,
+#wrapwrap .o_portal_index_card {
+    > a,
+    > div > a {
+        background: #FFFFFF !important;
+        border: 1px solid var(--eot-hair) !important;
+        border-top: 4px solid var(--eot-blue) !important;
+        border-radius: var(--eot-r-lg) !important;
+        box-shadow: var(--eot-shadow-sm);
+        color: var(--eot-ink) !important;
+        text-decoration: none;
+        transition: transform .15s ease, box-shadow .15s ease;
+    }
+    > a:hover,
+    > div > a:hover { transform: translateY(-2px); box-shadow: var(--eot-shadow); }
+    h5, .h5 { font-family: var(--eot-display); font-weight: 600; color: var(--eot-ink); }
+    p, small { color: var(--eot-muted); }
+}
+#wrapwrap .o_portal_docs .o_portal_index_card:nth-child(4n+2) > a { border-top-color: var(--eot-pink) !important; }
+#wrapwrap .o_portal_docs .o_portal_index_card:nth-child(4n+3) > a { border-top-color: var(--eot-mint) !important; }
+#wrapwrap .o_portal_docs .o_portal_index_card:nth-child(4n+4) > a { border-top-color: var(--eot-lemon) !important; }
+
+// Sidebar / details card on /my/home
+#wrapwrap .o_portal_sidebar,
+#wrapwrap .o_my_sidebar {
+    .card,
+    > div { border-radius: var(--eot-r-lg); }
+    a { color: var(--eot-teal); }
+}
+
+// Security page sections, address cards, account form
+#wrapwrap .o_portal_security_body,
+#wrapwrap .o_portal_security,
+#wrapwrap .o_portal_details,
+#wrapwrap .o_portal_addresses,
+#wrapwrap .o_portal_my_security {
+    section,
+    .card {
+        background: #FFFFFF;
+        border: 1px solid var(--eot-hair);
+        border-radius: var(--eot-r-lg);
+        box-shadow: var(--eot-shadow-sm);
+    }
+    section { padding: 1.75rem; margin-bottom: 1rem; }
+    hr { border-color: var(--eot-line); opacity: 1; }
+}
+
+// ---------------------------------------------------------------------------
+// Search results page (/website/search)
+// ---------------------------------------------------------------------------
+#wrapwrap .o_search_page {
+    padding-top: 3rem !important;
+    padding-bottom: 4.5rem !important;
+
+    .o_search_input_group {
+        border: 1px solid var(--eot-field);
+        border-radius: 999px;
+        overflow: hidden;
+        background: #FFFFFF;
+    }
+    .o_search_input_group .form-control,
+    .o_search_input_group .btn {
+        border: 0 !important;
+        background: transparent !important;
+        min-height: 52px;
+        box-shadow: none !important;
+    }
+    .o_search_input_group .form-control { padding-inline: 1.25rem; font-size: 1.0625rem; }
+    .o_search_input_group .btn { color: var(--eot-teal); padding-inline: 1.25rem; }
+    .o_searchbar_result section > h2 {
+        font-family: var(--eot-font);
+        font-size: .875rem !important;
+        font-weight: 600 !important;
+        color: var(--eot-teal) !important;
+        margin-bottom: .75rem;
+    }
+    .o_search_result_item {
+        border-radius: var(--eot-r-sm) !important;
+        border-bottom: 1px solid var(--eot-line);
+        margin-inline: 0 !important;
+    }
+    .o_search_result_item:hover { background-color: var(--eot-mist); }
+    .o_search_result_item a { color: var(--eot-ink); text-decoration: none; }
+    .o_search_result_item .text-muted,
+    .o_search_result_item small { color: var(--eot-muted) !important; }
+    mark,
+    .text-primary-emphasis { background: var(--eot-lemon); color: var(--eot-ink); padding: 0 .125rem; border-radius: 3px; }
+}
+
+// ---------------------------------------------------------------------------
+// 404 (views/i18n.xml replaces core's English content)
+// ---------------------------------------------------------------------------
+.eot-404 {
+    position: relative;
+    overflow: hidden;
+    padding: 7rem 0 8rem;
+    border-bottom: 1px solid var(--eot-hair);
+
+    .container { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .eot-404-code {
+        font-family: var(--eot-display);
+        font-weight: 700;
+        font-size: clamp(4.5rem, 12vw, 8.5rem);
+        line-height: 1;
+        color: var(--eot-teal);
+    }
+    h1 { font-size: clamp(1.75rem, 3.4vw, 2.5rem); margin: 0; }
+    p { margin: 0; max-width: 40rem; font-size: 1.125rem; line-height: 2; color: var(--eot-body); }
+    .eot-404-links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+    .eot-404-links a {
+        padding: .375rem 1rem;
+        border: 1px solid var(--eot-hair);
+        border-radius: 999px;
+        background: #FFFFFF;
         color: var(--eot-ink);
+        text-decoration: none;
         font-size: .9375rem;
     }
-
-    span {
-        display: block;
-        font-size: .75rem;
-        color: #5E6B6D;
-    }
+    .eot-404-links a:hover { border-color: var(--eot-teal); color: var(--eot-teal); }
 }

@@ -17,18 +17,16 @@
         Google Fonts URL broke the whole frontend stylesheet (the URL's ";"
         gets treated as a rule separator by Odoo's bundler).
 
-        Vazirmatn: body copy (already in place, reads well at small sizes).
-        Estedad: headings only - a richer, more distinctive display face
-        with a full 100-900 weight range and better-drawn Persian digits,
-        used to make headings/numbers feel more considered than plain
-        Vazirmatn Bold. See static/src/scss/theme.scss for where each is
-        applied.
+        Milestone 8 type system (approved "Direction D" fonts):
+        Vazirmatn 400-700 for body copy and UI, Estedad 500-700 for
+        headings and numbers (better-drawn Persian digits). Heavier weights
+        are deliberately not loaded: the design tops out at 700.
     -->
     <template id="theme_font" name="EOT Theme: Persian fonts" inherit_id="website.layout">
         <xpath expr="//head/meta[last()]" position="after">
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;family=Estedad:wght@500;600;700;800;900&amp;display=swap"/>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=Estedad:wght@500;600;700&amp;display=swap"/>
         </xpath>
     </template>
 </odoo>

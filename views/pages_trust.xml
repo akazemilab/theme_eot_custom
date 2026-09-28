@@ -60,8 +60,8 @@
                             <h2 class="eot-kicker" style="font-family: inherit;">مطالعه آثار و منابع</h2>
                             <a href="/کتب" class="eot-card eot-count-link"><b>۲۰</b><span><strong>کتاب‌ها</strong><small>کتاب و اثر بلند</small></span></a>
                             <a href="/مقالات" class="eot-card eot-count-link"><b>۱۴۲</b><span><strong>مقالات</strong><small>مقاله منتشرشده</small></span></a>
-                            <a href="/فرهنگنامه" class="eot-card eot-count-link"><b><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#07707F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></b><span><strong>فرهنگنامه</strong><small>روان‌شناسی تعاملی</small></span></a>
-                            <div class="eot-link-list"><a href="/about" style="background: #F1EAD3;">درباره هیجان اندیشه<span>←</span></a></div>
+                            <a href="/فرهنگنامه" class="eot-card eot-count-link"><b><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#005C65" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></b><span><strong>فرهنگنامه</strong><small>روان‌شناسی تعاملی</small></span></a>
+                            <div class="eot-link-list"><a href="/about" style="background: #F2F8F8;">درباره هیجان اندیشه<span>←</span></a></div>
                         </aside>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                         <span class="eot-kicker">علم • تجربه • رشد انسانی</span>
                         <h1>درباره هیجان اندیشه</h1>
                         <div class="eot-two eot-two-even" style="gap: 2.5rem;">
-                            <p class="eot-ed-p" style="font-size: 1.15rem; color: #1D2B2E;">مؤسسه تعاملی هیجان اندیشه یک نهاد علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی است؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی.</p>
+                            <p class="eot-ed-p" style="font-size: 1.15rem; color: #062E33;">مؤسسه تعاملی هیجان اندیشه یک نهاد علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی است؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی.</p>
                             <p class="eot-ed-p">این مجموعه بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است؛ رویکردی که انسان را در تعامل پویا با خویشتن، محیط و تجربه‌هایش می‌بیند و بر پیوند اندیشه، هیجان و رفتار تأکید دارد.</p>
                         </div>
                         <div class="eot-row-btns">
@@ -249,7 +249,7 @@
                     <div class="eot-ed-grid">
                         <article class="eot-ed-article">
                             <section id="urgent" class="eot-alert-dark" role="note">
-                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E4D6A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFE38A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
                                 <div class="eot-stack">
                                     <h2>شرایط فوری و بحرانی</h2>
                                     <p>اگر خطر فوری برای خودتان یا فرد دیگری وجود دارد، منتظر پاسخ فرم تماس یا نوبت برنامه‌ریزی‌شده نمانید. از خدمات اضطراری محل خود، نزدیک‌ترین مرکز درمانی یا یک فرد قابل اعتماد که می‌تواند کنار شما باشد کمک بگیرید.</p>
@@ -307,11 +307,11 @@
                                 <p class="eot-ed-p">هر ارزیابی از مجموعه‌ای از گویه‌ها تشکیل می‌شود. گویه‌ها می‌توانند به یک یا چند عامل یا محور مرتبط باشند و پاسخ‌ها بر اساس قواعد امتیازدهی همان ابزار به امتیاز عامل تبدیل شوند.</p>
                                 <figure class="eot-diagram" aria-label="از گویه تا سطح تفسیر">
                                     <span class="eot-stack" style="gap: .35rem; align-items: center;"><span class="eot-dg-dots" aria-hidden="true"><i/><i/><i/><i/><i/><i/></span><strong style="font-size: .85rem;">گویه‌ها</strong></span>
-                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#7A6230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
-                                    <span class="eot-dg-box" style="background: #E3F0F1; color: #054952;">عامل / محور</span>
-                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#7A6230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
-                                    <span class="eot-dg-box" style="background: #07707F; color: #fff;">امتیاز عامل</span>
-                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#7A6230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
+                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#005C65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
+                                    <span class="eot-dg-box" style="background: #E6F2F3; color: #004C54;">عامل / محور</span>
+                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#005C65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
+                                    <span class="eot-dg-box" style="background: #005C65; color: #fff;">امتیاز عامل</span>
+                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#005C65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
                                     <span class="eot-dg-scale"><span class="eot-dg-bar" aria-hidden="true"><i/><i/><i/></span><span class="eot-dg-labels"><span>پایین</span><span>میانه</span><span>بالا</span></span><strong style="font-size: .85rem; text-align: center;">سطح تفسیر همان ابزار</strong></span>
                                 </figure>
                                 <p class="eot-ed-p">در برخی ابزارها برای عامل‌ها سطح‌هایی مانند پایین، میانه یا بالا تعریف می‌شود. این سطح‌ها طبقه‌های امتیاز همان ابزار هستند و نباید به‌طور خودکار با «بد»، «متوسط» یا «خوب» یکی گرفته شوند.</p>
@@ -375,7 +375,7 @@
                     <div class="eot-ed-grid">
                         <div class="eot-faq">
                             <details t-foreach="faqs" t-as="f" t-att-open="'open' if f_index &lt; 2 else None">
-                                <summary><span t-out="f[0]"/><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#07707F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary>
+                                <summary><span t-out="f[0]"/><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#005C65" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary>
                                 <p t-out="f[1]"/>
                             </details>
                         </div>
@@ -405,7 +405,7 @@
                     </header>
                     <div class="eot-guide">
                         <section><h2>خدمات</h2>
-                            <a href="/مشاوره-روانشناسی-آنلاین">مشاوره روان‌شناسی</a><a href="/آزمون-روانشناسی">ارزیابی‌های روان‌شناختی</a><a href="/یادگیری-خودیار-روانشناسی">یادگیری آنلاین</a><a href="/کلاس-گروهی-آنلاین">کلاس‌های گروهی</a><a href="/کارورزی-روانشناسی-آنلاین">کارورزی روان‌شناسی</a><a href="/خدمات" style="font-weight: 800;">نقشه خدمات</a>
+                            <a href="/مشاوره-روانشناسی-آنلاین">مشاوره روان‌شناسی</a><a href="/آزمون-روانشناسی">ارزیابی‌های روان‌شناختی</a><a href="/یادگیری-خودیار-روانشناسی">یادگیری آنلاین</a><a href="/کلاس-گروهی-آنلاین">کلاس‌های گروهی</a><a href="/کارورزی-روانشناسی-آنلاین">کارورزی روان‌شناسی</a><a href="/خدمات" style="font-weight: 700;">نقشه خدمات</a>
                         </section>
                         <section><h2>دانش و منابع</h2>
                             <a href="/مقالات">مقالات</a><a href="/کتب">کتاب‌ها</a><a href="/فرهنگنامه">فرهنگنامه روان‌شناسی تعاملی</a><a href="/روش-ارزیابی-و-تفسیر">روش ارزیابی و تفسیر</a>
