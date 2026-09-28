@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Scaffold marker. Adds one invisible <meta> tag to the page head so a
+        deploy can be verified with curl: it must appear on website 1 and must
+        NOT appear on website 3. No visual effect.
+    -->
+    <template id="theme_marker" name="EOT Theme: marker" inherit_id="website.layout">
+        <xpath expr="//head/meta[last()]" position="after">
+            <meta name="eot-theme" content="theme_eot_custom"/>
+        </xpath>
+    </template>
+</odoo>

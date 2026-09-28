@@ -1,0 +1,187 @@
+// theme_eot_custom - frontend styles
+//
+// Bundled into web.assets_frontend only for websites whose theme is
+// theme_eot_custom (website_id 1). Structure as the theme grows:
+//
+//   _header.scss, _footer.scss, _home.scss, ... imported below.
+//
+// The custom property is a harmless marker so a deploy can confirm the
+// stylesheet reached website 1's bundle and not website 3's.
+:root {
+    --eot-theme: 1;
+}
+
+// -----------------------------------------------------------------------
+// Why plain CSS overrides instead of Odoo's $o-color-palettes system:
+//
+// Odoo's website color palettes are compiled at SCSS build time into
+// hard-coded hex values per selector (.btn-primary, .o_cc1, etc.) - they
+// are NOT driven by a single reassignable custom property at runtime.
+// Which palette is "active" for a given website is website-specific state
+// (written by the Theme tab's configurator into that website's own SCSS
+// customization), separate from this theme module's own files. Touching
+// that per-website state from here would risk exactly the fragile,
+// hard-to-revert edits this project set out to avoid (see README:
+// "never use the UI's Theme/Remove-theme buttons").
+//
+// So this stylesheet reskins with ordinary CSS rules loaded after Odoo's
+// own frontend bundle. Same effect (new brand colors, new typeface), zero
+// interaction with per-website customization state, trivially reversible
+// with `git revert`.
+// -----------------------------------------------------------------------
+
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+// Bootstrap's own runtime custom properties (unlike .btn-primary's colors,
+// these genuinely are consumed via var() at every usage site - .text-primary,
+// .bg-primary-subtle, .border-primary, link color, etc. - confirmed in the
+// compiled frontend CSS, e.g. `.bg-primary-subtle{background-color:
+// var(--primary-bg-subtle) !important}`). Overriding them here reaches
+// every Bootstrap utility class site-wide (badges, alerts, borders, links)
+// with one small block, consistent with the "plain CSS after the bundle"
+// approach above.
+:root,
+[data-bs-theme="light"] {
+    --primary: #07707F;
+    --primary-rgb: 7, 112, 127;
+    --primary-text-emphasis: #054952;
+    --primary-bg-subtle: #E3F1F2;
+    --primary-border-subtle: #B7DDE1;
+    --link-color: #07707F;
+    --link-hover-color: #054952;
+}
+
+:root {
+    --eot-primary: #07707F;
+    --eot-primary-dark: #0B3B44;
+    --eot-primary-hover: #06616E;
+    --eot-primary-active: #054F59;
+    --eot-accent: #E4D6A0;
+    --eot-ink: #1D2B2E;
+    --eot-paper: #FAF8F3;
+    --eot-footer-text: #D8E6E8;
+    --eot-footer-muted: #9FB7BB;
+}
+
+// Typeface -----------------------------------------------------------
+// The site's only loaded webfont (Inter) has no Persian glyphs, so
+// Persian text was falling back to whatever font the visitor's OS
+// happens to ship. Vazirmatn is a proper Persian/Latin webfont.
+body,
+input,
+textarea,
+select,
+button {
+    font-family: 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
+}
+
+// Buttons --------------------------------------------------------------
+// Overriding the Bootstrap 5 CSS custom properties .btn-primary already
+// sets (see var(--btn-bg) etc. in the compiled frontend CSS) rather than
+// background-color directly, so hover/active/disabled states stay correct.
+.btn-primary,
+.o_colored_level .o_cc1 .btn-fill-primary,
+.o_colored_level .o_cc2 .btn-fill-primary,
+.o_colored_level .o_cc3 .btn-fill-primary,
+.o_colored_level .o_cc4 .btn-fill-primary,
+.o_colored_level .o_cc5 .btn-fill-primary {
+    --btn-bg: var(--eot-primary);
+    --btn-border-color: var(--eot-primary);
+    --btn-hover-bg: var(--eot-primary-hover);
+    --btn-hover-border-color: var(--eot-primary-hover);
+    --btn-active-bg: var(--eot-primary-active);
+    --btn-active-border-color: var(--eot-primary-active);
+    --btn-disabled-bg: var(--eot-primary);
+    --btn-disabled-border-color: var(--eot-primary);
+    border-radius: 999px;
+}
+
+// Header (#top) ----------------------------------------------------------
+// Targeted by ID: highest practical specificity, independent of whichever
+// internal color-combination class Odoo's builder assigned to this header.
+#top {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #E7E2D6;
+
+    .nav-link,
+    .navbar-brand {
+        color: var(--eot-ink);
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--eot-primary) !important;
+    }
+
+    .o_header_language_selector .dropdown-toggle {
+        color: var(--eot-ink);
+    }
+}
+
+// Mobile offcanvas menu shares the header's look.
+.o_navbar_mobile,
+.offcanvas.o_navbar_mobile {
+    background-color: #FFFFFF;
+    color: var(--eot-ink);
+}
+
+// Footer (#bottom) ---------------------------------------------------------
+#bottom {
+    background-color: var(--eot-primary-dark) !important;
+    color: var(--eot-footer-text);
+
+    a {
+        color: var(--eot-footer-text);
+    }
+
+    a:hover {
+        color: var(--eot-accent) !important;
+    }
+
+    .o_footer_copyright {
+        background-color: var(--eot-primary-dark) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--eot-footer-muted);
+    }
+
+    .o_footer_copyright_name {
+        color: var(--eot-footer-text);
+    }
+}
+
+// Global polish ------------------------------------------------------
+// Homepage, login/portal and inner/blog pages all render through this
+// same website.layout + web.assets_frontend bundle (checked directly:
+// /, /web/login and /blog all carry the eot-theme marker and use
+// .btn-primary for their primary actions), so the rules above already
+// reach every page type - no separate per-page-type work needed. What's
+// left is small cross-cutting polish:
+
+// Keyboard focus ring in the brand color instead of Bootstrap's default
+// blue, which clashed with the new palette.
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--eot-primary);
+    outline-offset: 2px;
+}
+
+// Text selection color.
+::selection {
+    background-color: var(--eot-accent);
+    color: var(--eot-primary-dark);
+}
+
+// Mobile menu toggler icon (hamburger) is drawn as a background-image
+// with currentColor via mask in Odoo's own CSS; setting color here is
+// enough since #top already sets a dark color for its descendants, but
+// the toggler sits in the mobile navbar which isn't inside #top's normal
+// flow on some breakpoints - make it explicit rather than relying on
+// inheritance.
+.o_header_mobile .navbar-toggler,
+.o_header_mobile .navbar-toggler-icon {
+    color: var(--eot-ink);
+}
