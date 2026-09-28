@@ -101,6 +101,21 @@ button {
     border-radius: 999px;
 }
 
+// Outline variant: without this it kept Odoo's default purple palette.
+.btn-outline-primary {
+    --btn-color: var(--eot-primary);
+    --btn-border-color: var(--eot-primary);
+    --btn-hover-color: #FFFFFF;
+    --btn-hover-bg: var(--eot-primary);
+    --btn-hover-border-color: var(--eot-primary);
+    --btn-active-color: #FFFFFF;
+    --btn-active-bg: var(--eot-primary-active);
+    --btn-active-border-color: var(--eot-primary-active);
+    --btn-disabled-color: var(--eot-primary);
+    --btn-disabled-border-color: var(--eot-primary);
+    border-radius: 999px;
+}
+
 // Header (#top) ----------------------------------------------------------
 // Targeted by ID: highest practical specificity, independent of whichever
 // internal color-combination class Odoo's builder assigned to this header.
