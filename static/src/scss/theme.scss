@@ -1,0 +1,12 @@
+// theme_eot_custom - frontend styles
+//
+// Bundled into web.assets_frontend only for websites whose theme is
+// theme_eot_custom (website_id 1). Structure as the theme grows:
+//
+//   _header.scss, _footer.scss, _home.scss, ... imported below.
+//
+// The custom property is a harmless marker so a deploy can confirm the
+// stylesheet reached website 1's bundle and not website 3's.
+:root {
+    --eot-theme: 1;
+}
