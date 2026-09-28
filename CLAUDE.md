@@ -61,6 +61,48 @@ Rules:
    occurrence repeat `(//x[...])[1]` once per occurrence.
 8. Language: fa_IR (RTL) is the default; a browser with English sends
    visitors to `/en` (LTR). Check both. Cookie `frontend_lang` controls it.
+9. **`ir.config_parameter` has no `get_param`/`set_param` in Odoo 20.** Use
+   `ICP.get_int(key, default)` / `set_int(key, val)` and
+   `get_bool(key)` / `set_bool(key, val)` instead.
+10. **No `request.website`.** Use `request.env.website` in controllers.
+    Inside a `@staticmethod` (e.g. a sitemap generator) that only has `env`,
+    there's no `request` at all — use `env.website`, never
+    `env['website'].get_current_website()` (also removed).
+11. **`ir.http._unslug` rejects Persian combining marks** (tashdid ّ,
+    hamza ء) that `_slugify` itself produces when building the URL — Odoo
+    is self-inconsistent here. Don't route through `_unslug`/`unslug`; parse
+    the trailing numeric id directly: `re.search(r'(?:^|-)(\d+)$', slug)`.
+    Same marks break `blog.blog.seo_name` auto-generation for `/blog/...`
+    fallback URLs — set `seo_name` explicitly on affected records.
+12. **Odoo's `.container` ships `::before`/`::after` clearfix pseudo-elements**
+    (`display: table`, empty content). Inside a CSS Grid/Flex parent these
+    become a real phantom child and eat a track/slot, silently breaking
+    sidebar/TOC layouts. Diagnose with
+    `getComputedStyle(el, '::before').display` (not screenshots — a wrong
+    layout can look fine in a static screenshot); fix with a scoped
+    `.your-scope .container::before, ::after { content: none; display: none; }`.
+13. **Stored HTML content can have percent-encoded hrefs** (`%D9...`
+    Persian in `href`). `unquote()` before regex-matching links against
+    page content, or the match silently finds nothing.
+14. **`_read_group` returns `(record, count)` tuples**, not a dict — unpack
+    accordingly when counting posts/children per group.
+15. **Rehearse DB-touching module changes on a disposable clone**, never
+    directly on prod: `createdb` a copy (`dropdb --force` first if a prior
+    clone still has idle pool connections), run the upgrade against it from
+    a git worktree, serve on an unused port with `--workers=0`, curl every
+    route/redirect/sitemap/edge-case, only then deploy for real. Repeat per
+    round of fixes rather than patching prod directly.
+16. **Sitemap is cached as `ir.attachment` rows** (`url like '/sitemap%'`).
+    After changing what's in the sitemap (new redirects, filtered routes),
+    delete the stale rows for the affected `website_id` only — check other
+    websites' rows are untouched — so it regenerates.
+17. **Repurposing `blog.blog`/`blog.post`** (extra fields + overridden
+    routes/templates) is a fast way to get a full CMS content type (listing,
+    detail, sitemap, RSS) without a new model — cheaper than building
+    `website.page`-based custom routing from scratch, as long as the stock
+    `/blog/...` routes and sitemap entries for those blogs are then
+    redirected/filtered out (see #16) so they don't compete with the new
+    canonical URLs.
 
 ## Owner's standing rules
 - No placeholders anywhere on the site (demo phones, yourcompany emails,
