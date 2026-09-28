@@ -53,6 +53,16 @@ case "${1:-help}" in
   status)       # service + deployed commit + website answering
     prod "systemctl is-active odoo20; cd $REPO && git log --oneline -1; for h in www.eot.ir; do printf '%s ' \$h; curl -s -o /dev/null -w '%{http_code}\n' -H \"Host: \$h\" http://127.0.0.1:8069/; done" ;;
 
+  rehearse-stop) # eot rehearse-stop DB  -> stop+drop a rehearsal clone, verified
+    shift; db=${1:?usage: eot rehearse-stop <db>}
+    case "$db" in eot_main|eot_main_*) echo "!! refusing: '$db' looks like the live db, not a rehearsal clone"; exit 1 ;; esac
+    prod "pkill -f '[-]d $db' 2>/dev/null; sleep 1; \
+      sudo -u postgres dropdb --if-exists --force '$db'; \
+      rm -rf /opt/odoo/.local/share/Odoo/filestore/'$db'; \
+      echo pg:\$(sudo -u postgres psql -Atc \"select 1 from pg_database where datname='$db'\"); \
+      echo fs:\$(test -d /opt/odoo/.local/share/Odoo/filestore/'$db' && echo present || echo gone); \
+      echo proc:\$(pgrep -af \"[-]d $db\" | wc -l)" ;;
+
   ssh)          shift; prod "$@" ;;
 
   update)       # pull the latest toolkit from GitHub (source of truth: theme repo tools/vps)
@@ -69,6 +79,7 @@ eot find "text"          which active views (website 1 / generic) contain text
 eot view ID [lang]       arch of a view
 eot sql "query"          psql on eot_main (compact)
 eot deploy REF           deploy theme ref; on failure prints the real error
+eot rehearse-stop DB     stop+drop a rehearsal DB clone, with proof (pg/fs/proc), refuses eot_main*
 eot log [since] [pattern]  grouped error types + failing URLs (default last 30 min)
 eot status               service, deployed commit, both websites HTTP
 eot ssh CMD              run a command on eot-odoo-prod

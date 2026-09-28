@@ -22,7 +22,12 @@ CLEANUP=${3:-}
 step(){ echo "=== $(date +%T) $*"; }
 
 step reset
-pkill -f "d $DB" 2>/dev/null; sleep 1
+# Bracket the pattern ("[-]d $DB" not "d $DB"): over ssh this whole line is
+# itself the remote command, so an unbracketed pkill -f matches its own
+# argv and can kill the invoking shell instead of the target (CLAUDE.md
+# "pkill -f / pgrep -f self-match" pitfall). dropdb --force (PG13+) already
+# terminates other connections, so this is just a courtesy stop.
+pkill -f "[-]d $DB" 2>/dev/null; sleep 1
 sudo -u postgres dropdb --if-exists --force "$DB"
 rm -rf "$FS/$DB"
 
