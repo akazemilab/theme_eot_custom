@@ -45,7 +45,7 @@
         <xpath expr="//span[hasclass('visually-hidden')]" position="replace">
             <span class="visually-hidden">در حال بارگذاری...</span>
         </xpath>
-        <xpath expr="//small[hasclass('o_search_found_results')]" position="replace">
+        <xpath expr="//small[contains(@t-attf-class,'o_search_found_results')]" position="replace">
             <small t-attf-class="o_search_found_results {{'d-none' if not search else ''}}">
                 <span class="o_search_count" t-out="search_count"/> نتیجه
             </small>
