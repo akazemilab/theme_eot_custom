@@ -12,15 +12,23 @@
     </template>
 
     <!--
-        Persian webfont (Vazirmatn). Loaded as a <link> rather than an SCSS
-        @import: see the note in static/src/scss/theme.scss for why an
-        @import of this URL broke the whole frontend stylesheet.
+        Persian webfonts. Loaded as <link> tags rather than an SCSS @import:
+        see the note in static/src/scss/theme.scss for why an @import of a
+        Google Fonts URL broke the whole frontend stylesheet (the URL's ";"
+        gets treated as a rule separator by Odoo's bundler).
+
+        Vazirmatn: body copy (already in place, reads well at small sizes).
+        Estedad: headings only - a richer, more distinctive display face
+        with a full 100-900 weight range and better-drawn Persian digits,
+        used to make headings/numbers feel more considered than plain
+        Vazirmatn Bold. See static/src/scss/theme.scss for where each is
+        applied.
     -->
-    <template id="theme_font" name="EOT Theme: Vazirmatn font" inherit_id="website.layout">
+    <template id="theme_font" name="EOT Theme: Persian fonts" inherit_id="website.layout">
         <xpath expr="//head/meta[last()]" position="after">
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap"/>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;family=Estedad:wght@500;600;700;800;900&amp;display=swap"/>
         </xpath>
     </template>
 </odoo>

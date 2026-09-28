@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Hardcoded English strings the fa_IR translation didn't catch.
+
+        "Sign in" comes from portal.user_sign_in (addons/portal/views/
+        portal_templates.xml) - a literal English string in the template,
+        normally covered by Odoo's own fa_IR translation of the portal
+        module. It was still showing in English, which points at the
+        fa_IR language pack's module translations being stale/incomplete
+        on this instance (see CLAUDE.md pitfall #6 - this DB was carried
+        over from another instance). The real fix for that is reloading
+        fa_IR translations for base/web/website/portal on the server
+        (see README/ops notes); this template patch is a guaranteed,
+        version-controlled backstop for this specific string regardless
+        of that.
+    -->
+    <template id="user_sign_in_fa"
+              name="EOT: 'Sign in' in Persian"
+              inherit_id="portal.user_sign_in">
+        <!--
+            Odoo 20's actual portal.user_sign_in arch does NOT carry the
+            "t-if=request.session.profile_session" debug-marker span some
+            other Odoo versions' source has (confirmed: reproducing it here
+            threw "'Session' object has no attribute 'profile_session'" -
+            AttributeError on every page). Replace the <a> with just the
+            translated text, nothing else.
+        -->
+        <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
+            <a t-attf-href="/web/login" t-attf-class="#{_link_class}">ورود</a>
+        </xpath>
+    </template>
+
+    <!--
+        Header search box (website.website_search_box): "Loading..." (a
+        screen-reader-only spinner label) and " result(s)" (the visible
+        count next to search results) are literal English with no fa.po
+        entry upstream - reloading fa_IR translations (ops note below)
+        didn't touch these because there is nothing to load; they were
+        never translated in Odoo core to begin with.
+    -->
+    <template id="search_box_fa"
+              name="EOT: search box spinner/result(s) in Persian"
+              inherit_id="website.website_search_box">
+        <xpath expr="//span[hasclass('visually-hidden')]" position="replace">
+            <span class="visually-hidden">در حال بارگذاری...</span>
+        </xpath>
+        <xpath expr="//small[contains(@t-attf-class,'o_search_found_results')]" position="replace">
+            <small t-attf-class="o_search_found_results {{'d-none' if not search else ''}}">
+                <span class="o_search_count" t-out="search_count"/> نتیجه
+            </small>
+        </xpath>
+    </template>
+
+    <!--
+        Default search-box placeholder ("Search..." when no other
+        placeholder was passed in) - same story as above: a literal text
+        node, not a translatable string, in website.website_search_box_input.
+    -->
+    <template id="search_box_placeholder_fa"
+              name="EOT: search box default placeholder in Persian"
+              inherit_id="website.website_search_box_input">
+        <xpath expr="//t[@t-set='placeholder']" position="replace">
+            <t t-if="not placeholder" t-set="placeholder">جستجو...</t>
+        </xpath>
+    </template>
+</odoo>
