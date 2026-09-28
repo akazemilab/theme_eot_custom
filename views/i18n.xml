@@ -196,7 +196,7 @@
         <xpath expr="//h5[contains(., 'Delivery addresses')]" position="replace">
             <h5 class="mb-0">نشانی‌های ارسال</h5>
         </xpath>
-        <xpath expr="//a[@class='o_address_card_add_new btn btn-outline-primary btn-sm']" position="replace">
+        <xpath expr="//a[hasclass('o_address_card_add_new')]" position="replace">
             <a
                 role="button"
                 t-att-href="new_address_url"
@@ -243,6 +243,20 @@
         <xpath expr="//select[@name='country_id']/option[@value='']" position="replace">
             <option value="">کشور...</option>
         </xpath>
+        <xpath expr="//select[@name='state_id']/option[@value='']" position="replace">
+            <option value="">استان...</option>
+        </xpath>
+        <xpath expr="//select[@name='city_id']/option[@value='']" position="replace">
+            <option value="">شهر...</option>
+        </xpath>
+        <xpath expr="//label[@for='o_company_name']" position="replace">
+            <label
+                class="col-form-label fw-normal label-optional"
+                for="o_company_name"
+            >
+                شرکت
+            </label>
+        </xpath>
     </template>
 
     <template id="portal_my_details_fa" name="EOT: account details in Persian" inherit_id="portal.portal_my_details">
@@ -255,7 +269,9 @@
     </template>
 
     <template id="portal_security_fa" name="EOT: security page in Persian" inherit_id="portal.portal_my_security">
-        <xpath expr="//button[@data-bs-dismiss='modal']" position="replace">
+        <!-- The modal also has a close (x) button with the same data attribute:
+             match the text button by its exact class, not just the attribute. -->
+        <xpath expr="//button[@class='btn'][@data-bs-dismiss='modal']" position="replace">
             <button type="button" class="btn" data-bs-dismiss="modal">
                 انصراف
             </button>
