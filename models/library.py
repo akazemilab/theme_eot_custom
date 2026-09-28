@@ -195,7 +195,7 @@ class BlogBlog(models.Model):
     def _eot_library_sync(self):
         self = self.with_context(tracking_disable=True, mail_notrack=True, mail_create_nolog=True)
         ICP = self.env['ir.config_parameter'].sudo()
-        done = int(ICP.get_param(PARAM_VERSION, '0') or 0)
+        done = ICP.get_int(PARAM_VERSION, 0)
         blogs = self._eot_library_blogs()
         if not blogs:
             _logger.info('eot library: no library blogs on website %s, nothing to do', WEBSITE_ID)
@@ -203,11 +203,11 @@ class BlogBlog(models.Model):
         if done < LIBRARY_VERSION:
             self._eot_sync_blogs(blogs)
             self.env['blog.post']._eot_sync_posts(blogs)
-            ICP.set_param(PARAM_VERSION, str(LIBRARY_VERSION))
+            ICP.set_int(PARAM_VERSION, LIBRARY_VERSION)
             _logger.info('eot library: normalised to version %s', LIBRARY_VERSION)
-        if not ICP.get_param(PARAM_PUBLISHED):
+        if not ICP.get_bool(PARAM_PUBLISHED):
             self._eot_publish(blogs)
-            ICP.set_param(PARAM_PUBLISHED, '1')
+            ICP.set_bool(PARAM_PUBLISHED, True)
             _logger.info('eot library: published and added to the menu')
         return True
 
