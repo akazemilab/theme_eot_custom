@@ -33,9 +33,9 @@ step upgrade
 sudo -u odoo $PY $BIN -c /etc/odoo20.conf -d $DB --db-filter="^$DB\$" --addons-path=$AP -u theme_eot_custom --stop-after-init --no-http > /tmp/m6_upgrade.log 2>&1
 echo "rc=$?"; grep -E " (ERROR|CRITICAL|WARNING) |Traceback|ParseError" /tmp/m6_upgrade.log | cut -c1-300 | head -15
 step cleanup-dry
-EOT_DRY_RUN=1 sudo -E -u odoo $PY $BIN shell -c /etc/odoo20.conf -d $DB --db-filter="^$DB\$" --addons-path=$AP --no-http < $WT/theme_eot_custom/scripts/m6_cleanup.py 2>&1 | grep -vE "^(20[0-9]{2}-| *$|>>>|\.\.\.)" | tail -12
+sudo -u odoo env HOME=/opt/odoo EOT_DRY_RUN=1 $PY $BIN shell -c /etc/odoo20.conf -d $DB --db-filter="^$DB\$" --addons-path=$AP --no-http < $WT/theme_eot_custom/scripts/m6_cleanup.py 2>&1 | grep -vE "^(20[0-9]{2}-| *$|>>>|\.\.\.)" | tail -12
 step cleanup
-sudo -u odoo $PY $BIN shell -c /etc/odoo20.conf -d $DB --db-filter="^$DB\$" --addons-path=$AP --no-http < $WT/theme_eot_custom/scripts/m6_cleanup.py 2>&1 | grep -vE "^(20[0-9]{2}-| *$|>>>|\.\.\.)" | tail -12
+sudo -u odoo env HOME=/opt/odoo $PY $BIN shell -c /etc/odoo20.conf -d $DB --db-filter="^$DB\$" --addons-path=$AP --no-http < $WT/theme_eot_custom/scripts/m6_cleanup.py 2>&1 | grep -vE "^(20[0-9]{2}-| *$|>>>|\.\.\.)" | tail -12
 step serve
 sudo -u odoo setsid nohup $PY $BIN -c /etc/odoo20.conf -d $DB --db-filter="^$DB\$" --addons-path=$AP --http-port=8070 --workers=0 --max-cron-threads=0 --no-database-list > /tmp/m6_serve.log 2>&1 &
 for i in $(seq 1 60); do curl -s -o /dev/null -H "Host: www.eot.ir" http://127.0.0.1:8070/web/login && break; sleep 2; done

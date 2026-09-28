@@ -5,7 +5,7 @@
 # Run AFTER the 20.0.6.0.0 theme deploy (it relies on the page ids that
 # deploy creates, and refuses to run without them), through odoo shell:
 #
-#   sudo -u odoo /opt/odoo/venv/bin/python3 /opt/odoo/odoo/odoo-bin shell \
+#   sudo -u odoo env HOME=/opt/odoo /opt/odoo/venv/bin/python3 /opt/odoo/odoo/odoo-bin shell \
 #       -c /etc/odoo20.conf -d eot_main --no-http < scripts/m6_cleanup.py
 #
 # Set EOT_DRY_RUN=1 to report without changing anything.
