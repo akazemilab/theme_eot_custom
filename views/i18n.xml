@@ -30,4 +30,25 @@
             <a t-attf-href="/web/login" t-attf-class="#{_link_class}">ورود</a>
         </xpath>
     </template>
+
+    <!--
+        Header search box (website.website_search_box): "Loading..." (a
+        screen-reader-only spinner label) and " result(s)" (the visible
+        count next to search results) are literal English with no fa.po
+        entry upstream - reloading fa_IR translations (ops note below)
+        didn't touch these because there is nothing to load; they were
+        never translated in Odoo core to begin with.
+    -->
+    <template id="search_box_fa"
+              name="EOT: search box spinner/result(s) in Persian"
+              inherit_id="website.website_search_box">
+        <xpath expr="//span[hasclass('visually-hidden')]" position="replace">
+            <span class="visually-hidden">در حال بارگذاری...</span>
+        </xpath>
+        <xpath expr="//small[hasclass('o_search_found_results')]" position="replace">
+            <small t-attf-class="o_search_found_results {{'d-none' if not search else ''}}">
+                <span class="o_search_count" t-out="search_count"/> نتیجه
+            </small>
+        </xpath>
+    </template>
 </odoo>
