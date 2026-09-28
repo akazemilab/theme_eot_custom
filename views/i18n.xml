@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Hardcoded English strings the fa_IR translation didn't catch.
+
+        "Sign in" comes from portal.user_sign_in (addons/portal/views/
+        portal_templates.xml) - a literal English string in the template,
+        normally covered by Odoo's own fa_IR translation of the portal
+        module. It was still showing in English, which points at the
+        fa_IR language pack's module translations being stale/incomplete
+        on this instance (see CLAUDE.md pitfall #6 - this DB was carried
+        over from another instance). The real fix for that is reloading
+        fa_IR translations for base/web/website/portal on the server
+        (see README/ops notes); this template patch is a guaranteed,
+        version-controlled backstop for this specific string regardless
+        of that.
+    -->
+    <template id="user_sign_in_fa"
+              name="EOT: 'Sign in' in Persian"
+              inherit_id="portal.user_sign_in">
+        <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
+            <a t-attf-href="/web/login" t-attf-class="#{_link_class}">ورود<span t-if="request.session.profile_session" class="text-danger fa fa-circle"/></a>
+        </xpath>
+    </template>
+</odoo>

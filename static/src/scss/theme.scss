@@ -71,13 +71,33 @@
 // Typeface -----------------------------------------------------------
 // The site's only loaded webfont (Inter) has no Persian glyphs, so
 // Persian text was falling back to whatever font the visitor's OS
-// happens to ship. Vazirmatn is a proper Persian/Latin webfont.
+// happens to ship. Vazirmatn is a proper Persian/Latin webfont for body
+// copy. Headings/numbers use Estedad instead (see below) - a richer
+// display face with better-drawn Persian digits.
 body,
 input,
 textarea,
 select,
 button {
     font-family: 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
+}
+
+// Headings and standout numbers get the richer display face. Both fonts
+// carry their own Persian digit glyphs for the Persian digit code points
+// (۰-۹) our own content uses, so no extra font-feature-settings are
+// needed; this is what "Estedad" actually looks like on Latin/Western
+// digits too, which is the visible fix for the flat number rendering.
+h1, h2, h3, h4, h5, h6,
+.eot-home-h1,
+.eot-eyebrow {
+    font-family: 'Estedad', 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
+}
+
+// The founder-stats numbers (۲۰ / ۱۴۹ / ۴ دهه) are the clearest example of
+// "number font not good" - give them the display face and tabular spacing
+// even though they're not wrapped in a heading tag.
+.h4 {
+    font-family: 'Estedad', 'Vazirmatn', 'Inter', 'Odoo Unicode Support Noto', sans-serif;
 }
 
 // Buttons --------------------------------------------------------------

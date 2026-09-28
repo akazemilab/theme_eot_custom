@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Remove "Powered by Odoo - Create a free website" from the footer.
+
+        Traced via Odoo core source (addons/web/views/webclient_templates.xml,
+        addons/website/views/website_templates.xml):
+
+          web.brand_promotion            <div class="o_brand_promotion">
+                                            <t t-call="web.brand_promotion_message">
+          website.brand_promotion          (inherits web.brand_promotion,
+                                             replaces that t-call with one
+                                             whose _message is the
+                                             "Create a free website" link)
+
+        Rather than chase which inheriting view currently supplies the
+        message (that chain has changed across Odoo versions - see OCA's
+        website_odoo_debranding module, which does the same thing per
+        version), we replace the outer <div class="o_brand_promotion"> from
+        web.brand_promotion wholesale, same as that module's approach. That
+        node is where every version's chain of edits ends up, so this is
+        robust to what fills it.
+    -->
+    <template id="footer_no_brand_promotion"
+              name="EOT: remove 'Powered by Odoo' footer promo"
+              inherit_id="web.brand_promotion"
+              priority="999">
+        <xpath expr="//div[hasclass('o_brand_promotion')]" position="replace">
+            <div class="o_brand_promotion"/>
+        </xpath>
+    </template>
+</odoo>
