@@ -88,6 +88,26 @@ resets website 1's font, palette, header-template and footer-template
 customisations in `user_values.scss`. Initial activation was done by setting
 `website.theme_id` directly and installing from the CLI to avoid that reset.
 
+## Milestone 2 - header/footer visual identity
+
+Colors and the Persian typeface are set with plain CSS in
+`static/src/scss/theme.scss`, loaded after Odoo's own frontend bundle -
+**not** via Odoo's `$o-color-palettes` SCSS system. Reasoning kept here since
+it looks like the "wrong" way at first glance:
+
+Odoo's color palettes compile to hard-coded hex values per selector at SCSS
+build time (`.btn-primary { --btn-bg: #714B67; ... }`, not
+`var(--o-color-1)`), and which palette is "active" for a given website is
+per-website state written by the Theme tab's configurator into that
+website's own SCSS customisation - separate from this module's files.
+Changing that from here would mean writing to the same fragile per-website
+state the "no UI theme switcher" rule above already warns about. Plain CSS
+overrides, loaded after the core bundle, get the same visual result with
+zero interaction with that state, and `git revert` cleanly undoes them.
+
+`primary_variables.scss` stays empty for this reason; everything is in
+`theme.scss`.
+
 ## Branching
 
 * `main` - what is approved.
