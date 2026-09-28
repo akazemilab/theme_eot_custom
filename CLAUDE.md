@@ -161,6 +161,12 @@ Rules:
   with an MD5 check on both ends, and cross-validate counts against the
   source's own displayed totals before trusting the extract.
 
+- **`pkill -f` / `pgrep -f` over ssh match their own command line.** The
+  pattern text is inside `bash -c '...'`, so `pkill -f "d eot_m7test"`
+  killed its own ssh shell and silently skipped the dropdb after it. Use a
+  bracket pattern (`pkill -f "[-]d eot_m7test"`) and confirm the result
+  (e.g. list `pg_database`) instead of trusting a missing echo.
+
 ## Owner's standing rules
 - No placeholders anywhere on the site (demo phones, yourcompany emails,
   lorem ipsum...). Remove them; real values are added deliberately later.
