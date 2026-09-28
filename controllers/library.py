@@ -14,6 +14,7 @@ each item has exactly one address. Any other website gets a 404.
 """
 import re
 from collections import OrderedDict
+from urllib.parse import unquote
 
 from werkzeug.exceptions import NotFound
 
@@ -371,7 +372,7 @@ class EotLibrary(http.Controller):
         idx = ids.index(post.id)
         prev_t = terms[idx - 1] if idx > 0 else None
         next_t = terms[idx + 1] if idx + 1 < len(terms) else None
-        linked_ids = [int(i) for i in re.findall(r'href="/فرهنگنامه/[^"]*?-(\d+)"', str(post.content or ''))]
+        linked_ids = [int(i) for i in re.findall(r'href="/فرهنگنامه/[^"]*?-(\d+)"', unquote(str(post.content or '')))]
         linked = request.env['blog.post'].sudo().with_context(lang='fa_IR').browse(
             list(OrderedDict.fromkeys(i for i in linked_ids if i != post.id))).exists().filtered(
             lambda p: p.is_published and p.blog_id == blog)
