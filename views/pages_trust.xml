@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Milestone 6, group 2: trust & methodology ("editorial" look):
+        paper ground, one reading column, numbered sections, an in-page
+        contents box (highlighted on scroll by static/src/js/library.js via
+        .eot-page-toc) and a shared "اعتماد و روش" link list.
+    -->
+
+    <!-- Shared sidebar list; pass current= the page's path. -->
+    <template id="trust_related" name="EOT: trust pages list">
+        <nav class="eot-related" aria-label="اعتماد و روش">
+            <h2>اعتماد و روش</h2>
+            <t t-foreach="[('/اصول-علمی-و-تحریریه', 'اصول علمی و تحریریه'), ('/روش-ارزیابی-و-تفسیر', 'روش ارزیابی و تفسیر'), ('/ایمنی-روانشناختی', 'راهنمای ایمنی روان‌شناختی'), ('/سوالات-متداول', 'سؤالات متداول'), ('/دکتر-ناصرالدین-کاظمی-حقیقی', 'دکتر ناصرالدین کاظمی حقیقی')]" t-as="l">
+                <a t-att-href="l[0]" t-att-aria-current="'page' if l[0] == current else None" t-out="l[1]"/>
+            </t>
+        </nav>
+    </template>
+
+    <template id="trust_crumbs" name="EOT: trust breadcrumbs">
+        <nav class="eot-crumbs" aria-label="مسیر"><a href="/">خانه</a><span>/</span><span t-out="crumb or 'اعتماد و روش'"/></nav>
+    </template>
+
+    <!-- ================================================================ founder -->
+    <template id="page_founder" name="EOT page: founder" inherit_id="theme_eot_custom.eot_pv_founder">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <div class="container" style="padding-top: 1.5rem;">
+                    <nav class="eot-crumbs" aria-label="مسیر"><a href="/">خانه</a><span>/</span><a href="/about">درباره</a><span>/</span><span>بنیان‌گذار</span></nav>
+                    <section class="eot-portrait-hero">
+                        <div class="eot-stack" style="gap: 1.1rem;">
+                            <span class="eot-kicker">بنیان‌گذار هیجان اندیشه</span>
+                            <h1>دکتر ناصرالدین کاظمی حقیقی</h1>
+                            <p class="eot-ed-lead">روان‌شناس، پژوهشگر و نظریه‌پرداز مکتب روان‌شناسی تعاملی و بنیان‌گذار مؤسسه تعاملی هیجان اندیشه.</p>
+                            <div class="eot-row-btns">
+                                <a href="/کتب" class="eot-btn eot-btn-teal">مطالعه کتاب‌ها</a>
+                                <a href="https://www.sepehrtherapy.ir/appointment/11" target="_blank" rel="noopener" class="eot-btn eot-btn-line">رزرو جلسه اختصاصی</a>
+                            </div>
+                        </div>
+                        <figure class="eot-portrait"><img src="/web/image/836-bdfdb71c/h33-1.svg" alt="دکتر ناصرالدین کاظمی حقیقی"/></figure>
+                    </section>
+                    <div class="eot-ed-grid">
+                        <article class="eot-ed-article">
+                            <section id="research">
+                                <h2 class="eot-ed-h2"><small>۰۱</small>حوزه فعالیت و پژوهش</h2>
+                                <p class="eot-ed-p">فعالیت‌های علمی و حرفه‌ای دکتر ناصرالدین کاظمی حقیقی با روان‌شناسی تعاملی و موضوعاتی مانند استعداد، خلاقیت، تیزهوشی، آموزش و روان‌شناسی کودکان استثنایی پیوند دارد.</p>
+                                <blockquote class="eot-quote">مکتب روان‌شناسی تعاملی بر نگاه نظام‌مند به انسان و ارتباط میان اندیشه، هیجان، تجربه و محیط تأکید می‌کند</blockquote>
+                                <p class="eot-ed-p">و در محتوای علمی، ارزیابی‌ها و برنامه‌های آموزشی هیجان اندیشه بازتاب یافته است.</p>
+                            </section>
+                            <section id="role">
+                                <h2 class="eot-ed-h2"><small>۰۲</small>نقش در هیجان اندیشه</h2>
+                                <dl class="eot-dl-rows">
+                                    <div><dt>بنیان‌گذاری</dt><dd>بنیان‌گذار مؤسسه تعاملی هیجان اندیشه و شکل‌دهنده چارچوب روان‌شناسی تعاملی.</dd></div>
+                                    <div><dt>تألیف و پژوهش</dt><dd>تولید آثار و محتوای تخصصی در روان‌شناسی، استعداد، خلاقیت و آموزش.</dd></div>
+                                    <div><dt>آموزش حرفه‌ای</dt><dd>پشتیبانی نظری از آموزش‌ها، کارورزی و توسعه مسیرهای حرفه‌ای روان‌شناسی.</dd></div>
+                                </dl>
+                            </section>
+                        </article>
+                        <aside class="eot-side-stack">
+                            <h2 class="eot-kicker" style="font-family: inherit;">مطالعه آثار و منابع</h2>
+                            <a href="/کتب" class="eot-card eot-count-link"><b>۲۰</b><span><strong>کتاب‌ها</strong><small>کتاب و اثر بلند</small></span></a>
+                            <a href="/مقالات" class="eot-card eot-count-link"><b>۱۴۲</b><span><strong>مقالات</strong><small>مقاله منتشرشده</small></span></a>
+                            <a href="/فرهنگنامه" class="eot-card eot-count-link"><b><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#07707F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></b><span><strong>فرهنگنامه</strong><small>روان‌شناسی تعاملی</small></span></a>
+                            <div class="eot-link-list"><a href="/about" style="background: #F1EAD3;">درباره هیجان اندیشه<span>←</span></a></div>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================ about -->
+    <template id="page_about" name="EOT page: about" inherit_id="theme_eot_custom.eot_pv_about">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <div class="container">
+                    <section class="eot-about-head">
+                        <span class="eot-kicker">علم • تجربه • رشد انسانی</span>
+                        <h1>درباره هیجان اندیشه</h1>
+                        <div class="eot-two eot-two-even" style="gap: 2.5rem;">
+                            <p class="eot-ed-p" style="font-size: 1.15rem; color: #1D2B2E;">مؤسسه تعاملی هیجان اندیشه یک نهاد علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی است؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی.</p>
+                            <p class="eot-ed-p">این مجموعه بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است؛ رویکردی که انسان را در تعامل پویا با خویشتن، محیط و تجربه‌هایش می‌بیند و بر پیوند اندیشه، هیجان و رفتار تأکید دارد.</p>
+                        </div>
+                        <div class="eot-row-btns">
+                            <a href="#what-we-do" class="eot-btn eot-btn-teal">حوزه‌های فعالیت</a>
+                            <a href="/مقالات" class="eot-btn eot-btn-line">منابع علمی</a>
+                            <a href="/contactus" class="eot-btn eot-btn-text">ارتباط با ما</a>
+                        </div>
+                    </section>
+
+                    <section class="eot-sec" style="padding-top: 3rem;">
+                        <span class="eot-kicker" style="margin-bottom: 1rem;">سه محور اصلی</span>
+                        <div class="eot-pillars">
+                            <div><h2>مشاوره</h2><p>کاربرد دانش روان‌شناسی برای شناخت، تصمیم‌گیری، حمایت و مداخله حرفه‌ای.</p></div>
+                            <div><h2>آموزش</h2><p>تبدیل مفاهیم علمی به یادگیری روشن، ساختاریافته و قابل استفاده.</p></div>
+                            <div><h2>پژوهش</h2><p>توسعه دانش، ابزارهای سنجش و محتوای تخصصی در حوزه‌های روان‌شناسی و نخبگی.</p></div>
+                        </div>
+                    </section>
+
+                    <section class="eot-sec">
+                        <div class="eot-card-dark eot-dark-box" style="padding: 2.5rem;">
+                            <div class="eot-stack"><span class="eot-kicker">چارچوب نظری</span><h2>روان‌شناسی تعاملی؛ از فهم جزء به فهم نظام</h2></div>
+                            <div class="eot-stack">
+                                <p>در روان‌شناسی تعاملی، پدیده‌های روان‌شناختی جدا از بافت کلی زندگی و نظام روان بررسی نمی‌شوند. هدف، دیدن رابطه میان عوامل مختلف و فهم چگونگی اثرگذاری متقابل آن‌ها بر تجربه و رفتار انسان است.</p>
+                                <p>این نگاه در حوزه‌هایی مانند تشخیص، بهداشت روان، مشاوره، درمان، آموزش، استعداد و رشد فردی به کار گرفته می‌شود و پایه بسیاری از محتواها، ارزیابی‌ها و برنامه‌های آموزشی هیجان اندیشه را تشکیل می‌دهد.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="what-we-do" class="eot-sec">
+                        <div class="eot-sec-head">
+                            <span class="eot-kicker">از دانش تا کاربرد</span>
+                            <h2 class="eot-h2">چه کار می‌کنیم؟</h2>
+                            <p class="eot-lead">خدمات و محتوای هیجان اندیشه از خودشناسی و یادگیری عمومی تا آموزش حرفه‌ای روان‌شناسی امتداد دارد.</p>
+                        </div>
+                        <div class="eot-lined">
+                            <a href="/مشاوره-روانشناسی-آنلاین"><strong>مشاوره و خدمات روان‌شناختی</strong><span>دسترسی به روان‌شناسان و مشاوران و رزرو جلسه برای نیازهای فردی و حرفه‌ای.</span></a>
+                            <a href="/آزمون-روانشناسی"><strong>ارزیابی و خودشناسی</strong><span>فهرست‌ها و ارزیابی‌های ساختاریافته برای شناخت بهتر الگوهای فردی، استعداد و تجربه روان‌شناختی.</span></a>
+                            <a href="/یادگیری-خودیار-روانشناسی"><strong>یادگیری آنلاین</strong><span>مسیرهای eLearning مبتنی بر ارزیابی، کتاب، مقاله، فرهنگنامه و یادگیری حرفه‌ای.</span></a>
+                            <a href="/کلاس-گروهی-آنلاین"><strong>کلاس و کارگاه گروهی</strong><span>جلسات هفتگی و دوره‌های چندجلسه‌ای برای یادگیری زنده، گفت‌وگو و تمرین گروهی.</span></a>
+                            <a href="/کارورزی-روانشناسی-آنلاین"><strong>کارورزی و رشد حرفه‌ای</strong><span>مسیر تخصصی روان‌شناسی و مشاوره از تشخیص تا درمان، دستیاری و کمیسیون حرفه‌ای.</span></a>
+                            <a href="/مقالات"><strong>پژوهش، کتاب و محتوای علمی</strong><span>مقالات، کتاب‌ها و فرهنگنامه برای دسترسی ساختاریافته به دانش روان‌شناسی و روان‌شناسی تعاملی.</span></a>
+                        </div>
+                    </section>
+
+                    <section class="eot-sec">
+                        <div class="eot-grid eot-grid-2" style="gap: 1.5rem;">
+                            <div class="eot-card-sand eot-stack">
+                                <span class="eot-kicker">حوزه‌های تخصصی</span>
+                                <h2 class="eot-h3">روان‌شناسی، استعداد و آموزش نخبگی</h2>
+                                <p class="eot-body">قلمرو فعالیت هیجان اندیشه علاوه بر خدمات روان‌شناختی، حوزه‌های هوش، استعداد، خلاقیت، تیزهوشی و نخبگی را نیز در بر می‌گیرد. این موضوعات در قالب آموزش، پژوهش، ابزارهای سنجش، محتوای علمی و برنامه‌های رشد و یادگیری دنبال می‌شوند.</p>
+                                <div class="eot-row-btns" style="gap: 1.25rem;"><a href="/کتب" class="eot-link">کتاب‌ها ←</a><a href="/فرهنگنامه" class="eot-link">فرهنگنامه ←</a><a href="/مقالات" class="eot-link">مقالات ←</a></div>
+                            </div>
+                            <div class="eot-card-gold eot-stack">
+                                <span class="eot-kicker">اعتماد و مسئولیت حرفه‌ای</span>
+                                <h2 class="eot-h3">کلینیک روان‌شناسی و مشاوره ایران‌اندیش</h2>
+                                <p class="eot-body">کلینیک ایران‌اندیش در ساختار معرفی مؤسسه با پروانه شماره ۳۷۹ سازمان نظام روان‌شناسی و مشاوره معرفی شده و در حوزه خدمات تخصصی روان‌شناختی فعالیت می‌کند.</p>
+                                <p class="eot-lead" style="font-size: .925rem;">ارائه خدمات حرفه‌ای باید متناسب با نیاز فرد، حدود تخصص و استانداردهای حرفه‌ای انجام شود.</p>
+                                <div class="eot-pills"><span class="eot-pill eot-pill-sand">پروانه ۳۷۹</span><span class="eot-pill eot-pill-sand">شماره ثبت مؤسسه ۴۵۴۷۷</span></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="eot-sec">
+                        <div class="eot-founder-row">
+                            <img src="/web/image/836-bdfdb71c/h33-1.svg" alt="دکتر ناصرالدین کاظمی حقیقی" loading="lazy"/>
+                            <div class="eot-stack">
+                                <span class="eot-kicker">بنیان‌گذار و نظریه‌پرداز</span>
+                                <h2 class="eot-h2" style="font-size: 1.85rem;">دکتر ناصرالدین کاظمی حقیقی</h2>
+                                <p class="eot-body">روان‌شناس، پژوهشگر و نظریه‌پرداز مکتب «روان‌شناسی تعاملی» و بنیان‌گذار مؤسسه تعاملی هیجان اندیشه.</p>
+                                <p class="eot-body">تجربه حرفه‌ای و آثار ایشان در حوزه‌هایی مانند استعداد، خلاقیت، تیزهوشی، آموزش و روان‌شناسی تعاملی، یکی از پایه‌های شکل‌گیری منابع علمی و آموزشی مجموعه است.</p>
+                                <a href="/دکتر-ناصرالدین-کاظمی-حقیقی" class="eot-link">آشنایی با بنیان‌گذار ←</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="eot-sec eot-sec-last">
+                        <div class="eot-card eot-stack" style="padding: 2.25rem;">
+                            <span class="eot-kicker">از شناخت تا عمل</span>
+                            <h2 class="eot-h3" style="font-size: 1.75rem;">مسیر مناسب خودتان را از همین‌جا شروع کنید</h2>
+                            <p class="eot-body">می‌توانید با مطالعه یک مفهوم، انجام یک ارزیابی، ورود به یک دوره آموزشی یا گفت‌وگو با یک متخصص شروع کنید.</p>
+                            <div class="eot-row-btns">
+                                <a href="/آزمون-روانشناسی" class="eot-btn eot-btn-teal">ارزیابی‌ها</a>
+                                <a href="/یادگیری-خودیار-روانشناسی" class="eot-btn eot-btn-line">مرکز یادگیری</a>
+                                <a href="/مشاوره-روانشناسی-آنلاین" class="eot-btn eot-btn-line">مشاوره</a>
+                                <a href="/contactus" class="eot-btn eot-btn-text">تماس با ما</a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================ editorial principles -->
+    <template id="page_editorial" name="EOT page: editorial principles" inherit_id="theme_eot_custom.eot_pv_editorial">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <div class="container">
+                    <header class="eot-ed-head eot-stack">
+                        <t t-call="theme_eot_custom.trust_crumbs"/>
+                        <span class="eot-kicker">شفافیت علمی و تحریریه</span>
+                        <h1>اصول علمی، انتشار و اصلاح محتوا</h1>
+                        <p class="eot-ed-lead">چارچوبی برای مشخص بودن نویسنده، منبع، بازبینی، به‌روزرسانی و مسئولیت علمی محتوای هیجان اندیشه.</p>
+                    </header>
+                    <div class="eot-ed-grid">
+                        <article class="eot-ed-article">
+                            <section id="s1">
+                                <h2 class="eot-ed-h2"><small>۰۱</small>هدف انتشار</h2>
+                                <p class="eot-ed-p">محتوای هیجان اندیشه باید پیش از هر چیز برای کمک به فهم بهتر موضوعات روان‌شناسی، آموزش و رشد انسانی تولید شود؛ نه صرفاً برای جذب بازدید از موتورهای جست‌وجو.</p>
+                                <p class="eot-ed-p">عنوان، خلاصه و متن باید ماهیت واقعی محتوا را توصیف کنند و از ادعاهای قطعی، اغراق‌آمیز یا ترس‌آفرین پرهیز شود.</p>
+                            </section>
+                            <section id="s2">
+                                <h2 class="eot-ed-h2"><small>۰۲</small>نویسندگی، تخصص و بازبینی</h2>
+                                <ul class="eot-ed-list">
+                                    <li>در محتوایی که نویسنده یا بازبین مشخص دارد، نام او باید به‌صورت روشن نمایش داده شود و در صورت امکان به صفحه پروفایل او پیوند داده شود.</li>
+                                    <li>محتوای حساس مرتبط با سلامت روان باید متناسب با ماهیت موضوع، توسط فرد دارای دانش یا صلاحیت حرفه‌ای مناسب بازبینی شود.</li>
+                                    <li>نقش نویسنده، بازبین علمی و ناشر نباید با یکدیگر مخلوط شود.</li>
+                                </ul>
+                            </section>
+                            <section id="s3">
+                                <h2 class="eot-ed-h2"><small>۰۳</small>منابع و شواهد</h2>
+                                <p class="eot-ed-p">در مطالب علمی، اولویت با منابع اولیه، مقالات پژوهشی، کتاب‌های تخصصی و منابع معتبر دانشگاهی یا حرفه‌ای است. اگر مطلبی بر نظریه یا چارچوب اختصاصی هیجان اندیشه استوار باشد، این موضوع باید برای خواننده قابل تشخیص باشد.</p>
+                                <p class="eot-ed-callout">استناد به یک منبع به‌معنای تأیید همه دیدگاه‌های آن منبع نیست؛ استناد باید فقط از ادعایی که واقعاً پشتیبانی می‌کند استفاده شود.</p>
+                            </section>
+                            <section id="s4">
+                                <h2 class="eot-ed-h2"><small>۰۴</small>تاریخ، بازبینی و اصلاح</h2>
+                                <ul class="eot-ed-list">
+                                    <li>تاریخ انتشار و در صورت تغییر معنادار، تاریخ آخرین به‌روزرسانی باید تا حد ممکن قابل مشاهده باشد.</li>
+                                    <li>اصلاح اشتباه علمی یا factual باید بدون پنهان کردن ماهیت اصلاح انجام شود.</li>
+                                    <li>تغییر تاریخ بدون تغییر واقعی محتوا صرفاً برای تازه نشان دادن صفحه انجام نمی‌شود.</li>
+                                    <li>بازخورد درباره خطاهای احتمالی از طریق صفحه تماس قابل ارسال است.</li>
+                                </ul>
+                            </section>
+                            <section id="s5">
+                                <h2 class="eot-ed-h2"><small>۰۵</small>ابزارهای خودکار و هوش مصنوعی</h2>
+                                <p class="eot-ed-p">اگر ابزارهای خودکار یا هوش مصنوعی در تهیه، ساختاردهی یا بازنویسی یک محتوا نقش معناداری داشته باشند، مسئولیت نهایی صحت، ایمنی و تناسب محتوا با انسانِ نویسنده یا بازبین است. محتوای سلامت روان نباید صرفاً به خروجی خودکار بدون بازبینی انسانی متکی باشد.</p>
+                            </section>
+                            <section id="s6">
+                                <h2 class="eot-ed-h2"><small>۰۶</small>استقلال و تضاد منافع</h2>
+                                <p class="eot-ed-p">محتوای آموزشی و علمی نباید به‌گونه‌ای نوشته شود که مرز میان آموزش و تبلیغ پنهان شود. اگر یک صفحه برای معرفی یا فروش خدمت طراحی شده است، ماهیت تجاری آن باید از محتوای علمی قابل تشخیص باشد.</p>
+                            </section>
+                            <div><a href="/contactus" class="eot-btn eot-btn-teal">گزارش خطا یا درخواست اصلاح</a></div>
+                        </article>
+                        <aside>
+                            <nav class="eot-toc eot-page-toc" aria-label="در این صفحه">
+                                <h2>در این صفحه</h2>
+                                <a href="#s1">۱. هدف انتشار</a><a href="#s2">۲. نویسندگی، تخصص و بازبینی</a><a href="#s3">۳. منابع و شواهد</a><a href="#s4">۴. تاریخ، بازبینی و اصلاح</a><a href="#s5">۵. ابزارهای خودکار و هوش مصنوعی</a><a href="#s6">۶. استقلال و تضاد منافع</a>
+                            </nav>
+                            <t t-call="theme_eot_custom.trust_related" current.f="/اصول-علمی-و-تحریریه"/>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================ psychological safety -->
+    <template id="page_safety" name="EOT page: psychological safety" inherit_id="theme_eot_custom.eot_pv_safety">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <div class="container">
+                    <header class="eot-ed-head eot-stack">
+                        <t t-call="theme_eot_custom.trust_crumbs"/>
+                        <span class="eot-kicker">استفاده مسئولانه از خدمات</span>
+                        <h1>راهنمای ایمنی روان‌شناختی</h1>
+                        <p class="eot-ed-lead">مرز میان آموزش، خودسنجی و خدمات حرفه‌ای را روشن نگه دارید و در شرایط فوری از مسیر مناسب کمک بگیرید.</p>
+                    </header>
+                    <div class="eot-ed-grid">
+                        <article class="eot-ed-article">
+                            <section id="urgent" class="eot-alert-dark" role="note">
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E4D6A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                                <div class="eot-stack">
+                                    <h2>شرایط فوری و بحرانی</h2>
+                                    <p>اگر خطر فوری برای خودتان یا فرد دیگری وجود دارد، منتظر پاسخ فرم تماس یا نوبت برنامه‌ریزی‌شده نمانید. از خدمات اضطراری محل خود، نزدیک‌ترین مرکز درمانی یا یک فرد قابل اعتماد که می‌تواند کنار شما باشد کمک بگیرید.</p>
+                                    <p class="eot-alert-sub">فرم تماس عمومی، کلاس آموزشی، خودسنجی و رزرو عادی برای مدیریت وضعیت اورژانسی طراحی نشده‌اند.</p>
+                                </div>
+                            </section>
+                            <section id="s1">
+                                <h2 class="eot-ed-h2"><small>۰۱</small>خودسنجی با تشخیص متفاوت است</h2>
+                                <p class="eot-ed-p">آزمون یا فهرست آنلاین می‌تواند برای شناخت الگوها و ایجاد پرسش‌های بهتر مفید باشد، اما یک نتیجه منفرد به‌تنهایی تشخیص اختلال، پیش‌بینی آینده یا ارزش‌گذاری درباره فرد نیست.</p>
+                                <p class="eot-ed-p">اگر نتیجه برای شما نگران‌کننده است، با تجربه روزمره شما تعارض دارد یا با اختلال قابل توجه در کارکرد همراه است، بررسی حرفه‌ای مناسب‌تر است.</p>
+                            </section>
+                            <section id="s2">
+                                <h2 class="eot-ed-h2"><small>۰۲</small>آموزش با درمان متفاوت است</h2>
+                                <p class="eot-ed-p">مقالات، کتاب‌ها، فرهنگنامه، eLearning و کلاس‌های آموزشی برای افزایش دانش، خودآگاهی و مهارت طراحی می‌شوند. این محتواها به‌تنهایی رابطه درمانی ایجاد نمی‌کنند و جایگزین درمان یا پیگیری بالینی نیستند.</p>
+                            </section>
+                            <section id="s3">
+                                <h2 class="eot-ed-h2"><small>۰۳</small>چه زمانی کمک حرفه‌ای بگیرم؟</h2>
+                                <ul class="eot-when eot-grid eot-grid-2" style="gap: .6rem;">
+                                    <li>وقتی ناراحتی روانی پایدار یا رو به تشدید است.</li>
+                                    <li>وقتی خواب، کار، تحصیل، رابطه یا فعالیت روزمره به شکل معنادار مختل شده است.</li>
+                                    <li>وقتی خودسنجی یا خودآموزی باعث سردرگمی بیشتر شده است.</li>
+                                    <li>وقتی نیاز به تشخیص، درمان یا تصمیم حرفه‌ای وجود دارد.</li>
+                                </ul>
+                                <div><a href="/مشاوره-روانشناسی-آنلاین" class="eot-btn eot-btn-teal">مشاهده خدمات مشاوره</a></div>
+                            </section>
+                        </article>
+                        <aside>
+                            <nav class="eot-toc eot-page-toc" aria-label="در این صفحه">
+                                <h2>در این صفحه</h2>
+                                <a href="#urgent">شرایط فوری و بحرانی</a><a href="#s1">۱. خودسنجی با تشخیص متفاوت است</a><a href="#s2">۲. آموزش با درمان متفاوت است</a><a href="#s3">۳. چه زمانی کمک حرفه‌ای بگیرم؟</a>
+                            </nav>
+                            <t t-call="theme_eot_custom.trust_related" current.f="/ایمنی-روانشناختی"/>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================ assessment method -->
+    <template id="page_method" name="EOT page: assessment method" inherit_id="theme_eot_custom.eot_pv_method">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <div class="container">
+                    <header class="eot-ed-head eot-stack">
+                        <t t-call="theme_eot_custom.trust_crumbs"/>
+                        <span class="eot-kicker">شفافیت در خودسنجی</span>
+                        <h1>روش ارزیابی و تفسیر نتایج</h1>
+                        <p class="eot-ed-lead">ارزیابی آنلاین زمانی مفیدتر است که بدانیم سؤال‌ها، عامل‌ها، امتیازها و سطح‌های تفسیر چگونه باید خوانده شوند و چه محدودیت‌هایی دارند.</p>
+                    </header>
+                    <div class="eot-ed-grid">
+                        <article class="eot-ed-article">
+                            <section id="s1">
+                                <h2 class="eot-ed-h2"><small>۰۱</small>ساختار ارزیابی‌ها</h2>
+                                <p class="eot-ed-p">هر ارزیابی از مجموعه‌ای از گویه‌ها تشکیل می‌شود. گویه‌ها می‌توانند به یک یا چند عامل یا محور مرتبط باشند و پاسخ‌ها بر اساس قواعد امتیازدهی همان ابزار به امتیاز عامل تبدیل شوند.</p>
+                                <figure class="eot-diagram" aria-label="از گویه تا سطح تفسیر">
+                                    <span class="eot-stack" style="gap: .35rem; align-items: center;"><span class="eot-dg-dots" aria-hidden="true"><i/><i/><i/><i/><i/><i/></span><strong style="font-size: .85rem;">گویه‌ها</strong></span>
+                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#7A6230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
+                                    <span class="eot-dg-box" style="background: #E3F0F1; color: #054952;">عامل / محور</span>
+                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#7A6230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
+                                    <span class="eot-dg-box" style="background: #07707F; color: #fff;">امتیاز عامل</span>
+                                    <svg class="eot-dg-arrow" width="40" height="16" viewBox="0 0 40 16" fill="none" stroke="#7A6230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M38 8H3M9 2L3 8l6 6"/></svg>
+                                    <span class="eot-dg-scale"><span class="eot-dg-bar" aria-hidden="true"><i/><i/><i/></span><span class="eot-dg-labels"><span>پایین</span><span>میانه</span><span>بالا</span></span><strong style="font-size: .85rem; text-align: center;">سطح تفسیر همان ابزار</strong></span>
+                                </figure>
+                                <p class="eot-ed-p">در برخی ابزارها برای عامل‌ها سطح‌هایی مانند پایین، میانه یا بالا تعریف می‌شود. این سطح‌ها طبقه‌های امتیاز همان ابزار هستند و نباید به‌طور خودکار با «بد»، «متوسط» یا «خوب» یکی گرفته شوند.</p>
+                            </section>
+                            <section id="s2">
+                                <h2 class="eot-ed-h2"><small>۰۲</small>تفسیر نتیجه</h2>
+                                <ul class="eot-ed-list">
+                                    <li>نتیجه باید در چارچوب تعریف همان عامل خوانده شود.</li>
+                                    <li>یک امتیاز منفرد بدون توجه به شرایط زندگی، سابقه و سایر اطلاعات تصویر کاملی از فرد نمی‌دهد.</li>
+                                    <li>خودسنجی برای شناخت و یادگیری مفید است، اما تشخیص بالینی نیازمند ارزیابی حرفه‌ای است.</li>
+                                    <li>اگر نتیجه با تجربه شما سازگار نیست یا نگرانی ایجاد می‌کند، بررسی آن با متخصص می‌تواند مفید باشد.</li>
+                                </ul>
+                            </section>
+                            <section id="s3">
+                                <h2 class="eot-ed-h2"><small>۰۳</small>از نتیجه تا یادگیری</h2>
+                                <p class="eot-ed-p">در اکوسیستم هیجان اندیشه، نتیجه ارزیابی می‌تواند نقش «نقشه یادگیری» داشته باشد. عامل یا موضوعی که برای شما مهم‌تر است می‌تواند به یک مسیر eLearning، مقاله، مفهوم فرهنگنامه یا تمرین مرتبط وصل شود.</p>
+                                <div class="eot-row-btns"><a href="/آزمون-روانشناسی" class="eot-btn eot-btn-teal">مشاهده ارزیابی‌ها</a><a href="/یادگیری-خودیار-روانشناسی" class="eot-btn eot-btn-line">مرکز یادگیری</a></div>
+                            </section>
+                            <section id="s4">
+                                <h2 class="eot-ed-h2"><small>۰۴</small>تکرار ارزیابی و مقایسه</h2>
+                                <p class="eot-ed-p">تکرار ارزیابی تنها زمانی مفید است که فاصله زمانی، شرایط و هدف مقایسه معنادار باشند. هدف از بازسنجی «گرفتن نمره بهتر» نیست؛ بلکه مشاهده تغییر احتمالی در یک الگو و ترکیب آن با تجربه واقعی زندگی است.</p>
+                                <a href="/ایمنی-روانشناختی" class="eot-link">راهنمای ایمنی و مرز خودسنجی با تشخیص ←</a>
+                            </section>
+                        </article>
+                        <aside>
+                            <nav class="eot-toc eot-page-toc" aria-label="در این صفحه">
+                                <h2>در این صفحه</h2>
+                                <a href="#s1">۱. ساختار ارزیابی‌ها</a><a href="#s2">۲. تفسیر نتیجه</a><a href="#s3">۳. از نتیجه تا یادگیری</a><a href="#s4">۴. تکرار ارزیابی و مقایسه</a>
+                            </nav>
+                            <t t-call="theme_eot_custom.trust_related" current.f="/روش-ارزیابی-و-تفسیر"/>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================ FAQ -->
+    <template id="page_faq" name="EOT page: FAQ" inherit_id="theme_eot_custom.eot_pv_faq">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <t t-set="faqs" t-value="[
+                    ('هیجان اندیشه چیست؟', 'هیجان اندیشه یک مجموعه علمی و تخصصی در حوزه روان‌شناسی، آموزش و پرورش نخبگی است که خدمات مشاوره، ارزیابی، آموزش، پژوهش و منابع علمی را در یک اکوسیستم یکپارچه ارائه می‌کند.'),
+                    ('اگر ندانم از کدام خدمت شروع کنم چه کار کنم؟', 'اگر مسئله شما نیازمند بررسی فردی و حرفه‌ای است از مشاوره شروع کنید. اگر هدف شما شناخت بهتر خودتان است، ارزیابی‌ها نقطه شروع مناسبی هستند. برای یادگیری می‌توانید وارد مرکز eLearning یا کلاس‌های گروهی شوید.'),
+                    ('آیا نتیجه آزمون‌های روان‌شناسی تشخیص پزشکی یا روان‌شناختی است؟', 'خیر. نتیجه خودسنجی به‌تنهایی تشخیص بالینی نیست. تفسیر آن باید با محدودیت‌های ابزار و زمینه فرد دیده شود و در صورت نیاز به تشخیص یا درمان، ارزیابی متخصص لازم است.'),
+                    ('آیا ارزیابی‌های روان‌شناختی آنلاین رایگان هستند؟', 'بله، ارزیابی‌های معرفی‌شده در سامانه ارزیابی هیجان اندیشه به‌صورت آنلاین و رایگان قابل انجام هستند.'),
+                    ('eLearning هیجان اندیشه چگونه کار می‌کند؟', 'دوره‌ها می‌توانند از نتیجه یک ارزیابی، یک کتاب، موضوع مقالات، فرهنگنامه یا مسیر حرفه‌ای شروع شوند و با درس‌های کوتاه، بازیابی فعال، تمرین و مرور ادامه پیدا کنند.'),
+                    ('چطور جلسه روان‌شناسی رزرو کنم؟', 'در صفحه مشاوره روان‌شناسی می‌توانید متخصص را انتخاب کنید و سپس وارد فرایند مشاهده زمان‌های قابل رزرو و تکمیل نوبت شوید.'),
+                    ('کلاس‌های گروهی چه تفاوتی با مشاوره فردی دارند؟', 'کلاس‌ها و کارگاه‌ها برای یادگیری گروهی، گفت‌وگو و تمرین طراحی شده‌اند؛ مشاوره فردی برای بررسی تخصصی مسئله شخصی و نیازهای حرفه‌ای مرتبط است.'),
+                    ('کارورزی روان‌شناسی برای چه کسانی است؟', 'کارورزی برای دانش‌آموختگان و فعالان روان‌شناسی و مشاوره طراحی شده و مسیر حرفه‌ای آن شامل تشخیص، راهنمایی و مشاوره، حمایت، درمان و سپس دستیاری و کمیسیون است.'),
+                    ('منابع علمی سایت شامل چه چیزهایی است؟', 'مقالات، کتاب‌های تخصصی و فرهنگنامه روان‌شناسی تعاملی سه لایه اصلی منابع علمی سایت هستند و در کنار دوره‌های eLearning استفاده می‌شوند.'),
+                    ('اگر در وضعیت بحرانی یا خطر فوری باشم از فرم تماس استفاده کنم؟', 'خیر. فرم تماس و خدمات برنامه‌ریزی‌شده برای وضعیت‌های اورژانسی طراحی نشده‌اند. در خطر فوری باید از خدمات اضطراری محل خود، نزدیک‌ترین مرکز درمانی یا یک فرد قابل اعتماد کمک بگیرید.'),
+                ]"/>
+                <div class="container">
+                    <header class="eot-ed-head eot-stack">
+                        <t t-call="theme_eot_custom.trust_crumbs"/>
+                        <span class="eot-kicker">راهنمای سریع</span>
+                        <h1>سؤالات متداول</h1>
+                        <p class="eot-ed-lead">پاسخ کوتاه به پرسش‌های اصلی درباره خدمات، ارزیابی‌ها، آموزش و استفاده ایمن از هیجان اندیشه.</p>
+                    </header>
+                    <div class="eot-ed-grid">
+                        <div class="eot-faq">
+                            <details t-foreach="faqs" t-as="f" t-att-open="'open' if f_index &lt; 2 else None">
+                                <summary><span t-out="f[0]"/><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#07707F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary>
+                                <p t-out="f[1]"/>
+                            </details>
+                        </div>
+                        <aside class="eot-side-stack">
+                            <div class="eot-card-dark eot-help-card">
+                                <h2>پاسخ خود را پیدا نکردم</h2>
+                                <a href="/contactus" class="eot-btn eot-btn-sand">تماس با هیجان اندیشه</a>
+                            </div>
+                            <t t-call="theme_eot_custom.trust_related" current.f="/سوالات-متداول"/>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================ site guide -->
+    <template id="page_siteguide" name="EOT page: site guide" inherit_id="theme_eot_custom.eot_pv_siteguide">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-ed">
+                <div class="container">
+                    <header class="eot-ed-head eot-stack">
+                        <nav class="eot-crumbs" aria-label="مسیر"><a href="/">خانه</a><span>/</span><span>راهنمای سایت</span></nav>
+                        <span class="eot-kicker">راهنمای کامل وب‌سایت</span>
+                        <h1>راهنمای سایت</h1>
+                        <p class="eot-ed-lead">دسترسی سریع به خدمات، منابع علمی، صفحات اعتماد و سیاست‌های عمومی هیجان اندیشه.</p>
+                    </header>
+                    <div class="eot-guide">
+                        <section><h2>خدمات</h2>
+                            <a href="/مشاوره-روانشناسی-آنلاین">مشاوره روان‌شناسی</a><a href="/آزمون-روانشناسی">ارزیابی‌های روان‌شناختی</a><a href="/یادگیری-خودیار-روانشناسی">یادگیری آنلاین</a><a href="/کلاس-گروهی-آنلاین">کلاس‌های گروهی</a><a href="/کارورزی-روانشناسی-آنلاین">کارورزی روان‌شناسی</a><a href="/خدمات" style="font-weight: 800;">نقشه خدمات</a>
+                        </section>
+                        <section><h2>دانش و منابع</h2>
+                            <a href="/مقالات">مقالات</a><a href="/کتب">کتاب‌ها</a><a href="/فرهنگنامه">فرهنگنامه روان‌شناسی تعاملی</a><a href="/روش-ارزیابی-و-تفسیر">روش ارزیابی و تفسیر</a>
+                        </section>
+                        <section><h2>درباره و اعتماد</h2>
+                            <a href="/about">درباره هیجان اندیشه</a><a href="/دکتر-ناصرالدین-کاظمی-حقیقی">دکتر ناصرالدین کاظمی حقیقی</a><a href="/اصول-علمی-و-تحریریه">اصول علمی و تحریریه</a><a href="/سوالات-متداول">سؤالات متداول</a><a href="/contactus">تماس با ما</a>
+                        </section>
+                        <section><h2>حقوق و ایمنی</h2>
+                            <a href="/حریم-خصوصی">حریم خصوصی</a><a href="/شرایط-استفاده">شرایط استفاده</a><a href="/سیاست-کوکی">سیاست کوکی</a><a href="/دسترس-پذیری">دسترس‌پذیری</a><a href="/ایمنی-روانشناختی">ایمنی روان‌شناختی</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

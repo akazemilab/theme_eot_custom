@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Milestone 6, group 1: services & offerings ("product" look).
+        Approved mockups: canvas "eot.ir — Inner pages redesign", page 1.
+
+        Each template replaces the #wrap of an existing website-1 builder
+        page (named by migrations/20.0.6.0.0/pre-migrate.py). Copy is the
+        page's own text from eot_main. Styles: static/src/scss/pages.scss.
+    -->
+
+    <!-- ================================================================
+         /خدمات - services hub
+         ================================================================ -->
+    <template id="page_services" name="EOT page: services hub" inherit_id="theme_eot_custom.eot_pv_services">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
+                <section class="eot-hero eot-hero-overlap">
+                    <div class="container">
+                        <div class="eot-hero-in">
+                            <span class="eot-kicker">نقشه خدمات هیجان اندیشه</span>
+                            <h1>از شناخت تا یادگیری و همراهی تخصصی</h1>
+                            <p class="eot-hero-lead">همه خدمات هیجان اندیشه در یک مسیر روشن؛ از ارزیابی و خودشناسی تا یادگیری، کلاس گروهی، مشاوره و رشد حرفه‌ای روان‌شناسی.</p>
+                            <div class="eot-row-btns">
+                                <a href="#service-map" class="eot-btn eot-btn-sand">مشاهده همه خدمات</a>
+                                <a href="#choose-by-need" class="eot-btn eot-btn-ghost">بر اساس نیاز انتخاب کنم</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="choose-by-need" class="container eot-overlap">
+                    <div class="eot-card">
+                        <div class="eot-sec-head">
+                            <h2 class="eot-h3">از کجا شروع کنم؟</h2>
+                            <p class="eot-lead">به‌جای شناخت نام خدمات، از نیاز خودتان شروع کنید.</p>
+                        </div>
+                        <div class="eot-grid eot-grid-4">
+                            <a href="/مشاوره-روانشناسی-آنلاین" class="eot-need">
+                                <span class="eot-icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span>
+                                <strong>گفت‌وگو با متخصص</strong>
+                                <span>مسئله‌ای دارم که می‌خواهم با روان‌شناس یا مشاور بررسی کنم.</span>
+                                <em>مشاوره روان‌شناسی ←</em>
+                            </a>
+                            <a href="/آزمون-روانشناسی" class="eot-need">
+                                <span class="eot-icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span>
+                                <strong>شناخت بهتر خودم</strong>
+                                <span>می‌خواهم یک موضوع، توانایی یا الگوی روان‌شناختی را بهتر بشناسم.</span>
+                                <em>ارزیابی‌ها ←</em>
+                            </a>
+                            <a href="/یادگیری-خودیار-روانشناسی" class="eot-need">
+                                <span class="eot-icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg></span>
+                                <strong>یادگیری و تمرین</strong>
+                                <span>می‌خواهم موضوعی را مرحله‌به‌مرحله یاد بگیرم و تمرین کنم.</span>
+                                <em>مرکز یادگیری ←</em>
+                            </a>
+                            <a href="/کارورزی-روانشناسی-آنلاین" class="eot-need">
+                                <span class="eot-icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20l6-6 4 4 8-8"/><path d="M15 10h6v6"/></svg></span>
+                                <strong>رشد حرفه‌ای</strong>
+                                <span>دانشجو یا فعال روان‌شناسی هستم و مسیر تخصصی می‌خواهم.</span>
+                                <em>کارورزی حرفه‌ای ←</em>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="service-map" class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <span class="eot-kicker">کاتالوگ خدمات</span>
+                        <h2 class="eot-h2">همه خدمات و برنامه‌ها</h2>
+                        <p class="eot-lead">هر خدمت صفحه اختصاصی خود را دارد و از اینجا می‌توانید مستقیماً وارد مسیر مناسب شوید.</p>
+                    </div>
+                    <div class="eot-grid eot-grid-2">
+                        <a href="/مشاوره-روانشناسی-آنلاین" class="eot-card-dark eot-svc-feature">
+                            <span class="eot-pill eot-pill-dark" style="align-self: flex-start;">افراد، زوج‌ها و خانواده‌ها</span>
+                            <h3>مشاوره روان‌شناسی</h3>
+                            <p>انتخاب روان‌شناس یا مشاور، مشاهده زمان‌های قابل رزرو و ورود به فرایند جلسه تخصصی.</p>
+                            <span class="eot-svc-figs">
+                                <span><b>۹</b><small>روان‌شناس و مشاور</small></span>
+                                <span><b>آنلاین</b><small>بدون مراجعه حضوری</small></span>
+                            </span>
+                            <span class="eot-btn eot-btn-sand" style="align-self: flex-start; margin-top: auto;">انتخاب متخصص ←</span>
+                        </a>
+                        <a href="/آزمون-روانشناسی" class="eot-card eot-svc">
+                            <span class="eot-svc-aud">افرادی که می‌خواهند شناخت دقیق‌تری از خود داشته باشند</span>
+                            <h3>ارزیابی‌های روان‌شناختی</h3>
+                            <p>ارزیابی‌های ساختاریافته در موضوعاتی مانند شخصیت، آرامش، استعداد، شناخت، روابط و زندگی شغلی.</p>
+                            <em>مشاهده ارزیابی‌ها ←</em>
+                        </a>
+                        <a href="/یادگیری-خودیار-روانشناسی" class="eot-card eot-svc">
+                            <span class="eot-svc-aud">عموم، علاقه‌مندان و فراگیران</span>
+                            <h3>یادگیری آنلاین روان‌شناسی</h3>
+                            <p>مسیرهای eLearning برای یادگیری کوتاه، تمرین، بازیابی فعال و پیشرفت مرحله‌ای بر پایه موضوع یا نتیجه ارزیابی.</p>
+                            <em>ورود به مرکز یادگیری ←</em>
+                        </a>
+                        <a href="/کلاس-گروهی-آنلاین" class="eot-card eot-svc">
+                            <span class="eot-svc-aud">افرادی که یادگیری زنده و گروهی را ترجیح می‌دهند</span>
+                            <h3>کلاس‌ها و کارگاه‌های گروهی</h3>
+                            <p>جلسات هفتگی و دوره‌های چندجلسه‌ای گروهی برای گفت‌وگو، تمرین و یادگیری تعاملی.</p>
+                            <em>مشاهده برنامه کلاس‌ها ←</em>
+                        </a>
+                        <a href="/کارورزی-روانشناسی-آنلاین" class="eot-card eot-svc">
+                            <span class="eot-svc-aud">دانش‌آموختگان و فعالان روان‌شناسی و مشاوره</span>
+                            <h3>کارورزی حرفه‌ای روان‌شناسی</h3>
+                            <p>مسیر حرفه‌ای بلندمدت از تشخیص، راهنمایی و مشاوره، حمایت و درمان تا دستیاری و کمیسیون هفتگی.</p>
+                            <em>مشاهده مسیر کارورزی ←</em>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <span class="eot-kicker">ارتباط میان خدمات</span>
+                        <h2 class="eot-h2">خدمات جدا از هم نیستند</h2>
+                        <p class="eot-lead" style="max-width: 52rem;">بسته به نیاز شما، یک مسیر می‌تواند از ارزیابی شروع شود، با آموزش ادامه پیدا کند و در صورت نیاز به کلاس گروهی یا همراهی متخصص برسد.</p>
+                    </div>
+                    <ol class="eot-rail">
+                        <li><b>۱</b><strong>شناخت</strong><span>ارزیابی و منابع علمی</span></li>
+                        <li><b>۲</b><strong>یادگیری</strong><span>eLearning و مطالعه هدایت‌شده</span></li>
+                        <li><b>۳</b><strong>تمرین گروهی</strong><span>کلاس و کارگاه زنده</span></li>
+                        <li><b>۴</b><strong>همراهی تخصصی</strong><span>مشاوره روان‌شناسی</span></li>
+                        <li><b>۵</b><strong>مسیر حرفه‌ای</strong><span>کارورزی و دستیاری</span></li>
+                    </ol>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <span class="eot-kicker">منابع مکمل</span>
+                        <h2 class="eot-h2">دانش و منابع علمی</h2>
+                        <p class="eot-lead">علاوه بر خدمات، هیجان اندیشه مجموعه‌ای از منابع ساختاریافته برای مطالعه، جست‌وجو و یادگیری عمیق‌تر ارائه می‌کند.</p>
+                    </div>
+                    <div class="eot-grid eot-grid-3">
+                        <a href="/مقالات" class="eot-tile"><strong>مقالات</strong><span>برای مطالعه موضوعی و کاربردی.</span></a>
+                        <a href="/کتب" class="eot-tile"><strong>کتاب‌ها</strong><span>برای مطالعه پیوسته و عمیق‌تر.</span></a>
+                        <a href="/فرهنگنامه" class="eot-tile"><strong>فرهنگنامه</strong><span>برای تعریف و جست‌وجوی مفاهیم تخصصی.</span></a>
+                    </div>
+                </section>
+
+                <section class="container eot-sec eot-sec-last">
+                    <div class="eot-card eot-stack" style="padding: 2.25rem;">
+                        <span class="eot-kicker">اگر هنوز مطمئن نیستید</span>
+                        <h2 class="eot-h3" style="font-size: 1.75rem;">مسیر را بر اساس نیاز انتخاب کنید</h2>
+                        <p class="eot-body" style="max-width: 56rem;">اگر مسئله شما نیازمند بررسی حرفه‌ای است، مشاوره مناسب‌تر است. اگر هدف شناخت یا یادگیری است، می‌توانید از ارزیابی‌ها، eLearning یا منابع علمی شروع کنید.</p>
+                        <div class="eot-row-btns">
+                            <a href="/مشاوره-روانشناسی-آنلاین" class="eot-btn eot-btn-teal">انتخاب مشاور</a>
+                            <a href="/آزمون-روانشناسی" class="eot-btn eot-btn-line">شروع از ارزیابی</a>
+                            <a href="/contactus" class="eot-btn eot-btn-text">تماس با هیجان اندیشه</a>
+                        </div>
+                        <p class="eot-note"><strong>توجه:</strong> محتوای آموزشی و نتایج خودسنجی به‌تنهایی جایگزین تشخیص یا درمان تخصصی نیستند. در صورت نیاز به بررسی حرفه‌ای، از خدمات روان‌شناسی و مشاوره استفاده کنید.</p>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================
+         /مشاوره-روانشناسی-آنلاین - online counseling
+         Booking itself happens on the live sepehrtherapy.ir system.
+         ================================================================ -->
+    <template id="page_counseling" name="EOT page: counseling" inherit_id="theme_eot_custom.eot_pv_counseling">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
+                <t t-set="therapists" t-value="[
+                    ('م', 'محمد صادق علیخانی', 'روان‌شناس', 14),
+                    ('ر', 'راضیه جهانشاهی', 'روان‌شناس', 12),
+                    ('ز', 'زینت السادات میرطاهری', 'روان‌شناس', 11),
+                    ('ط', 'طیبه مالمیر', 'روان‌شناس', 143),
+                    ('م', 'مریم ملک', 'روان‌شناس', 13),
+                    ('م', 'مهوش طالبی', 'روان‌شناس', 10),
+                    ('ن', 'نجده مساعدیان', 'مشاور', 15),
+                    ('م', 'محیا سامت', 'روان‌شناس', 173),
+                 ]"/>
+                <section class="eot-hero">
+                    <div class="container eot-hero-split">
+                        <div class="eot-hero-in">
+                            <span class="eot-kicker">جلسه آنلاین • انتخاب درمانگر • رزرو زمان</span>
+                            <h1>مشاوره روان‌شناسی آنلاین</h1>
+                            <p class="eot-hero-lead">درمانگر خود را انتخاب کنید، زمان‌های خالی را ببینید و جلسه روان‌شناسی را به‌صورت آنلاین رزرو کنید.</p>
+                            <p class="eot-hero-sub">جلسات برای بررسی، پیگیری و درمان مسائل روان‌شناختی در سامانه رزرو سپهر هیجان اندیش برگزار می‌شوند.</p>
+                            <div class="eot-row-btns">
+                                <a href="#therapists" class="eot-btn eot-btn-sand">انتخاب روان‌شناس یا مشاور</a>
+                                <a href="https://www.sepehrtherapy.ir/appointment/4?skip_resource_selection=1" target="_blank" rel="noopener" class="eot-btn eot-btn-ghost">مشاهده اولین زمان‌های خالی
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+                            </div>
+                        </div>
+                        <div class="eot-stack">
+                            <div class="eot-glass"><span class="eot-glass-big">۹</span><span><strong>روان‌شناس و مشاور</strong><small>انتخاب مستقیم درمانگر</small></span></div>
+                            <div class="eot-glass"><span class="eot-glass-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E4D6A0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></span><span><strong>آنلاین</strong><small>برگزاری جلسه بدون نیاز به مراجعه حضوری</small></span></div>
+                            <div class="eot-glass"><span class="eot-glass-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E4D6A0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span><strong>رزرو زمان</strong><small>تقویم آنلاین؛ انتخاب روز و ساعت مناسب</small></span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-sec-head"><h2 class="eot-h2">رزرو جلسه چگونه انجام می‌شود؟</h2></div>
+                    <ol class="eot-steps eot-grid eot-grid-3">
+                        <li class="eot-card eot-step"><span class="eot-num">۱</span><strong>درمانگر را انتخاب کنید</strong><span>از میان روان‌شناسان و مشاوران، فرد مورد نظر خود را انتخاب کنید.</span></li>
+                        <li class="eot-card eot-step"><span class="eot-num">۲</span><strong>روز و ساعت را ببینید</strong><span>با ورود به تقویم رزرو، زمان‌های خالی درمانگر را مشاهده و زمان مناسب را انتخاب کنید.</span></li>
+                        <li class="eot-card eot-step"><span class="eot-num">۳</span><strong>رزرو را تکمیل کنید</strong><span>اطلاعات لازم را ثبت و فرایند رزرو جلسه آنلاین را در سامانه سپهر هیجان اندیش تکمیل کنید.</span></li>
+                    </ol>
+                </section>
+
+                <section id="therapists" class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <h2 class="eot-h2">روان‌شناسان و مشاوران</h2>
+                        <p class="eot-lead">با انتخاب هر درمانگر، مستقیماً وارد صفحه زمان‌های خالی همان فرد در سامانه رزرو می‌شوید.</p>
+                    </div>
+                    <article class="eot-card-gold eot-feature-person">
+                        <img src="/web/image/836-bdfdb71c/h33-1.svg" alt="تصویر دکتر ناصرالدین کاظمی حقیقی" loading="lazy"/>
+                        <div class="eot-stack">
+                            <span class="eot-pill eot-pill-sand" style="align-self: flex-start;">جلسه اختصاصی</span>
+                            <h3>دکتر ناصرالدین کاظمی حقیقی</h3>
+                            <span class="eot-lead">مشاور • بنیان‌گذار هیجان اندیشه</span>
+                            <dl class="eot-meta eot-meta-3">
+                                <div><dt>نوع جلسه</dt><dd>آنلاین</dd></div>
+                                <div><dt>مدت</dt><dd>۳۰ دقیقه</dd></div>
+                                <div><dt>هزینه فعلی جلسه</dt><dd class="eot-num-font">۱٬۱۰۰٬۰۰۰ تومان</dd></div>
+                            </dl>
+                        </div>
+                        <div class="eot-feature-cta"><a href="https://www.sepehrtherapy.ir/appointment/11" target="_blank" rel="noopener" class="eot-btn eot-btn-teal">زمان‌های خالی و رزرو</a></div>
+                    </article>
+                    <div class="eot-grid eot-grid-4" style="margin-top: 1rem;">
+                        <article t-foreach="therapists" t-as="t" class="eot-card eot-person">
+                            <div class="eot-person-head">
+                                <span class="eot-mono" aria-hidden="true" t-out="t[0]"/>
+                                <span><h3 t-out="t[1]"/><small t-out="t[2]"/></span>
+                            </div>
+                            <div class="eot-person-meta"><span>آنلاین • ۴۵ دقیقه</span><b>۸۸۰٬۰۰۰ تومان</b></div>
+                            <a t-att-href="'https://www.sepehrtherapy.ir/appointment/4?staff_user_id=%s' % t[3]" target="_blank" rel="noopener" class="eot-btn eot-btn-line" t-att-aria-label="'زمان‌های خالی و رزرو - %s' % t[1]">زمان‌های خالی و رزرو</a>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="container" style="padding-top: 2.5rem;">
+                    <div class="eot-band">
+                        <div>
+                            <h2>اگر انتخاب درمانگر برایتان مهم نیست</h2>
+                            <p>می‌توانید همه وقت‌های خالی موجود را ببینید و بر اساس نزدیک‌ترین زمان مناسب، جلسه خود را انتخاب کنید.</p>
+                        </div>
+                        <a href="https://www.sepehrtherapy.ir/appointment/4?skip_resource_selection=1" target="_blank" rel="noopener" class="eot-btn eot-btn-white">مشاهده کل وقت‌های خالی</a>
+                    </div>
+                </section>
+
+                <section class="container eot-sec eot-sec-last">
+                    <div class="eot-two">
+                        <div class="eot-stack">
+                            <h2 class="eot-h3" style="font-size: 1.5rem;">اطلاعات جلسات آنلاین</h2>
+                            <p class="eot-body">جلسه عمومی مشاوره آنلاین در حال حاضر ۴۵ دقیقه است و هزینه آن در سامانه رزرو ۸۸۰٬۰۰۰ تومان نمایش داده می‌شود. در صورتی که جلسه تا ۶۰ دقیقه ادامه پیدا کند، هزینه اعلام‌شده در سامانه سپهر هیجان اندیش ۱٬۱۰۰٬۰۰۰ تومان است.</p>
+                            <p class="eot-body">جلسه اختصاصی با دکتر ناصرالدین کاظمی حقیقی در صفحه رزرو اختصاصی ایشان ۳۰ دقیقه و با هزینه فعلی ۱٬۱۰۰٬۰۰۰ تومان ارائه می‌شود.</p>
+                            <p class="eot-lead" style="font-size: .9rem;">هزینه و زمان جلسه ممکن است در آینده تغییر کند؛ مبلغ و زمان نهایی همان اطلاعاتی است که هنگام رزرو در سامانه سپهر هیجان اندیش نمایش داده می‌شود.</p>
+                        </div>
+                        <aside class="eot-note eot-note-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7A6230" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+                            <p><strong>توجه:</strong> این سرویس برای رزرو جلسه برنامه‌ریزی‌شده روان‌شناسی است و برای شرایط اورژانسی یا خطر فوری طراحی نشده است. <a href="/ایمنی-روانشناختی" class="eot-link">راهنمای ایمنی ←</a></p>
+                        </aside>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================
+         /کلاس-گروهی-آنلاین - group classes
+         Weekly sessions show their recurring slot (each dated occurrence is
+         its own event on sepehrtherapy.ir, so they link to the event list);
+         the 4-session course links to its own registration page.
+         Filtering: data-eot-filter hooks, handled by static/src/js/library.js.
+         ================================================================ -->
+    <template id="page_classes" name="EOT page: group classes" inherit_id="theme_eot_custom.eot_pv_classes">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
+                <section class="eot-hero eot-hero-overlap">
+                    <div class="container">
+                        <div class="eot-hero-in">
+                            <span class="eot-kicker">زنده • آنلاین • گروهی</span>
+                            <h1>کلاس‌ها و دوره‌های گروهی آنلاین</h1>
+                            <p class="eot-hero-lead">جلسات هفتگی و دوره‌های چندجلسه‌ای در روان‌شناسی، خودشناسی، روابط، معنا و موضوعات تخصصی؛ برنامه را ببینید و برای کلاس مناسب خود آنلاین ثبت‌نام کنید.</p>
+                            <div class="eot-row-btns">
+                                <a href="#current-classes" class="eot-btn eot-btn-sand">مشاهده کلاس‌های فعال</a>
+                                <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener" class="eot-btn eot-btn-ghost">همه رویدادهای سپهر هیجان اندیش</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="container eot-overlap">
+                    <div class="eot-strip">
+                        <div><strong>آنلاین</strong><span>برگزاری زنده گروهی؛ لینک جلسه برای ثبت‌نام‌شدگان ارسال می‌شود</span></div>
+                        <div><strong>هفتگی</strong><span>جلسات مستقل برای موضوعات مستمر و گفت‌وگوهای گروهی</span></div>
+                        <div><strong>چندجلسه‌ای</strong><span>دوره‌های ساختاریافته؛ چند جلسه متوالی با برنامه مشخص</span></div>
+                    </div>
+                </section>
+
+                <section id="current-classes" class="container eot-sec" data-eot-filter="">
+                    <div class="eot-filterbar">
+                        <div class="eot-filterbar-top">
+                            <div class="eot-stack" style="gap: .4rem;">
+                                <h2 class="eot-h2">کلاس‌ها و دوره‌های پیشِ رو</h2>
+                                <p class="eot-lead" style="font-size: .925rem;">تاریخ، زمان و هزینه زیر بر اساس اطلاعات فعلی سامانه ثبت‌نام است؛ اطلاعات نهایی در صفحه هر رویداد نمایش داده می‌شود.</p>
+                            </div>
+                            <label class="eot-search">جستجو در کلاس‌ها
+                                <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E6B6D" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" data-eot-search="" placeholder="عنوان، موضوع یا محتوای کلاس" autocomplete="off"/></span>
+                            </label>
+                        </div>
+                        <div class="eot-chip-row" role="group" aria-label="نوع برنامه">
+                            <button type="button" class="eot-chip" data-eot-dim="kind" data-eot-val="" aria-pressed="true">همه <span class="eot-cnt" data-eot-count="">۴</span></button>
+                            <button type="button" class="eot-chip" data-eot-dim="kind" data-eot-val="weekly" aria-pressed="false">جلسات هفتگی</button>
+                            <button type="button" class="eot-chip" data-eot-dim="kind" data-eot-val="course" aria-pressed="false">دوره‌های چندجلسه‌ای</button>
+                        </div>
+                        <div class="eot-chip-row" role="group" aria-label="موضوع">
+                            <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="" aria-pressed="true">همه موضوع‌ها</button>
+                            <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="psy" aria-pressed="false">روان‌شناسی</button>
+                            <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="self" aria-pressed="false">خودشناسی</button>
+                            <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="couple" aria-pressed="false">روابط زوجین</button>
+                            <button type="button" class="eot-chip" data-eot-dim="topic" data-eot-val="lit" aria-pressed="false">ادبیات و معنویت</button>
+                        </div>
+                    </div>
+                    <div class="eot-grid eot-grid-2">
+                        <article class="eot-card eot-class" data-eot-item="" data-kind="weekly" data-topic="lit|self">
+                            <div class="eot-class-body">
+                                <div class="eot-pills"><span class="eot-pill eot-pill-teal">جلسه هفتگی آنلاین</span><span class="eot-pill eot-pill-sand">ادبیات، معنا و خودشناسی</span></div>
+                                <h3>مثنوی معنوی</h3>
+                                <p>جلسه گروهی آنلاین برای خوانش و شرح ابیات مثنوی مولانا و آشنایی عمیق‌تر با مفاهیم عرفانی، اخلاقی و انسانی.</p>
+                                <ul><li>خوانش و فهم مثنوی</li><li>مفاهیم اخلاقی و معنوی</li><li>تأمل و خودشناسی</li></ul>
+                            </div>
+                            <dl class="eot-meta eot-meta-3">
+                                <div><dt>زمان</dt><dd>چهارشنبه‌ها ۱۷:۰۰ تا ۱۸:۰۰</dd></div>
+                                <div><dt>نحوه برگزاری</dt><dd>زنده و آنلاین</dd></div>
+                                <div><dt>هزینه فعلی هر جلسه</dt><dd class="eot-num-font">۴۰۰٬۰۰۰ تومان</dd></div>
+                            </dl>
+                            <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener" class="eot-btn eot-btn-teal">جزئیات و ثبت‌نام</a>
+                        </article>
+                        <article class="eot-card eot-class" data-eot-item="" data-kind="weekly" data-topic="psy">
+                            <div class="eot-class-body">
+                                <div class="eot-pills"><span class="eot-pill eot-pill-teal">جلسه تخصصی گروهی آنلاین</span><span class="eot-pill eot-pill-sand">روان‌شناسی و گفت‌وگوی تخصصی</span></div>
+                                <h3>کمیسیون روانشناسی</h3>
+                                <p>جلسه گروهی آنلاین برای بررسی تخصصی، گفت‌وگوی بالینی و جمع‌بندی موضوعات مرتبط با فرایندهای روان‌شناختی.</p>
+                                <ul><li>تحلیل موضوعات روان‌شناختی</li><li>گفت‌وگوی تخصصی</li><li>تصمیم‌گیری آگاهانه</li></ul>
+                            </div>
+                            <dl class="eot-meta eot-meta-3">
+                                <div><dt>زمان</dt><dd>پنجشنبه‌ها از ساعت ۰۸:۰۰</dd></div>
+                                <div><dt>نحوه برگزاری</dt><dd>زنده و آنلاین</dd></div>
+                                <div><dt>هزینه فعلی هر جلسه</dt><dd class="eot-num-font">۳۳۰٬۰۰۰ تومان</dd></div>
+                            </dl>
+                            <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener" class="eot-btn eot-btn-teal">جزئیات و ثبت‌نام</a>
+                        </article>
+                        <article class="eot-card eot-class" data-eot-item="" data-kind="weekly" data-topic="self|psy">
+                            <div class="eot-class-body">
+                                <div class="eot-pills"><span class="eot-pill eot-pill-teal">جلسه هفتگی آنلاین</span><span class="eot-pill eot-pill-sand">خودشناسی و روان‌شناسی</span></div>
+                                <h3>علم‌النفس</h3>
+                                <p>جلسه گروهی آنلاین درباره شناخت نفس، لایه‌های درونی انسان و پیوند میان روان، آگاهی، ذهن و تجربه زیسته.</p>
+                                <ul><li>خودشناسی</li><li>شناخت ذهن و تجربه درونی</li><li>تأمل در سازوکارهای روانی</li></ul>
+                            </div>
+                            <dl class="eot-meta eot-meta-3">
+                                <div><dt>زمان</dt><dd>پنجشنبه‌ها ۱۱:۰۰ تا ۱۲:۰۰</dd></div>
+                                <div><dt>نحوه برگزاری</dt><dd>زنده و آنلاین</dd></div>
+                                <div><dt>هزینه فعلی هر جلسه</dt><dd class="eot-num-font">۳۳۰٬۰۰۰ تومان</dd></div>
+                            </dl>
+                            <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener" class="eot-btn eot-btn-teal">جزئیات و ثبت‌نام</a>
+                        </article>
+                        <article class="eot-card eot-class eot-class-dark" data-eot-item="" data-kind="course" data-topic="couple">
+                            <div class="eot-class-body">
+                                <div class="eot-pills"><span class="eot-pill eot-pill-onsand">دوره گروهی آنلاین • ۴ جلسه</span><span class="eot-pill eot-pill-dark">روابط زوجین</span></div>
+                                <h3>بهسازی پیوند زناشویی</h3>
+                                <p>دوره آنلاین چهارجلسه‌ای برای تقویت کیفیت رابطه زوجین، گفت‌وگوی مؤثر، مدیریت تعارض، شناخت نیازهای عاطفی و بازسازی صمیمیت.</p>
+                                <ul><li>گفت‌وگوی مؤثر</li><li>مدیریت تعارض</li><li>نیازهای عاطفی</li></ul>
+                            </div>
+                            <dl class="eot-meta eot-meta-3">
+                                <div><dt>تاریخ شروع</dt><dd>شنبه ۱۴۰۵/۰۷/۱۱</dd></div>
+                                <div><dt>زمان</dt><dd>شنبه‌ها ۱۶:۳۰ تا ۱۷:۴۵</dd></div>
+                                <div><dt>هزینه فعلی دوره</dt><dd class="eot-num-font" style="color: #E4D6A0;">۱٬۹۸۰٬۰۰۰ تومان</dd></div>
+                            </dl>
+                            <a href="https://sepehrtherapy.ir/event/online-couples-relationship-course-1405-07-11-106/register" target="_blank" rel="noopener" class="eot-btn eot-btn-sand">جزئیات و ثبت‌نام</a>
+                        </article>
+                    </div>
+                    <p class="eot-empty" data-eot-empty="" hidden="">کلاس یا دوره‌ای با این عبارت پیدا نشد.</p>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-two eot-two-even">
+                        <div class="eot-stack" style="gap: 1.1rem;">
+                            <h2 class="eot-h3" style="font-size: 1.6rem;">فرایند شرکت در کلاس</h2>
+                            <ol class="eot-steps eot-steps-v">
+                                <li><span class="eot-num">۱</span><span><strong>کلاس مناسب را انتخاب کنید</strong><small>موضوع، تعداد جلسات، زمان و توضیحات هر برنامه را مقایسه کنید.</small></span></li>
+                                <li><span class="eot-num">۲</span><span><strong>ثبت‌نام آنلاین را کامل کنید</strong><small>از دکمه ثبت‌نام وارد صفحه رسمی همان کلاس در سپهر هیجان اندیش شوید.</small></span></li>
+                                <li><span class="eot-num">۳</span><span><strong>آنلاین در جلسه حاضر شوید</strong><small>لینک ورود به جلسه پیش از شروع برای ثبت‌نام‌شدگان ارسال می‌شود.</small></span></li>
+                            </ol>
+                        </div>
+                        <div class="eot-card-sand eot-stack">
+                            <h2 class="eot-h3">جلسه هفتگی یا دوره چندجلسه‌ای؟</h2>
+                            <p class="eot-body">جلسات هفتگی برای موضوعاتی هستند که هر تاریخ به‌صورت یک رویداد مستقل منتشر و ثبت‌نام می‌شود؛ می‌توانید همان نوبتی را که برایتان مناسب است انتخاب کنید.</p>
+                            <p class="eot-body">دوره‌های چندجلسه‌ای یک برنامه منظم و پیوسته دارند و ثبت‌نام برای مجموعه جلسات انجام می‌شود. برای نمونه، دوره بهسازی پیوند زناشویی در چهار جلسه هفتگی برگزار می‌شود.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container" style="padding: 2rem 0 4.5rem;">
+                    <p class="eot-note"><strong>توجه:</strong> این صفحه برای کلاس‌ها، دوره‌ها و جلسات آموزشی یا تخصصی گروهی است و جایگزین جلسه درمان یا مشاوره فردی نیست. برای خدمات فردی از صفحه <a href="/مشاوره-روانشناسی-آنلاین" class="eot-link">مشاوره روان‌شناسی آنلاین</a> استفاده کنید.</p>
+                </section>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ================================================================
+         /کارورزی-روانشناسی-آنلاین - internship
+         ================================================================ -->
+    <template id="page_internship" name="EOT page: internship" inherit_id="theme_eot_custom.eot_pv_internship">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
+                <section class="eot-hero">
+                    <div class="container">
+                        <div class="eot-hero-in">
+                            <span class="eot-kicker">کارورزی حرفه‌ای • آنلاین • روان‌شناسی و مشاوره</span>
+                            <h1>کارورزی آنلاین روان‌شناسی و مشاوره</h1>
+                            <p class="eot-hero-lead">مسیر حرفه‌ای ۲۸ ماهه در چهار مرحله تخصصی تشخیص، راهنمایی و مشاوره، حمایت و درمان؛ همراه با کلاس آنلاین، کارگاه، تمرین‌های حرفه‌ای و خروجی‌های کاربردی.</p>
+                            <p class="eot-hero-sub">برنامه بر پایه مکتب روان‌شناسی تعاملی طراحی شده و هدف آن رشد تدریجی آمادگی‌های حرفه‌ای در خدمات روان‌شناختی و مشاوره‌ای است.</p>
+                            <div class="eot-row-btns">
+                                <a href="#program-roadmap" class="eot-btn eot-btn-sand">مشاهده مسیر ۲۸ ماهه</a>
+                                <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener" class="eot-btn eot-btn-ghost">برنامه جلسات و کارگاه‌های جاری</a>
+                            </div>
+                        </div>
+                        <dl class="eot-stats">
+                            <div><dt>۲۸ ماه</dt><dd>مسیر حرفه‌ای</dd></div>
+                            <div><dt>۴</dt><dd>مرحله تخصصی و پیوسته</dd></div>
+                            <div><dt>+۳۰۰</dt><dd>دانش‌آموخته پیشین</dd></div>
+                            <div><dt>از ۱۳۹۳</dt><dd>سابقه کارورزی مؤسسه</dd></div>
+                        </dl>
+                    </div>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-two eot-two-58">
+                        <div class="eot-stack">
+                            <h2 class="eot-h2">این کارورزی چیست؟</h2>
+                            <p class="eot-body">کارورزی حرفه‌ای هیجان اندیشه یک برنامه بلندمدت برای رشد آمادگی‌های تخصصی روان‌شناسی و مشاوره است. مبنای نظری برنامه، روان‌شناسی تعاملی و نگاه یکپارچه به پدیده‌های روان‌شناختی در تعامل با نظام روان است.</p>
+                            <p class="eot-body">مخاطب اصلی این مسیر، دانش‌آموختگان روان‌شناسی و مشاوره‌ای هستند که می‌خواهند دانش نظری را در قالب کلاس، کارگاه، تمرین، تحلیل، ابزار، مقاله و فعالیت حرفه‌ای به مهارت قابل استفاده تبدیل کنند.</p>
+                        </div>
+                        <div class="eot-stack">
+                            <h2 class="eot-h3">مدل یادگیری حرفه‌ای</h2>
+                            <p class="eot-lead" style="font-size: .925rem;">آموزش در این مسیر فقط کلاس نظری نیست؛ یادگیری با تمرین، کارگاه، تولید خروجی و تحلیل حرفه‌ای تکمیل می‌شود.</p>
+                            <div class="eot-grid eot-grid-2" style="gap: .75rem;">
+                                <div class="eot-mini"><strong>کلاس‌های آنلاین</strong><p>آموزش مبانی نظری و چارچوب‌های تخصصی هر مرحله در فضای گروهی آنلاین.</p></div>
+                                <div class="eot-mini"><strong>کارگاه‌های مهارتی</strong><p>تمرین روش‌ها، فنون، ابزارها و مهارت‌های حرفه‌ای در قالب کارگاه و فعالیت هدایت‌شده.</p></div>
+                                <div class="eot-mini"><strong>تمرین و تکلیف حرفه‌ای</strong><p>تمرین‌های ساختاریافته برای تبدیل مفاهیم نظری به مهارت قابل استفاده در موقعیت‌های حرفه‌ای.</p></div>
+                                <div class="eot-mini"><strong>کار با ابزارهای روان‌شناختی</strong><p>آشنایی و تمرین با ابزارهای تشخیصی و فهرست‌های معتبر متناسب با مرحله تشخیص.</p></div>
+                                <div class="eot-mini"><strong>تولید خروجی کاربردی</strong><p>طراحی ابزار یا تألیف مقاله کاربردی و تحلیلی در مراحل مختلف دوره.</p></div>
+                                <div class="eot-mini"><strong>کمیسیون هفتگی</strong><p>پس از اتمام موفق دوره و ورود به سطح دستیاری، تحلیل گزارش‌ها و پروتکل‌های درمانی در کمیسیون هفتگی.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="program-roadmap" class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <span class="eot-kicker">۴ مرحله × ۷ ماه</span>
+                        <h2 class="eot-h2">مسیر ۲۸ ماهه کارورزی</h2>
+                        <p class="eot-lead">هر مرحله یک حوزه حرفه‌ای مشخص را دنبال می‌کند و با فعالیت یا خروجی کاربردی به پایان می‌رسد.</p>
+                    </div>
+                    <div class="eot-road-bar" aria-hidden="true"><span/><span/><span/><span/></div>
+                    <div class="eot-grid eot-grid-4">
+                        <article class="eot-card eot-stage">
+                            <small>مرحله ۱ • ۷ ماه</small>
+                            <h3>تشخیص</h3>
+                            <p>آشنایی با مبانی نظری روان‌شناسی تعاملی و کار حرفه‌ای متمرکز بر سازه‌های تعاملی و ابزارهای تشخیصی.</p>
+                            <ul><li>مبانی نظری روان‌شناسی تعاملی</li><li>آزمون‌های CAT و TAT</li><li>ابزارهای ترسیمی</li><li>فهرست‌های شخصیت، رضایت از زندگی، استعداد، بهداشت روان و رضایت شغلی</li></ul>
+                            <span class="eot-out">طراحی یک ابزار در ماه پایانی مرحله</span>
+                        </article>
+                        <article class="eot-card eot-stage">
+                            <small>مرحله ۲ • ۷ ماه</small>
+                            <h3>راهنمایی و مشاوره</h3>
+                            <p>تمرکز بر روش‌ها و فنون راهنمایی، تصمیم‌گیری تعاملی و مشاوره تحصیلی و شغلی.</p>
+                            <ul><li>روش‌ها و فنون راهنمایی</li><li>الگوی تعاملی تصمیم‌گیری و راهبردهای مشاوره‌ای</li><li>مبانی و روش‌های مشاوره تحصیلی</li><li>مبانی و روش‌های مشاوره شغلی و حرفه‌ای</li></ul>
+                            <span class="eot-out">تألیف یک مقاله کاربردی در پایان مرحله</span>
+                        </article>
+                        <article class="eot-card eot-stage">
+                            <small>مرحله ۳ • ۷ ماه</small>
+                            <h3>حمایت</h3>
+                            <p>آموزش اصول و روش‌های کاهش بیتابی روانی در چهار قلمرو حمایتی و تمرین کاربردی آن‌ها.</p>
+                            <ul><li>الگوی حمایتی زیستی</li><li>الگوی حمایتی اجتماعی</li><li>الگوی حمایتی کلامی</li><li>الگوی حمایتی شناختی</li></ul>
+                            <span class="eot-out">تألیف یک مقاله کاربردی در پایان مرحله</span>
+                        </article>
+                        <article class="eot-card eot-stage">
+                            <small>مرحله ۴ • ۷ ماه</small>
+                            <h3>درمان</h3>
+                            <p>کارورزی حرفه‌ای روان‌درمانگری بر پایه مکتب روان‌شناسی تعاملی و الگوهای تخصصی روان‌درمانی.</p>
+                            <ul><li>آشنایی با عوامل پایه‌ای و ریشه‌ای پدیده‌های روان‌شناختی</li><li>اصول و راهبردهای عاطفی، ارزشی، شخصیتی، نگرشی و رفتاری درمان</li><li>کار با الگوهای تخصصی روان‌درمانی تعاملی</li><li>انتخاب الگو متناسب با ماهیت درماندگی</li></ul>
+                            <span class="eot-out">تألیف مقاله تحلیلی-کاربردی در پایان مرحله</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-card-dark eot-dark-box" style="padding: 2.25rem;">
+                        <div class="eot-stack">
+                            <span class="eot-kicker">پس از اتمام موفق کارورزی</span>
+                            <h2>دستیاری و کمیسیون هفتگی</h2>
+                            <p>پس از پایان موفق دوره ۲۸ ماهه، مسیر حرفه‌ای می‌تواند با ورود به سطح دستیاری ادامه پیدا کند. در این مرحله، جلسات هفتگی کمیسیون برای تحلیل گزارش‌های ویژه و بررسی پروتکل‌های درمانی دستیاران برگزار می‌شود.</p>
+                            <p>هدف این مرحله، رشد تدریجی و مستمر ظرفیت حرفه‌ای و نزدیک‌تر شدن به سطح همکاری حرفه‌ای است.</p>
+                        </div>
+                        <aside>
+                            <h3>کمیسیون شامل چه چیزی است؟</h3>
+                            <ul><li>تحلیل گزارش‌های حرفه‌ای</li><li>بررسی و تحلیل پروتکل‌های درمانی</li><li>گفت‌وگوی گروهی و بازخورد حرفه‌ای</li><li>رشد مستمر ظرفیت‌های حرفه‌ای</li></ul>
+                            <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener">مشاهده برنامه کمیسیون و رویدادهای جاری ←</a>
+                        </aside>
+                    </div>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <h2 class="eot-h2" style="font-size: 1.6rem;">منابع و فعالیت‌های مکمل</h2>
+                        <p class="eot-lead">در کنار مسیر اصلی کارورزی، محتوای تخصصی و ابزارهای آنلاین هیجان اندیشه می‌توانند برای مطالعه و تمرین بیشتر استفاده شوند.</p>
+                    </div>
+                    <div class="eot-grid eot-grid-4">
+                        <a href="/مقالات" class="eot-tile"><strong>مقالات تخصصی</strong><span>مطالعه مباحث روان‌شناسی تعاملی، شخصیت، استعداد، هیجان و موضوعات کاربردی.</span></a>
+                        <a href="/فرهنگنامه" class="eot-tile"><strong>فرهنگنامه روان‌شناسی تعاملی</strong><span>مرجع مفاهیم، اصطلاحات و نظریه‌های مورد استفاده در رویکرد تعاملی.</span></a>
+                        <a href="/آزمون-روانشناسی" class="eot-tile"><strong>ارزیابی‌های روان‌شناختی</strong><span>آشنایی با ساختار فهرست‌ها، عوامل و ارزیابی‌های آنلاین موجود در سامانه.</span></a>
+                        <a href="/کلاس-گروهی-آنلاین" class="eot-tile"><strong>کلاس‌ها و کارگاه‌های گروهی آنلاین</strong><span>مشاهده برنامه جلسات و دوره‌های گروهی آنلاین جاری.</span></a>
+                    </div>
+                </section>
+
+                <section class="container eot-sec eot-sec-last">
+                    <div class="eot-card-gold eot-cta-row">
+                        <div class="eot-stack">
+                            <h2 class="eot-h3">اطلاعات پذیرش و دوره بعدی</h2>
+                            <p class="eot-body">مدت و ساختار علمی دوره در این صفحه مشخص است؛ اما تاریخ شروع دوره بعدی، ظرفیت، شهریه و جزئیات پذیرش باید بر اساس فراخوان هر دوره اعلام شود.</p>
+                        </div>
+                        <div class="eot-btns-v">
+                            <a href="https://sepehrtherapy.ir/event" target="_blank" rel="noopener" class="eot-btn eot-btn-teal">برنامه‌های جاری مؤسسه</a>
+                            <a href="/کلاس-گروهی-آنلاین" class="eot-btn eot-btn-line">کلاس‌ها و کارگاه‌های آنلاین</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>

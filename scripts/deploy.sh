@@ -5,7 +5,7 @@
 #
 # Run as root on eot-odoo-prod. Stops odoo20, upgrades the module, starts
 # odoo20, then checks that the theme marker is on website 1 and NOT on
-# website 3. Exits non-zero on any upgrade error or failed check.
+# website 1 and that no theme view exists outside website 1. Exits non-zero on any upgrade error or failed check.
 set -euo pipefail
 
 # Two safety nets before doing anything:
@@ -93,14 +93,18 @@ wait_for() {  # host website_id
     done
     return 1
 }
-echo "Waiting for Odoo to serve both websites"
+echo "Waiting for Odoo to serve website 1"
 W1=$(wait_for www.eot.ir 1) || { echo "!! www.eot.ir did not render website 1" >&2; exit 1; }
-W3=$(wait_for www.sepehrtherapy.ir 3) || { echo "!! www.sepehrtherapy.ir did not render website 3" >&2; exit 1; }
 grep -q 'name="eot-theme"' <<<"$W1" || { echo "!! theme marker missing on website 1" >&2; exit 1; }
-if grep -q 'name="eot-theme"' <<<"$W3"; then
-    echo "!! theme marker LEAKED to website 3" >&2
+# Scope check straight from the database: every view this theme created
+# must belong to website 1 (website 3, the sepehrtherapy duplicate, was
+# deleted in milestone 6; this check holds whether or not other websites
+# exist).
+LEAK=$(sudo -u postgres psql -d "$DB" -Atc "select count(*) from ir_ui_view where key like '$MODULE.%' and website_id is distinct from 1")
+if [ "$LEAK" != "0" ]; then
+    echo "!! $LEAK theme view(s) outside website 1" >&2
     exit 1
 fi
 
-echo "OK: $MODULE @ $TARGET deployed. Marker on website 1, absent on website 3."
+echo "OK: $MODULE @ $TARGET deployed. Marker on website 1; no theme views outside website 1."
 echo "Check: http://odoo.innerquest.me/"

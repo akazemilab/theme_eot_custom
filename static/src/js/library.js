@@ -37,7 +37,8 @@
             items.forEach(function (it, i) {
                 var ok = true;
                 Object.keys(state).forEach(function (dim) {
-                    if (state[dim] && it.dataset[dim] !== state[dim]) { ok = false; }
+                    // values may hold several options separated by "|" (e.g. an assessment in two categories)
+                    if (state[dim] && (it.dataset[dim] || "").split("|").indexOf(state[dim]) === -1) { ok = false; }
                 });
                 if (ok && q) { ok = texts[i].indexOf(q) !== -1; }
                 it.hidden = !ok;

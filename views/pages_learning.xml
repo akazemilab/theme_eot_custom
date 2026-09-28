@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Milestone 6, group 1 (continued): learning center and assessments.
+        The catalogs themselves are generated (views/pages_catalog.xml).
+
+        Data gap handled by design (approved): the survey and eLearning
+        modules are not installed on eot_main, so no assessment or course
+        can be started yet. Cards show "به‌زودی" instead of a dead link.
+        The old "نتایج من" links went to a demo results page of an
+        uninstalled module and are gone (that URL now redirects here).
+    -->
+
+    <template id="page_learning" name="EOT page: learning center" inherit_id="theme_eot_custom.eot_pv_learning">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
+                <section class="eot-hero">
+                    <div class="container">
+                        <div class="eot-hero-in">
+                            <span class="eot-kicker">مرکز یادگیری هیجان اندیشه</span>
+                            <h1>یادگیری آنلاین روان‌شناسی؛ از شناخت تا تسلط</h1>
+                            <p class="eot-hero-lead">۷۴ مسیر یادگیری که ارزیابی‌های روان‌شناختی، کتاب‌ها، مقالات، فرهنگنامه، کلاس‌های زنده و کارورزی حرفه‌ای را در یک تجربه واحد eLearning به هم متصل می‌کند.</p>
+                            <p class="eot-hero-sub">مسیرها کوتاه، مرحله‌ای و پژوهش‌محور طراحی شده‌اند: یاد بگیر، از حافظه بازیابی کن، تمرین کن، مرور کن و پیشرفت خودت را ببین.</p>
+                            <div class="eot-row-btns">
+                                <a href="#choose-path" class="eot-btn eot-btn-sand">مسیر مناسبم را پیدا کنم</a>
+                                <a href="#course-catalog" class="eot-btn eot-btn-ghost">مشاهده همه ۷۴ دوره</a>
+                                <a href="/آزمون-روانشناسی" class="eot-btn eot-btn-text" style="color: #E4D6A0;">شروع از ارزیابی ←</a>
+                            </div>
+                        </div>
+                        <ol class="eot-cycle">
+                            <li><b>۱. کشف</b><span>از ارزیابی، کتاب، موضوع یا مسیر حرفه‌ای شروع کن.</span></li>
+                            <li><b>۲. یادگیری</b><span>درس‌های کوتاه و روشن با یک هدف مشخص.</span></li>
+                            <li><b>۳. بازیابی</b><span>بدون نگاه به متن، آنچه یاد گرفته‌ای را بازسازی کن.</span></li>
+                            <li><b>۴. تمرین</b><span>یادگیری را به یک رفتار یا مسئله واقعی وصل کن.</span></li>
+                            <li><b>۵. مرور و تسلط</b><span>برگرد، مرور کن و مسیر بعدی را انتخاب کن.</span></li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section id="choose-path" class="container eot-sec">
+                    <div class="eot-sec-head">
+                        <span class="eot-kicker">از جایی شروع کن که برایت معنا دارد</span>
+                        <h2 class="eot-h2">شش ورودی به یک سیستم یادگیری</h2>
+                        <p class="eot-lead">همه مسیرها در eLearning هستند؛ تفاوت فقط در نقطه شروع و عمق یادگیری است.</p>
+                    </div>
+                    <div class="eot-grid eot-grid-3">
+                        <a href="#course-catalog" class="eot-card eot-entry"><span class="eot-entry-top"><strong>بر پایه ارزیابی</strong><span class="eot-pill eot-pill-teal">۳۶ دوره</span></span><span>نتیجه ارزیابی را به مسیر یادگیری عامل‌محور، تمرین هفت‌روزه، بازیابی فعال و بازسنجی تبدیل می‌کند.</span></a>
+                        <a href="#course-catalog" class="eot-card eot-entry"><span class="eot-entry-top"><strong>مطالعه هدایت‌شده کتاب</strong><span class="eot-pill eot-pill-teal">۲۰ دوره</span></span><span>کتاب‌های هیجان اندیشه را به مطالعه فصل‌به‌فصل، Checkpointهای یادآوری و نقشه مفهومی تبدیل می‌کند.</span></a>
+                        <a href="#course-catalog" class="eot-card eot-entry"><span class="eot-entry-top"><strong>مسیرهای موضوعی مقالات</strong><span class="eot-pill eot-pill-teal">۱۱ دوره</span></span><span>مقالات مرتبط را در مسیرهای منظم موضوعی قرار می‌دهد تا مطالعه پراکنده به فهم و کاربرد تبدیل شود.</span></a>
+                        <a href="#course-catalog" class="eot-card eot-entry"><span class="eot-entry-top"><strong>تسلط مفهومی فرهنگنامه</strong><span class="eot-pill eot-pill-teal">۱ دوره</span></span><span>مفاهیم فرهنگنامه را به Microlearningهای کوتاه برای تعریف، مثال‌سازی، مقایسه و بازیابی تبدیل می‌کند.</span></a>
+                        <a href="#course-catalog" class="eot-card eot-entry"><span class="eot-entry-top"><strong>مکمل کلاس‌های زنده</strong><span class="eot-pill eot-pill-teal">۱ دوره</span></span><span>قبل، حین و بعد از کلاس آنلاین به آماده‌سازی، یادداشت فعال، مرور و انتقال به عمل کمک می‌کند.</span></a>
+                        <a href="#course-catalog" class="eot-card eot-entry"><span class="eot-entry-top"><strong>مسیر حرفه‌ای کارورزی</strong><span class="eot-pill eot-pill-teal">۵ دوره</span></span><span>زنجیره حرفه‌ای تشخیص، مشاوره، حمایت، درمان و دستیاری/کمیسیون با Prerequisiteهای مرحله‌ای.</span></a>
+                    </div>
+                </section>
+
+                <section class="container eot-sec">
+                    <div class="eot-card-sand eot-stack" style="gap: 1.25rem;">
+                        <div class="eot-stack" style="gap: .4rem;">
+                            <span class="eot-kicker">گیمیفیکیشن با هدف یادگیری</span>
+                            <h2 class="eot-h3" style="font-size: 1.6rem;">پیشرفتت را ببین؛ با دیگران مقایسه نشو</h2>
+                            <p class="eot-body">امتیاز، نشان و رتبه برای ساختن تداوم و حس تسلط استفاده می‌شوند؛ نه برای رتبه‌بندی وضعیت روان‌شناختی افراد.</p>
+                        </div>
+                        <div class="eot-badges">
+                            <div class="eot-badge"><b>۱</b><strong>شروع آگاهانه</strong><small>اولین قدم را برداشته‌اید.</small></div>
+                            <div class="eot-badge"><b>۳</b><strong>سه گام پیوسته</strong><small>تداوم از شروع مهم‌تر است.</small></div>
+                            <div class="eot-badge"><b>۵</b><strong>یادگیرنده پیگیر</strong><small>یادگیری به عادت تبدیل می‌شود.</small></div>
+                            <div class="eot-badge"><b>۱۰</b><strong>ده مسیر</strong><small>دامنه یادگیری شما گسترده‌تر شده است.</small></div>
+                            <div class="eot-badge"><b>۲۰</b><strong>بیست گام تسلط</strong><small>پیشرفت پایدار در چند حوزه.</small></div>
+                            <div class="eot-badge"><b>۴۰</b><strong>خودراهبر پیشرفته</strong><small>مدیریت مستقل مسیر یادگیری.</small></div>
+                            <div class="eot-badge eot-badge-top"><b>۷۰</b><strong>استاد مسیر</strong><small>تقریباً تمام اکوسیستم یادگیری را پیموده‌اید.</small></div>
+                        </div>
+                        <div class="eot-stack" style="gap: .5rem;">
+                            <span class="eot-kicker" style="font-size: .8125rem;">سطوح تجربه</span>
+                            <div class="eot-levels" aria-hidden="true"><span/><span/><span/><span/><span/><span/><span/></div>
+                            <div class="eot-level-names">
+                                <span><strong>آغازگر</strong><br/>۱ XP</span><span><strong>جستجوگر</strong><br/>۳۰۰ XP</span><span><strong>یادگیرنده پیگیر</strong><br/>۱٬۰۰۰ XP</span><span><strong>تمرین‌ورز</strong><br/>۲٬۵۰۰ XP</span><span><strong>خودراهبر</strong><br/>۴٬۵۰۰ XP</span><span><strong>راهنمای یادگیری</strong><br/>۶٬۰۰۰ XP</span><span><strong>استاد مسیر</strong><br/>۷٬۰۰۰ XP</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="course-catalog" class="container eot-sec eot-sec-last" data-eot-filter="">
+                    <div class="eot-filterbar">
+                        <div class="eot-filterbar-top">
+                            <div class="eot-stack" style="gap: .4rem;">
+                                <span class="eot-kicker">کاتالوگ کامل eLearning</span>
+                                <h2 class="eot-h2">همه دوره‌ها <span class="eot-lead" style="font-size: 1rem;">(<span data-eot-count="">۷۴</span>)</span></h2>
+                            </div>
+                            <label class="eot-search">جستجو در دوره‌ها
+                                <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E6B6D" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" data-eot-search="" placeholder="نام یا موضوع دوره" autocomplete="off"/></span>
+                            </label>
+                        </div>
+                        <div class="eot-chip-row" role="group" aria-label="نوع مسیر">
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="" aria-pressed="true">همه</button>
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="assessment" aria-pressed="false">بر پایه ارزیابی <span class="eot-cnt">۳۶</span></button>
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="books" aria-pressed="false">کتاب <span class="eot-cnt">۲۰</span></button>
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="articles" aria-pressed="false">مقالات <span class="eot-cnt">۱۱</span></button>
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="glossary" aria-pressed="false">فرهنگنامه <span class="eot-cnt">۱</span></button>
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="live" aria-pressed="false">کلاس زنده <span class="eot-cnt">۱</span></button>
+                            <button type="button" class="eot-chip" data-eot-dim="family" data-eot-val="internship" aria-pressed="false">کارورزی <span class="eot-cnt">۵</span></button>
+                        </div>
+                    </div>
+                    <div class="eot-grid eot-grid-3">
+                        <t t-call="theme_eot_custom.catalog_courses"/>
+                    </div>
+                    <p class="eot-empty" data-eot-empty="" hidden="">دوره‌ای با این عبارت پیدا نشد.</p>
+                </section>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="page_assessments" name="EOT page: assessments" inherit_id="theme_eot_custom.eot_pv_assessments">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="oe_structure eot-pg eot-pg-svc">
+                <section class="eot-hero">
+                    <div class="container eot-hero-split">
+                        <div class="eot-hero-in">
+                            <span class="eot-kicker">خودسنجی آنلاین • رایگان</span>
+                            <h1>آزمون‌ها و ارزیابی‌های روان‌شناختی آنلاین رایگان</h1>
+                            <p class="eot-hero-lead">مجموعه‌ای از ارزیابی‌های ساختاریافته برای خودشناسی، شخصیت، آرامش و سلامت روان، استعداد، توانایی‌های شناختی، روابط و زندگی شغلی.</p>
+                            <p class="eot-hero-sub">هر ارزیابی مستقیماً در مرورگر انجام می‌شود و برای شروع آن هزینه‌ای دریافت نمی‌شود.</p>
+                            <div class="eot-row-btns"><a href="#all-assessments" class="eot-btn eot-btn-sand">مشاهده همه ارزیابی‌ها</a></div>
+                        </div>
+                        <div class="eot-stat-tiles">
+                            <div class="eot-glass"><span class="eot-glass-big">۳۶</span><small>ارزیابی آنلاین</small></div>
+                            <div class="eot-glass"><span class="eot-glass-big">۱٬۳۴۰</span><small>گویه در مجموعه</small></div>
+                            <div class="eot-glass"><span class="eot-glass-big">۳۳</span><small>با قرارداد امتیازدهی</small></div>
+                            <div class="eot-glass"><span class="eot-glass-big">رایگان</span><small>شروع آنلاین</small></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container" style="padding-top: 1.5rem;">
+                    <p class="eot-note"><strong>توجه:</strong> این ابزارها برای خودسنجی و شناخت بهتر الگوهای فردی طراحی شده‌اند و نتیجه آن‌ها به‌تنهایی جایگزین تشخیص، ارزیابی بالینی یا مشاوره تخصصی روان‌شناس و پزشک نیست. <a href="/روش-ارزیابی-و-تفسیر" class="eot-link">روش ارزیابی و تفسیر ←</a></p>
+                </section>
+
+                <section id="all-assessments" class="container eot-sec" data-eot-filter="">
+                    <div class="eot-side-layout">
+                        <aside class="eot-stack" style="gap: 1rem;">
+                            <label class="eot-search">جستجو در ارزیابی‌ها
+                                <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E6B6D" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" data-eot-search="" placeholder="نام، موضوع، ابعاد یا مخاطب" autocomplete="off"/></span>
+                            </label>
+                            <nav class="eot-catnav" aria-label="مرور بر اساس موضوع">
+                                <h2>مرور بر اساس موضوع</h2>
+                                <button type="button" data-eot-dim="cat" data-eot-val="" aria-pressed="true">همه<span>۳۶</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="خودشناسی و شخصیت" aria-pressed="false">خودشناسی و شخصیت<span>۱۴</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="آرامش و سلامت روان" aria-pressed="false">آرامش و سلامت روان<span>۹</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="استعداد و توانایی‌های شناختی" aria-pressed="false">استعداد و توانایی‌های شناختی<span>۸</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="کودک و نوجوان" aria-pressed="false">کودک و نوجوان<span>۴</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="معنا و معنویت" aria-pressed="false">معنا و معنویت<span>۲</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="روابط و زندگی مشترک" aria-pressed="false">روابط و زندگی مشترک<span>۱</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="کار و زندگی شغلی" aria-pressed="false">کار و زندگی شغلی<span>۱</span></button>
+                                <button type="button" data-eot-dim="cat" data-eot-val="هیجان و روان‌شناسی تعاملی" aria-pressed="false">هیجان و روان‌شناسی تعاملی<span>۱</span></button>
+                            </nav>
+                        </aside>
+                        <div>
+                            <div class="eot-sec-head" style="flex-direction: row; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+                                <h2 class="eot-h2">همه ارزیابی‌ها <span class="eot-lead" style="font-size: 1rem;">(<span data-eot-count="">۳۶</span>)</span></h2>
+                                <span class="eot-lead" style="font-size: .9rem;">برای انتخاب مناسب‌تر، تعداد سؤال، ابعاد سنجش، مخاطب و زمان تقریبی هر ارزیابی را مقایسه کنید.</span>
+                            </div>
+                            <div class="eot-grid eot-grid-2">
+                                <t t-call="theme_eot_custom.catalog_assessments"/>
+                            </div>
+                            <p class="eot-empty" data-eot-empty="" hidden="">ارزیابی‌ای با این عبارت و فیلتر پیدا نشد.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container eot-sec eot-sec-last">
+                    <div class="eot-card-sand">
+                        <div class="eot-two">
+                            <div class="eot-stack">
+                                <h2 class="eot-h3" style="font-size: 1.5rem;">درباره ارزیابی‌های هیجان اندیشه</h2>
+                                <p class="eot-body">این مجموعه شامل ۳۶ فهرست و ارزیابی روان‌شناختی است که به‌صورت آنلاین در سامانه نظرسنجی اجرا می‌شوند. ساختار هر ارزیابی بر پایه تعداد مشخصی گویه و یک یا چند عامل سنجش تعریف شده است.</p>
+                                <p class="eot-body">برای ارزیابی‌هایی که قرارداد امتیازدهی فعال دارند، ساختار نمره‌گذاری و سطوح تفسیر در سامانه تعریف شده است. در صفحه فهرست، این موارد با نشان «تفسیر امتیاز» مشخص شده‌اند.</p>
+                            </div>
+                            <div class="eot-link-list">
+                                <a href="/روش-ارزیابی-و-تفسیر">روش ارزیابی و تفسیر<span>←</span></a>
+                                <a href="/ایمنی-روانشناختی">راهنمای ایمنی روان‌شناختی<span>←</span></a>
+                                <a href="/یادگیری-خودیار-روانشناسی">مرکز یادگیری<span>←</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>

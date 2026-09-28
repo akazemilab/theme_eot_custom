@@ -64,4 +64,16 @@
             <t t-if="not placeholder" t-set="placeholder">جستجو...</t>
         </xpath>
     </template>
+    <!--
+        Keyboard "skip to content" link (portal.frontend_layout) is literal
+        English with no Persian translation on this instance; every page
+        showed "Skip to Content" to keyboard and screen-reader users.
+    -->
+    <template id="skip_to_content_fa"
+              name="EOT: 'Skip to Content' in Persian"
+              inherit_id="portal.frontend_layout">
+        <xpath expr="//a[hasclass('o_skip_to_content')]" position="replace">
+            <a class="o_skip_to_content btn btn-primary rounded-0 visually-hidden-focusable position-absolute start-0" href="#wrap" groups="!base.group_user">پرش به محتوای اصلی</a>
+        </xpath>
+    </template>
 </odoo>

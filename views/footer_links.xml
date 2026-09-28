@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Milestone 6: footer link columns (approved on the mockup canvas).
+        Website 1's footer is the "Centered" layout (its own copy of
+        website.template_footer_centered, view 1604), whose #footer is
+        empty apart from the copyright bar below it. Before this, nothing on
+        the site linked to the legal, trust or service pages.
+        Styles: .eot-footer-cols in static/src/scss/pages.scss.
+    -->
+    <template id="footer_link_columns"
+              name="EOT Footer: link columns"
+              inherit_id="website.template_footer_centered">
+        <xpath expr="//div[@id='footer']" position="inside">
+            <section class="eot-footer-cols">
+                <div class="container">
+                    <div class="eot-fc-grid">
+                        <div class="eot-fc-brand">
+                            <strong>هیجان اندیشه</strong>
+                            <p>مؤسسه تعاملی هیجان اندیشه — روان‌شناسی، خودشناسی و آموزش تخصصی بر پایه مکتب «روان‌شناسی تعاملی». شماره ثبت ۴۵۴۷۷</p>
+                        </div>
+                        <nav aria-label="خدمات">
+                            <h2>خدمات</h2>
+                            <a href="/مشاوره-روانشناسی-آنلاین">مشاوره روان‌شناسی</a>
+                            <a href="/آزمون-روانشناسی">ارزیابی‌ها</a>
+                            <a href="/یادگیری-خودیار-روانشناسی">یادگیری آنلاین</a>
+                            <a href="/کلاس-گروهی-آنلاین">کلاس‌های گروهی</a>
+                            <a href="/کارورزی-روانشناسی-آنلاین">کارورزی</a>
+                            <a href="/خدمات">نقشه خدمات</a>
+                        </nav>
+                        <nav aria-label="دانش و اعتماد">
+                            <h2>دانش و اعتماد</h2>
+                            <a href="/کتب">کتاب‌ها</a>
+                            <a href="/مقالات">مقالات</a>
+                            <a href="/فرهنگنامه">فرهنگنامه</a>
+                            <a href="/about">درباره هیجان اندیشه</a>
+                            <a href="/اصول-علمی-و-تحریریه">اصول علمی و تحریریه</a>
+                            <a href="/سوالات-متداول">سؤالات متداول</a>
+                        </nav>
+                        <nav aria-label="حقوق و ایمنی">
+                            <h2>حقوق و ایمنی</h2>
+                            <a href="/حریم-خصوصی">حریم خصوصی</a>
+                            <a href="/شرایط-استفاده">شرایط استفاده</a>
+                            <a href="/سیاست-کوکی">سیاست کوکی</a>
+                            <a href="/دسترس-پذیری">دسترس‌پذیری</a>
+                            <a href="/ایمنی-روانشناختی">ایمنی روان‌شناختی</a>
+                            <a href="/راهنمای-سایت">راهنمای سایت</a>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+</odoo>
