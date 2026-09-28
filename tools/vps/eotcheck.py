@@ -8,13 +8,14 @@ here on the VPS and return a verdict, not raw HTML/CSS.
                       whether each stylesheet actually PARSES (rule count).
                       Catches "CSS loads 200 but browser uses 0 rules".
   placeholders [BASE] crawl the sitemap and grep rendered pages for demo
-                      placeholders (555-555, yourcompany, lorem ipsum, ...).
+                      placeholders (555-555, yourcompany, lorem ipsum, ...);
+                      also lists sitemap pages that don't return 200.
   text URL [N]        visible text of a page (first N chars, default 1500).
 """
 import re
 import sys
 from html.parser import HTMLParser
-from urllib.parse import urljoin, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 
 import requests
 import tinycss2
@@ -120,13 +121,17 @@ def cmd_placeholders(base=BASE):
     print(f"scanning {len(urls)} pages")
     hits = {}
     defaults = set()
+    broken = []
     for u in urls:
         u = u.replace(urlparse(u).netloc, base_host, 1)
         try:
-            html = get(u).text
+            resp = get(u)
         except Exception as e:  # noqa: BLE001
             print(f"  ERR {u} {e}")
             continue
+        if resp.status_code != 200:
+            broken.append(f"{resp.status_code} {unquote(urlparse(u).path)}")
+        html = resp.text
         body = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
         for m in set(x.group(0) for x in PLACEHOLDER_RE.finditer(body)):
             hits.setdefault(m, []).append(urlparse(u).path)
@@ -138,6 +143,10 @@ def cmd_placeholders(base=BASE):
         print(f"  {m!r} on {len(pages)} page(s): {', '.join(pages[:5])}{' ...' if len(pages) > 5 else ''}")
     if defaults:
         print(f"  (Odoo default 'Powered by Odoo' footer on {len(defaults)} page(s))")
+    if broken:
+        print(f"BROKEN PAGES in sitemap ({len(broken)}):")
+        for b in broken:
+            print("  " + b)
 
 
 class Text(HTMLParser):

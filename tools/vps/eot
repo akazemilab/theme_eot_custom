@@ -40,9 +40,12 @@ case "${1:-help}" in
     fi
     exit $rc ;;
 
-  log)          # eot log [grep] [since]  -> odoo20 journal, errors by default
-    shift; pat=${1:-'ERROR|CRITICAL|Traceback'}; since=${2:--30min}
-    prod "journalctl -u odoo20 --since '$since' --no-pager -o cat | grep -E '$pat' | tail -20" ;;
+  log)          # eot log [since] [pattern] -> grouped error types + failing requests, with counts
+    shift; since=${1:--30min}; pat=${2:-}
+    if [ -n "$pat" ]; then prod "journalctl -u odoo20 --since '$since' --no-pager -o cat | grep -E '$pat' | tail -20"; exit; fi
+    prod "journalctl -u odoo20 --since '$since' --no-pager -o cat > /tmp/eotlog.txt
+      echo '-- error types --'; grep -E '^[A-Za-z_.]+(Error|Exception)[:]' /tmp/eotlog.txt | cut -c1-160 | sort | uniq -c | sort -rn | head -8
+      echo '-- failing requests (4xx/5xx) --'; grep -oE '\"(GET|POST) [^ ]+ HTTP/[0-9.]+\" [45][0-9]{2}' /tmp/eotlog.txt | python3 -c 'import sys,urllib.parse as u; [print(u.unquote(l.strip())) for l in sys.stdin]' | sort | uniq -c | sort -rn | head -15" ;;
 
   status)       # service + deployed commit + both websites answering
     prod "systemctl is-active odoo20; cd $REPO && git log --oneline -1; for h in www.eot.ir www.sepehrtherapy.ir; do printf '%s ' \$h; curl -s -o /dev/null -w '%{http_code}\n' -H \"Host: \$h\" http://127.0.0.1:8069/; done" ;;
@@ -61,7 +64,7 @@ eot find "text"          which active views (website 1 / generic) contain text
 eot view ID [lang]       arch of a view
 eot sql "query"          psql on eot_main (compact)
 eot deploy REF           deploy theme ref; on failure prints the real error
-eot log [pattern] [since] odoo20 journal lines (errors by default)
+eot log [since] [pattern]  grouped error types + failing URLs (default last 30 min)
 eot status               service, deployed commit, both websites HTTP
 eot ssh CMD              run a command on eot-odoo-prod
 eot update               git pull the toolkit (edit it in the theme repo, not on the VPS)
