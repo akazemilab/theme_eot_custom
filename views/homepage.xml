@@ -209,32 +209,32 @@
                         <div class="row g-2">
                             <div class="col-md-6">
                                 <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات">
-                                    <span>هوش موفق</span><i class="oi oi-chevron-left" aria-hidden="true"/>
+                                    <span>هوش موفق</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
                                 </a>
                             </div>
                             <div class="col-md-6">
                                 <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات">
-                                    <span>نظریه هیجان اندیشه</span><i class="oi oi-chevron-left" aria-hidden="true"/>
+                                    <span>نظریه هیجان اندیشه</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
                                 </a>
                             </div>
                             <div class="col-md-6">
                                 <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات">
-                                    <span>مفهوم روان‌شناسی تعاملی و گستره آن</span><i class="oi oi-chevron-left" aria-hidden="true"/>
+                                    <span>مفهوم روان‌شناسی تعاملی و گستره آن</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
                                 </a>
                             </div>
                             <div class="col-md-6">
                                 <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات">
-                                    <span>نقش خانواده در پیشرفت تحصیلی تیزهوشان</span><i class="oi oi-chevron-left" aria-hidden="true"/>
+                                    <span>نقش خانواده در پیشرفت تحصیلی تیزهوشان</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
                                 </a>
                             </div>
                             <div class="col-md-6">
                                 <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات">
-                                    <span>هوش و خلّاقیّت در گستره تیزهوشی</span><i class="oi oi-chevron-left" aria-hidden="true"/>
+                                    <span>هوش و خلّاقیّت در گستره تیزهوشی</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
                                 </a>
                             </div>
                             <div class="col-md-6">
                                 <a class="eot-article-row d-flex align-items-center justify-content-between p-3 text-decoration-none" href="/مقالات">
-                                    <span>مبانی نظری نخبگی</span><i class="oi oi-chevron-left" aria-hidden="true"/>
+                                    <span>مبانی نظری نخبگی</span><svg class="eot-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
                                 </a>
                             </div>
                         </div>

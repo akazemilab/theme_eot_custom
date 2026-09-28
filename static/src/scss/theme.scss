@@ -84,12 +84,13 @@ button {
 // Overriding the Bootstrap 5 CSS custom properties .btn-primary already
 // sets (see var(--btn-bg) etc. in the compiled frontend CSS) rather than
 // background-color directly, so hover/active/disabled states stay correct.
+//
+// Scoped under #wrapwrap (Odoo's page wrapper) so the rule outranks Odoo's
+// color-combination rules like ".o_cc1 .btn-primary": a plain .btn-primary
+// lost to those, which left e.g. the header's "تماس با ما" button purple.
 .btn-primary,
-.o_colored_level .o_cc1 .btn-fill-primary,
-.o_colored_level .o_cc2 .btn-fill-primary,
-.o_colored_level .o_cc3 .btn-fill-primary,
-.o_colored_level .o_cc4 .btn-fill-primary,
-.o_colored_level .o_cc5 .btn-fill-primary {
+#wrapwrap .btn-primary,
+#wrapwrap .btn-fill-primary {
     --btn-bg: var(--eot-primary);
     --btn-border-color: var(--eot-primary);
     --btn-hover-bg: var(--eot-primary-hover);
@@ -102,7 +103,8 @@ button {
 }
 
 // Outline variant: without this it kept Odoo's default purple palette.
-.btn-outline-primary {
+.btn-outline-primary,
+#wrapwrap .btn-outline-primary {
     --btn-color: var(--eot-primary);
     --btn-border-color: var(--eot-primary);
     --btn-hover-color: #FFFFFF;
@@ -261,6 +263,11 @@ select:focus-visible {
 
 .eot-article-row {
     background-color: #FFFFFF;
+
+    .eot-arrow {
+        flex-shrink: 0;
+        color: var(--eot-primary);
+    }
 }
 
 .eot-institute-banner {
