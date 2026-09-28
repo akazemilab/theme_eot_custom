@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Hide the desktop navbar on mobile.
+
+        Website 1 has its own copy of website.template_header_default (view
+        1601, carried over when eot_main was copied from the old instance).
+        In that copy the "d-none d-lg-block" classes are set with a t-set
+        INSIDE the <t t-call="website.navbar"> body. Odoo 20's navbar
+        template reads _navbar_classes when it renders its <nav>, and a
+        t-set in the call body no longer reaches that, so the desktop <nav>
+        rendered with no hide-on-mobile classes and showed above the mobile
+        header on phones. (Core Odoo 20 passes it as a t-call attribute.)
+
+        Passing it as a t-call attribute here, the way core does, restores
+        the intended behaviour. As a theme template it is copied onto website
+        1 only and inherits from website 1's own header copy.
+    -->
+    <template id="header_desktop_nav_hidden_on_mobile"
+              name="EOT Header: hide desktop navbar on mobile"
+              inherit_id="website.template_header_default">
+        <xpath expr="(//t[@t-call='website.navbar'])[1]" position="attributes">
+            <attribute name="_navbar_classes.f">d-none d-lg-block shadow-sm</attribute>
+        </xpath>
+    </template>
+</odoo>
