@@ -299,4 +299,22 @@
             </button>
         </xpath>
     </template>
+
+    <template id="portal_address_footer_fa" name="EOT: address form buttons in Persian" inherit_id="portal.address_footer">
+        <xpath expr="//a[hasclass('btn-outline-secondary')]" position="replace">
+            <a
+                role="button"
+                t-att-href="discard_url or '/my/'"
+                class="btn btn-outline-secondary w-100 w-md-auto order-md-1 order-3"
+            >
+                <i class="fw-light oi me-2" data-icon="keyboard_arrow_left"/>انصراف
+            </a>
+        </xpath>
+        <xpath expr="//span[hasclass('px-3')]" position="replace">
+            <span class="px-3">یا</span>
+        </xpath>
+        <xpath expr="//t[@name='save_address_label']" position="replace">
+            <t name="save_address_label">ذخیره</t>
+        </xpath>
+    </template>
 </odoo>
