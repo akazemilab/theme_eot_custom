@@ -4,8 +4,9 @@
 #   usage: deploy.sh <branch|commit>
 #
 # Run as root on eot-odoo-prod. Stops odoo20, upgrades the module, starts
-# odoo20, then checks that the theme marker is on website 1 and NOT on
-# website 1 and that no theme view exists outside website 1. Exits non-zero on any upgrade error or failed check.
+# odoo20, then checks that the theme marker is on website 1 and that no
+# theme view exists outside website 1. Exits non-zero on any upgrade error
+# or failed check.
 set -euo pipefail
 
 # Two safety nets before doing anything:
