@@ -18,8 +18,6 @@
     <template id="user_sign_in_fa"
               name="EOT: 'Sign in' in Persian"
               inherit_id="portal.user_sign_in">
-        <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
-            <a t-attf-href="/web/login" t-attf-class="#{_link_class}">ورود<span t-if="request.session.profile_session" class="text-danger fa fa-circle"/></a>
-        </xpath>
+        <xpath expr="//a[@t-attf-href='/web/login']/text()" position="replace">ورود</xpath>
     </template>
 </odoo>
