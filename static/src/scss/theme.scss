@@ -584,6 +584,17 @@ summary:focus-visible {
     .eot-fc-crisis a { color: var(--eot-danger) !important; font-weight: 700; }
 }
 
+// Odoo's own "#wrap .container::before/::after { display: table }" clearfix
+// becomes a phantom first item inside grid/flex containers (CLAUDE.md #12)
+// and, being ID-scoped, outranks a class-scoped reset. Anchor the reset on
+// #wrapwrap so it wins for the homepage, inner pages and the 404 page.
+#wrapwrap .eot-h,
+#wrapwrap .eot-pg,
+#wrapwrap .eot-404 {
+    .container::before,
+    .container::after { content: none; display: none; }
+}
+
 // ---------------------------------------------------------------------------
 // Homepage (.eot-h, views/homepage.xml)
 // ---------------------------------------------------------------------------
@@ -608,9 +619,13 @@ summary:focus-visible {
     .container { position: relative; z-index: 1; }
 }
 
+// ID-anchored: Odoo gives direct children of sections position:relative,
+// which collapsed the field to 0px high.
+#wrapwrap .eot-h-field,
 .eot-h-field {
     position: absolute;
     inset: 0;
+    z-index: 0;
     overflow: hidden;
     pointer-events: none;
 
@@ -696,16 +711,30 @@ summary:focus-visible {
 }
 
 .eot-h-portrait {
-    margin: 0;
-    padding: 1.5rem;
-    border-radius: var(--eot-r-xl);
-    background: var(--eot-pink);
-    border: 1px solid var(--eot-hair);
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    position: relative;
+    margin: 0 0 1.5rem 1.5rem;
+    max-width: 24rem;
 
-    img { width: 100%; max-width: 22rem; height: auto; display: block; }
+    // Pink offset block behind the photo (mirrors automatically in RTL).
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 1.5rem -1.5rem -1.5rem 1.5rem;
+        border-radius: var(--eot-r-xl);
+        background: var(--eot-pink);
+    }
+
+    img {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 697 / 789;
+        object-fit: cover;
+        object-position: center top;
+        border-radius: var(--eot-r-xl);
+        box-shadow: 0 24px 48px rgba(6, 46, 51, .16);
+    }
 }
 
 .eot-h-founder-txt {
