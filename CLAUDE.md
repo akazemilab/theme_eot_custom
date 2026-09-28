@@ -1,0 +1,68 @@
+# theme_eot_custom — working rules
+
+Odoo 20 theme for eot.ir (website_id 1, db eot_main, server eot-odoo-prod
+95.38.235.225). Read README.md for the scoping mechanism and deploy script.
+
+## Facts that change how you work
+- **Deploys are LIVE.** www.eot.ir, eot.ir and odoo.innerquest.me all serve
+  from eot-odoo-prod. There is no staging copy. A milestone branch deployed
+  "for review" is public. Verify immediately after every deploy.
+- website 3 (sepehrtherapy duplicate) must stay untouched; deploy.sh checks it.
+
+## Token efficiency: do the heavy work on the VPS
+Claude reaches the VPS (95.38.234.86) with `vps_exec`; the VPS reaches prod
+with `ssh eot-odoo-prod` (dedicated key). The `eot` toolkit on the VPS
+(source: `tools/vps/`, install: `tools/vps/install.sh`) returns short verdicts:
+
+    eot deploy <ref>      deploy; on failure prints the real ParseError
+    eot check [url]       page + assets + "does the CSS actually parse"
+    eot placeholders      scan every sitemap page for demo placeholders
+    eot find "text"       which view contains a string
+    eot view ID | eot sql "..." | eot log | eot status | eot text URL
+
+Rules:
+- Never pull big payloads (view arch, CSS, HTML, logs) into the conversation;
+  grep/parse on the VPS and print only the answer.
+- Don't round-trip files you already have. Edit tools in this repo, push,
+  then `eot update` on the VPS.
+- vps_exec calls die after ~60 s: run anything longer detached
+  (`setsid nohup ... > log 2>&1 &`) and poll the log.
+- Visual checks: use the desktop app's built-in browser pane
+  (odoo.innerquest.me and eot.ir are allowed). Prefer JS measurements
+  (computed styles, `document.styleSheets[i].cssRules.length`, element
+  sizes) over many screenshots; use scaled screenshots (0.5) when needed.
+  A blank screenshot right after a programmatic scroll is a capture
+  artifact; wait ~1 s and re-take before concluding anything.
+- Headless Chromium can't be installed on prod: cdn.playwright.dev is
+  geo-blocked for Iranian IPs. The VPS has only 1 GB RAM.
+
+## Odoo 20 pitfalls (each one bit us)
+1. **No `@import url(...)` in SCSS.** The asset bundler hoists @import by
+   splitting on `;`; Google Fonts URLs contain `;` → broken fragment at the
+   top of the bundle → browsers drop the whole stylesheet (0 rules). Load
+   webfonts with `<link>` in `views/theme_marker.xml`. `eot check` detects this.
+2. **"Loads with 200" ≠ "works".** Always check the stylesheet parses
+   (`eot check`) and look at the page; never report success from HTTP codes.
+3. **No Font Awesome in Odoo 20** (`fa fa-*` renders 0 px), and the `oi`
+   classes don't cover arbitrary glyphs. Use inline SVG icons.
+4. **Specificity:** plain `.btn-primary` loses to Odoo's `.o_cc1 .btn-primary`
+   etc. Scope brand overrides under `#wrapwrap`.
+5. **`<template inherit_id>` needs a real external id.** Builder-made pages
+   (e.g. website 1 homepage, key `website.خانه`) have none. Create the id
+   in a migration (see `migrations/20.0.3.0.1/pre-migrate.py`, idempotent,
+   noupdate). A `<record model="ir.model.data">` in XML only loads once and
+   aborts every later upgrade ("found record of different model").
+6. **Stale website-1 view copies** came over from the old instance (e.g. the
+   header copy view 1601 with a t-set inside t-call). Old copies may use
+   patterns Odoo 20 no longer honours; fix via theme templates, not DB edits.
+7. xpath in inheritance modifies only the FIRST match; to hit every
+   occurrence repeat `(//x[...])[1]` once per occurrence.
+8. Language: fa_IR (RTL) is the default; a browser with English sends
+   visitors to `/en` (LTR). Check both. Cookie `frontend_lang` controls it.
+
+## Owner's standing rules
+- No placeholders anywhere on the site (demo phones, yourcompany emails,
+  lorem ipsum...). Remove them; real values are added deliberately later.
+  Run `eot placeholders` after every deploy.
+- Check the result yourself; don't ask the owner to test on their phone.
+- Milestone flow: mockup → approval → branch → deploy → verify → merge to main.

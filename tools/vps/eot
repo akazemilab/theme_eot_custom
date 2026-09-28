@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# eot - token-cheap toolkit for the eot.ir Odoo site (website 1 on
+# eot-odoo-prod, 95.38.235.225, db eot_main). Runs on the VPS; talks to prod
+# over the dedicated SSH key (alias "eot-odoo-prod" in /root/.ssh/config).
+#
+# Designed so Claude gets a short verdict instead of raw output.
+# Run "eot help" for the command list.
+set -uo pipefail
+TOOLS=/root/eot-tools                      # venv lives here
+SRC=$(dirname "$(readlink -f "$0")")       # scripts: git clone of the theme repo (tools/vps)
+PY="$TOOLS/venv/bin/python $SRC/eotcheck.py"
+PROD=eot-odoo-prod
+REPO=/opt/odoo/themes/theme_eot_custom
+
+prod() { ssh -o BatchMode=yes -o ConnectTimeout=10 "$PROD" "$@"; }
+sql() { prod "sudo -u postgres psql -d eot_main -At -F ' | ' -v ON_ERROR_STOP=1" ; }
+
+case "${1:-help}" in
+  check)        shift; $PY check "$@" ;;
+  placeholders) shift; $PY placeholders "$@" ;;
+  text)         shift; $PY text "$@" ;;
+
+  sql)          # eot sql "select ..."   (query also accepted on stdin)
+    shift; if [ $# -gt 0 ]; then printf '%s\n' "$*" | sql; else sql; fi ;;
+
+  find)         # eot find "text"  -> active views (website 1 or generic) containing text
+    shift; q=${1//\'/\'\'}
+    printf "select id, key, coalesce(website_id::text,'generic'), inherit_id from ir_ui_view where active and (website_id=1 or website_id is null) and arch_db::text ilike '%%%s%%' order by website_id nulls last, id;\n" "$q" | sql ;;
+
+  view)         # eot view ID [lang]  -> arch of a view (en_US by default)
+    shift; printf "select arch_db->>'%s' from ir_ui_view where id=%d;\n" "${2:-en_US}" "$1" | sql ;;
+
+  deploy)       # eot deploy REF  -> deploy + compact verdict; on failure the real error
+    shift; ref=${1:?usage: eot deploy <branch|commit>}
+    out=$(prod "$REPO/scripts/deploy.sh '$ref'" 2>&1); rc=$?
+    echo "$out" | grep -E '^(Checked out|OK:|!!)' | sed 's/^/  /'
+    if [ $rc -ne 0 ]; then
+      echo "  --- error detail (latest upgrade log) ---"
+      prod "f=\$(ls -t /var/log/odoo/deploy-theme_eot_custom-*.log | head -1); grep -E 'ParseError|Error:|Exception|while parsing|For external id|xpath|Element' \"\$f\" | grep -v 'markdown2' | tail -8"
+    fi
+    exit $rc ;;
+
+  log)          # eot log [grep] [since]  -> odoo20 journal, errors by default
+    shift; pat=${1:-'ERROR|CRITICAL|Traceback'}; since=${2:--30min}
+    prod "journalctl -u odoo20 --since '$since' --no-pager -o cat | grep -E '$pat' | tail -20" ;;
+
+  status)       # service + deployed commit + both websites answering
+    prod "systemctl is-active odoo20; cd $REPO && git log --oneline -1; for h in www.eot.ir www.sepehrtherapy.ir; do printf '%s ' \$h; curl -s -o /dev/null -w '%{http_code}\n' -H \"Host: \$h\" http://127.0.0.1:8069/; done" ;;
+
+  ssh)          shift; prod "$@" ;;
+
+  update)       # pull the latest toolkit from GitHub (source of truth: theme repo tools/vps)
+    git -C "$SRC/../.." pull -q --ff-only && git -C "$SRC/../.." log --oneline -1 ;;
+
+  help|*)
+    cat <<'EOF'
+eot check [URL]          page + assets: status/type, CSS actually parses (rule count)
+eot placeholders [BASE]  crawl sitemap, find demo placeholders on rendered pages
+eot text URL [N]         visible text of a page
+eot find "text"          which active views (website 1 / generic) contain text
+eot view ID [lang]       arch of a view
+eot sql "query"          psql on eot_main (compact)
+eot deploy REF           deploy theme ref; on failure prints the real error
+eot log [pattern] [since] odoo20 journal lines (errors by default)
+eot status               service, deployed commit, both websites HTTP
+eot ssh CMD              run a command on eot-odoo-prod
+eot update               git pull the toolkit (edit it in the theme repo, not on the VPS)
+EOF
+    ;;
+esac

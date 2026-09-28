@@ -70,7 +70,9 @@ It fetches, checks out the ref, runs
 `odoo-bin -c /etc/odoo20.conf -d eot_main -u theme_eot_custom --stop-after-init`,
 restarts `odoo20`, and prints the log lines produced during the upgrade.
 
-Check the result at <http://odoo.innerquest.me/> (serves website 1).
+**This is the live site**: www.eot.ir, eot.ir and odoo.innerquest.me are all
+served by this server. Verify right after deploying (`eot check`,
+`eot placeholders` on the VPS - see `tools/vps/` and CLAUDE.md).
 
 ## Rolling back a milestone
 
