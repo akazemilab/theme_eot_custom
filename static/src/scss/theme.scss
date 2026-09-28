@@ -185,3 +185,71 @@ select:focus-visible {
 .o_header_mobile .navbar-toggler-icon {
     color: var(--eot-ink);
 }
+
+// Homepage (milestone 3) --------------------------------------------------
+// Minimal, founder-focused homepage: institute intro, then Dr. Kazemi,
+// role cards, books, articles, closing banner. See views/homepage.xml.
+// Scoped to elements only the homepage content uses, so this adds nothing
+// to other page types.
+
+.eot-eyebrow {
+    font-weight: 700;
+    font-size: .875rem;
+    letter-spacing: .02em;
+    color: var(--eot-primary);
+}
+
+.eot-home-hero {
+    background-color: var(--eot-paper);
+}
+
+.eot-home-h1 {
+    font-weight: 800;
+    color: var(--eot-ink);
+}
+
+.eot-pillar,
+.eot-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E7E2D6;
+    border-radius: 1.25rem;
+}
+
+.eot-founder-photo {
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 380 / 430;
+    object-fit: cover;
+    object-position: center 12%;
+    border-radius: 1.75rem;
+}
+
+.eot-book-card,
+.eot-article-row {
+    background-color: var(--eot-paper);
+    border: 1px solid #E7E2D6;
+    border-radius: 1.125rem;
+    color: var(--eot-ink);
+    transition: border-color .15s ease, color .15s ease;
+}
+
+.eot-book-card:hover,
+.eot-article-row:hover {
+    border-color: var(--eot-primary);
+    color: var(--eot-primary);
+}
+
+.eot-article-row {
+    background-color: #FFFFFF;
+}
+
+.eot-institute-banner {
+    background-color: var(--eot-primary-dark);
+    color: var(--eot-footer-text);
+    border-radius: 1.5rem;
+
+    p {
+        color: var(--eot-footer-text);
+        max-width: 780px;
+    }
+}
