@@ -370,7 +370,7 @@ summary:focus-visible {
 }
 .eot-tag-sm { font-size: .75rem; padding: .25rem .75rem; }
 
-.eot-dot {
+.eot-pdot {
     flex-shrink: 0;
     width: 8px;
     height: 8px;
@@ -378,10 +378,10 @@ summary:focus-visible {
     background: #3FBF6A;
     box-shadow: 0 0 0 4px rgba(157, 234, 178, .45);
 }
-.eot-dot.eot-c-pink { background: var(--eot-pink); box-shadow: 0 0 0 4px rgba(255, 184, 178, .5); }
-.eot-dot.eot-c-blue { background: #7FBDF5; box-shadow: 0 0 0 4px rgba(185, 221, 255, .6); }
-.eot-dot.eot-c-lemon { background: #F5C84A; box-shadow: 0 0 0 4px rgba(255, 227, 138, .6); }
-.eot-dot.eot-c-orange { background: var(--eot-orange); box-shadow: 0 0 0 4px rgba(242, 115, 74, .22); }
+.eot-pdot.eot-c-pink { background: var(--eot-pink); box-shadow: 0 0 0 4px rgba(255, 184, 178, .5); }
+.eot-pdot.eot-c-blue { background: #7FBDF5; box-shadow: 0 0 0 4px rgba(185, 221, 255, .6); }
+.eot-pdot.eot-c-lemon { background: #F5C84A; box-shadow: 0 0 0 4px rgba(255, 227, 138, .6); }
+.eot-pdot.eot-c-orange { background: var(--eot-orange); box-shadow: 0 0 0 4px rgba(242, 115, 74, .22); }
 
 .eot-idx {
     font-family: var(--eot-display);
@@ -430,8 +430,11 @@ summary:focus-visible {
 // put on the header.
 // ---------------------------------------------------------------------------
 #top {
-    background-color: rgba(255, 255, 255, .94) !important;
-    backdrop-filter: saturate(160%) blur(12px);
+    // Solid, no backdrop-filter: a filter on #top makes it the containing
+    // block of the fixed mobile offcanvas menu, which then widened every
+    // page on phones (702px in a 375px viewport) and would open trapped
+    // inside the header.
+    background-color: #FFFFFF !important;
     border-bottom: 1px solid var(--eot-hair);
     box-shadow: none !important;
 

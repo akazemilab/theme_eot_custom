@@ -54,6 +54,12 @@ $eot-display: 'Estedad', 'Vazirmatn', 'Inter', sans-serif;
     ul, ol, dl { margin: 0; }
     h1, h2, h3 { font-family: $eot-display; margin: 0; }
 
+    // Headings on dark (teal) surfaces take the surface's light text colour;
+    // without this the site-wide heading colour (ink) made them unreadable.
+    .eot-hero, .eot-card-dark, .eot-class-dark, .eot-dark-box, .eot-band, .eot-badge-top, .eot-svc-feature {
+        h1, h2, h3, h4 { color: inherit; }
+    }
+
     // --- shared atoms --------------------------------------------------
     .eot-kicker { display: block; font-size: .875rem; font-weight: 700; color: $eot-ochre; }
     .eot-h2 { font-size: 2rem; font-weight: 700; color: $eot-deep; line-height: 1.45; }
@@ -228,7 +234,7 @@ $eot-display: 'Estedad', 'Vazirmatn', 'Inter', sans-serif;
     .eot-steps { list-style: none; padding: 0; }
     .eot-step { display: flex; flex-direction: column; gap: .5rem; }
     .eot-step strong { font-size: 1.1rem; font-weight: 700; }
-    .eot-step span { font-size: .95rem; line-height: 1.9; color: $eot-muted; }
+    .eot-step span:not(.eot-num) { font-size: .95rem; line-height: 1.9; color: $eot-muted; }
     .eot-steps-v { display: flex; flex-direction: column; gap: .9rem; }
     .eot-steps-v li { display: flex; gap: .9rem; }
     .eot-steps-v li > span { display: flex; flex-direction: column; gap: .15rem; }

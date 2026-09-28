@@ -44,7 +44,7 @@
                     <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f2"/><span class="eot-f3"/><span class="eot-f4"/></div>
                     <div class="container">
                         <div class="eot-h-hero-in">
-                            <span class="eot-tag"><span class="eot-dot"/>علم • تجربه • رشد انسانی</span>
+                            <span class="eot-tag"><span class="eot-pdot"/>علم • تجربه • رشد انسانی</span>
                             <h1 class="eot-h-title">مؤسسه تعاملی <span class="eot-hl">هیجان اندیشه</span></h1>
                             <p class="eot-h-lead">نهادی علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی. این مجموعه (شماره ثبت ۴۵۴۷۷) بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است.</p>
                             <div class="eot-actions">
@@ -86,7 +86,7 @@
                             <img src="/web/image/836-bdfdb71c/h33-1.svg" alt="دکتر ناصرالدین کاظمی حقیقی" loading="lazy"/>
                         </figure>
                         <div class="eot-h-founder-txt">
-                            <span class="eot-tag"><span class="eot-dot eot-c-pink"/>بنیان‌گذار هیجان اندیشه</span>
+                            <span class="eot-tag"><span class="eot-pdot eot-c-pink"/>بنیان‌گذار هیجان اندیشه</span>
                             <h2 class="eot-h2">دکتر ناصرالدین کاظمی حقیقی</h2>
                             <p class="eot-h-founder-lead">روان‌شناس، پژوهشگر و نظریه‌پرداز مکتب روان‌شناسی تعاملی و بنیان‌گذار مؤسسه تعاملی هیجان اندیشه.</p>
                             <p class="eot-muted">فعالیت‌های علمی و حرفه‌ای ایشان با روان‌شناسی تعاملی و موضوعاتی مانند استعداد، خلاقیت، تیزهوشی، آموزش و روان‌شناسی کودکان استثنایی پیوند دارد. مکتب روان‌شناسی تعاملی بر نگاه نظام‌مند به انسان و ارتباط میان اندیشه، هیجان، تجربه و محیط تأکید می‌کند.</p>
@@ -108,7 +108,7 @@
                 <section id="eot-family" class="eot-h-family" aria-labelledby="eot-family-title">
                     <div class="container">
                         <div class="eot-h-head">
-                            <span class="eot-tag"><span class="eot-dot eot-c-blue"/>مجموعه هیجان اندیشه</span>
+                            <span class="eot-tag"><span class="eot-pdot eot-c-blue"/>مجموعه هیجان اندیشه</span>
                             <h2 id="eot-family-title" class="eot-h2">به دنبال چه هستید؟</h2>
                             <p class="eot-muted">هیجان اندیشه خانه دانش و آموزش روان‌شناسی است. درمان، آزمون، یادگیری عمومی و کارورزی هر کدام مرکز تخصصی خود را دارند؛ اینجا مسیر درست را پیدا کنید و کار را در سایت همان مرکز انجام دهید.</p>
                         </div>
@@ -143,7 +143,7 @@
                                 <span class="eot-h-by">مدرسه استعداد · قدرت گرفته از هیجان اندیشه</span>
                                 <h3>یادگیری در زمان خودتان</h3>
                                 <p>دوره‌های خودآموز روان‌شناسی برای زندگی روزمره، با سرعتی که خودتان تعیین می‌کنید.</p>
-                                <span class="eot-tag eot-tag-sm"><span class="eot-dot eot-c-lemon"/>سایت مدرسه استعداد در حال راه‌اندازی است</span>
+                                <span class="eot-tag eot-tag-sm"><span class="eot-pdot eot-c-lemon"/>سایت مدرسه استعداد در حال راه‌اندازی است</span>
                                 <div class="eot-h-fcard-actions">
                                     <a href="/یادگیری-خودیار-روانشناسی" class="btn btn-outline-primary">مسیرهای خودآموز فعلی</a>
                                 </div>
@@ -153,7 +153,7 @@
                                 <span class="eot-h-by">مرکز خدمات روان‌شناسی و مشاوره ایران اندیش · قدرت گرفته از هیجان اندیشه</span>
                                 <h3>کارورزی روان‌شناسی و مشاوره</h3>
                                 <p>کارورزی آنلاین روان‌شناسی و مشاوره، در قالب یک دوره حرفه‌ای ۲۸ ماهه.</p>
-                                <span class="eot-tag eot-tag-sm"><span class="eot-dot eot-c-lemon"/>سایت ایران اندیش در حال راه‌اندازی است</span>
+                                <span class="eot-tag eot-tag-sm"><span class="eot-pdot eot-c-lemon"/>سایت ایران اندیش در حال راه‌اندازی است</span>
                                 <div class="eot-h-fcard-actions">
                                     <a href="/کارورزی-روانشناسی-آنلاین" class="btn btn-outline-primary">جزئیات کارورزی</a>
                                 </div>
@@ -202,7 +202,7 @@
                 <section id="articles" class="eot-h-articles">
                     <div class="container">
                         <div class="eot-h-head">
-                            <span class="eot-tag"><span class="eot-dot eot-c-orange"/>مقالات دکتر کاظمی حقیقی</span>
+                            <span class="eot-tag"><span class="eot-pdot eot-c-orange"/>مقالات دکتر کاظمی حقیقی</span>
                             <h2 class="eot-h2">۱۴۲ مقاله منتشرشده</h2>
                             <a href="/مقالات" class="btn btn-primary">مشاهده همه مقالات</a>
                         </div>

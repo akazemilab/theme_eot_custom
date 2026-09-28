@@ -386,7 +386,7 @@ $eot-shelves: (
         h1 { margin: 0; font-weight: 700; font-size: clamp(3.5rem, 9vw, 5.5rem); line-height: 1; }
     }
     .eot-big-count { display: flex; align-items: baseline; gap: .6rem;
-        span:first-child { font-family: $eot-display; font-weight: 700; font-size: clamp(3.5rem, 9vw, 5.5rem); line-height: 1; color: $eot-sand; }
+        span:first-child { font-family: $eot-display; font-weight: 700; font-size: clamp(3.5rem, 9vw, 5.5rem); line-height: 1; color: $eot-teal; }
         span:last-child { color: $eot-muted; } }
     .eot-toolbar {
         padding: 1.5rem 0; border-bottom: 1px solid $eot-line; background: #fff;
