@@ -8,12 +8,24 @@
 # website 3. Exits non-zero on any upgrade error or failed check.
 set -euo pipefail
 
-# The checkout below can rewrite this very file while bash is reading it.
-# Re-run from a private copy so the running script never changes underfoot.
+# Two safety nets before doing anything:
+#  1. The checkout below can rewrite this very file while bash is reading
+#     it, so the real work runs from a private copy.
+#  2. The deploy must survive a dropped SSH connection (it stops odoo20
+#     half way through). The copy runs detached in its own session, so a
+#     hang-up cannot kill it; this foreground process only follows the log
+#     and reports the exit code.
 if [ -z "${EOT_DEPLOY_COPY:-}" ]; then
     copy=$(mktemp /tmp/eot-deploy.XXXXXX.sh)
     cp "$0" "$copy"
-    EOT_DEPLOY_COPY=1 exec bash "$copy" "$@"
+    run_log=/var/log/odoo/deploy-run-$(date +%Y%m%d-%H%M%S).log
+    EOT_DEPLOY_COPY=1 setsid --wait nohup bash "$copy" "$@" \
+        >"$run_log" 2>&1 </dev/null &
+    pid=$!
+    echo "Deploy running detached (pid $pid). Full log: $run_log"
+    tail --pid="$pid" -n +1 -f "$run_log" || true
+    wait "$pid"
+    exit $?
 fi
 trap 'rm -f "$0"' EXIT
 
