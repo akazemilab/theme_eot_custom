@@ -32,6 +32,25 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
 
+// Bootstrap's own runtime custom properties (unlike .btn-primary's colors,
+// these genuinely are consumed via var() at every usage site - .text-primary,
+// .bg-primary-subtle, .border-primary, link color, etc. - confirmed in the
+// compiled frontend CSS, e.g. `.bg-primary-subtle{background-color:
+// var(--primary-bg-subtle) !important}`). Overriding them here reaches
+// every Bootstrap utility class site-wide (badges, alerts, borders, links)
+// with one small block, consistent with the "plain CSS after the bundle"
+// approach above.
+:root,
+[data-bs-theme="light"] {
+    --primary: #07707F;
+    --primary-rgb: 7, 112, 127;
+    --primary-text-emphasis: #054952;
+    --primary-bg-subtle: #E3F1F2;
+    --primary-border-subtle: #B7DDE1;
+    --link-color: #07707F;
+    --link-hover-color: #054952;
+}
+
 :root {
     --eot-primary: #07707F;
     --eot-primary-dark: #0B3B44;
@@ -128,4 +147,41 @@ button {
     .o_footer_copyright_name {
         color: var(--eot-footer-text);
     }
+}
+
+// Global polish ------------------------------------------------------
+// Homepage, login/portal and inner/blog pages all render through this
+// same website.layout + web.assets_frontend bundle (checked directly:
+// /, /web/login and /blog all carry the eot-theme marker and use
+// .btn-primary for their primary actions), so the rules above already
+// reach every page type - no separate per-page-type work needed. What's
+// left is small cross-cutting polish:
+
+// Keyboard focus ring in the brand color instead of Bootstrap's default
+// blue, which clashed with the new palette.
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--eot-primary);
+    outline-offset: 2px;
+}
+
+// Text selection color.
+::selection {
+    background-color: var(--eot-accent);
+    color: var(--eot-primary-dark);
+}
+
+// Mobile menu toggler icon (hamburger) is drawn as a background-image
+// with currentColor via mask in Odoo's own CSS; setting color here is
+// enough since #top already sets a dark color for its descendants, but
+// the toggler sits in the mobile navbar which isn't inside #top's normal
+// flow on some breakpoints - make it explicit rather than relying on
+// inheritance.
+.o_header_mobile .navbar-toggler,
+.o_header_mobile .navbar-toggler-icon {
+    color: var(--eot-ink);
 }
