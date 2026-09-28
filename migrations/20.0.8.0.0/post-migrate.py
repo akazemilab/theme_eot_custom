@@ -16,6 +16,11 @@
    the portal / portal_discuss modules). Odoo 20's fa.po has no entry for
    these names, so the tiles showed "Addresses", "Connection & Security",
    "Discuss". Matched by url, only the fa_IR key is added.
+
+4. Persian record names for the two published pages still named in English
+   (/about "About", /contactus "Contact Us"). The name shows in site search
+   results; the browser titles were already Persian. Wording taken from each
+   page's own Persian title.
 """
 
 PORTAL_ENTRY_FA = {
@@ -23,6 +28,11 @@ PORTAL_ENTRY_FA = {
     '/my/addresses': ('نشانی‌ها', None),
     '/my/security': ('ارتباط و امنیت', None),
     '/my/conversations': ('گفتگوها', 'دسترسی به گفتگوهای شما'),
+}
+
+PAGE_NAME_FA = {
+    '/about': 'درباره هیجان اندیشه',
+    '/contactus': 'تماس با هیجان اندیشه',
 }
 
 MENU_ITEMS = [
@@ -115,3 +125,14 @@ def migrate(cr, version):
                 """,
                 (desc, url),
             )
+
+    # 4. page record names ----------------------------------------------------
+    for url, name in PAGE_NAME_FA.items():
+        cr.execute(
+            """
+            UPDATE website_page
+               SET name = name || jsonb_build_object('fa_IR', %s::text)
+             WHERE website_id = 1 AND url->>'en_US' = %s
+            """,
+            (name, url),
+        )
