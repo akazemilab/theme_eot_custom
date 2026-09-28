@@ -128,10 +128,38 @@ Rules:
     redirect records (controllers/redirects.py).
 
 ## Tools added in milestone 6
-    scripts/rehearse.sh [ref]     restore the latest backup into eot_m6test, upgrade
-                                  from a worktree, run the cleanup, serve on :8070
+    scripts/rehearse.sh [ref] [db] [cleanup-script]
+                                  restore the latest backup into a scratch DB,
+                                  upgrade from a worktree, optionally dry-run
+                                  then run a cleanup script, serve on :8070.
+                                  Generalized after milestone 6 (was hardcoded
+                                  to eot_m6test/m6_cleanup.py) - reuse it as-is
+                                  for future milestones, don't fork a copy.
     scripts/gen_catalogs.py       regenerate views/pages_catalog.xml from
                                   data/m6_catalog_source.json
+    scripts/m6_cleanup.py         one-off milestone-6 cleanup (website 3 +
+                                  stub deletion); kept as the template for a
+                                  future milestone's own cleanup script - copy
+                                  its assert-preconditions/dry-run/abort-loud
+                                  shape rather than writing one from scratch.
+
+## Patterns worth reusing (not just eot-specific)
+- **Assert preconditions, then act; abort loud on mismatch.** Before any
+  irreversible DB change, check the thing you're about to delete/change is
+  actually what you think it is (id, name, domain, url prefix...) and raise
+  rather than proceeding on a wrong guess. See `scripts/m6_cleanup.py`.
+- **Dry-run flag before the real run**, printing the same report either way,
+  so the diff is visible before it's committed (`EOT_DRY_RUN=1`).
+- **Long vps_exec/shell jobs: fire detached, poll the log.** Don't block a
+  60s-capped call on a multi-minute job (`setsid nohup ... > log 2>&1 &`,
+  poll with `tail`/`grep`).
+- **Long-running browser-side JS: fire-and-poll, not one blocking call.**
+  Store progress on a global (`window.__x`), return immediately, poll with
+  short follow-up calls - avoids the tool's own timeout on async work that
+  outlives it.
+- **Large structured data leaving the VPS: gzip+base64, not raw paste**,
+  with an MD5 check on both ends, and cross-validate counts against the
+  source's own displayed totals before trusting the extract.
 
 ## Owner's standing rules
 - No placeholders anywhere on the site (demo phones, yourcompany emails,
