@@ -51,4 +51,17 @@
             </small>
         </xpath>
     </template>
+
+    <!--
+        Default search-box placeholder ("Search..." when no other
+        placeholder was passed in) - same story as above: a literal text
+        node, not a translatable string, in website.website_search_box_input.
+    -->
+    <template id="search_box_placeholder_fa"
+              name="EOT: search box default placeholder in Persian"
+              inherit_id="website.website_search_box_input">
+        <xpath expr="//t[@t-set='placeholder']" position="replace">
+            <t t-if="not placeholder" t-set="placeholder">جستجو...</t>
+        </xpath>
+    </template>
 </odoo>
