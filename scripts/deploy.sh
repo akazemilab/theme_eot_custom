@@ -8,6 +8,15 @@
 # website 3. Exits non-zero on any upgrade error or failed check.
 set -euo pipefail
 
+# The checkout below can rewrite this very file while bash is reading it.
+# Re-run from a private copy so the running script never changes underfoot.
+if [ -z "${EOT_DEPLOY_COPY:-}" ]; then
+    copy=$(mktemp /tmp/eot-deploy.XXXXXX.sh)
+    cp "$0" "$copy"
+    EOT_DEPLOY_COPY=1 exec bash "$copy" "$@"
+fi
+trap 'rm -f "$0"' EXIT
+
 REF="${1:?usage: deploy.sh <branch|commit>}"
 MODULE=theme_eot_custom
 REPO=/opt/odoo/themes/$MODULE
