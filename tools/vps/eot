@@ -88,6 +88,28 @@ case "${1:-help}" in
 
   ssh)          shift; prod "$@" ;;
 
+  mcp-update)   # push tools/prod/mcp_server.py + mcp_scss_check.sh to eot-mcp
+                # on prod (the eot.innerquest.me connector - no device needed
+                # to reach it) and restart the service. Edit in this repo, not
+                # on prod: this is the same "don't round-trip files" rule as
+                # the rest of the toolkit.
+    cat "$PRODTOOLS/mcp_server.py" | prod "cat > /opt/eot-mcp/mcp_server.py.new"
+    cat "$PRODTOOLS/mcp_scss_check.sh" | prod "cat > /opt/eot-mcp/scss_check.sh.new"
+    prod "set -e
+      python3 -m py_compile /opt/eot-mcp/mcp_server.py.new
+      bash -n /opt/eot-mcp/scss_check.sh.new
+      mv /opt/eot-mcp/mcp_server.py.new /opt/eot-mcp/mcp_server.py
+      mv /opt/eot-mcp/scss_check.sh.new /opt/eot-mcp/scss_check.sh
+      chown eotmcp:eotmcp /opt/eot-mcp/mcp_server.py /opt/eot-mcp/scss_check.sh
+      chmod 700 /opt/eot-mcp/mcp_server.py /opt/eot-mcp/scss_check.sh
+      rm -rf /opt/eot-mcp/__pycache__
+      line='eotmcp ALL=(root) NOPASSWD: /opt/eot-mcp/scss_check.sh'
+      grep -qxF \"\$line\" /etc/sudoers.d/eotmcp 2>/dev/null || { echo \"\$line\" >> /etc/sudoers.d/eotmcp; visudo -cf /etc/sudoers.d/eotmcp; }
+      chmod 440 /etc/sudoers.d/eotmcp
+      systemctl restart eot-mcp
+      sleep 1
+      systemctl is-active eot-mcp" ;;
+
   # ---- background jobs ----------------------------------------------------
   bg)           shift; n=${1:?usage: eot bg NAME CMD...}; shift; bg "$n" "$@" ;;
   job)          shift; job "${1:?usage: eot job NAME [regex]}" "${2:-}" ;;
@@ -185,6 +207,8 @@ eot rehearse-stop DB     stop+drop a rehearsal DB clone, with proof (pg/fs/proc)
 eot log [since] [pattern]  grouped error types + failing URLs (default last 30 min)
 eot status               service, deployed commit, both websites HTTP
 eot ssh CMD              run a command on eot-odoo-prod
+eot mcp-update           push tools/prod/mcp_server.py to the eot-mcp gateway on prod
+                         and restart it (see tools/prod/mcp_server.py's docstring)
 eot update               git pull the toolkit (edit it in the theme repo, not on the VPS)
 
 background jobs (anything longer than one ~60 s call)
