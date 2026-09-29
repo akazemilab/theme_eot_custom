@@ -123,6 +123,27 @@
         </xpath>
     </template>
 
+    <!--
+        Signed-in account menu in the header (portal.user_dropdown and
+        portal.my_account_link): "Logout" / "My Account" have no fa.po entry
+        upstream. Elements copied from the Odoo 20 source, wording only.
+        Found by a signed-in clone render (eot render, clone and portal options).
+    -->
+    <template id="user_dropdown_logout_fa" name="EOT: account menu logout in Persian" inherit_id="portal.user_dropdown">
+        <xpath expr="//button[@id='o_logout']" position="replace">
+            <button id="o_logout" type="submit" class="btn w-100 ps-3 text-start">
+                <i class="oi oi-fw small text-primary-emphasis" data-icon="logout"/> خروج
+            </button>
+        </xpath>
+    </template>
+    <template id="my_account_link_fa" name="EOT: account menu link in Persian" inherit_id="portal.my_account_link">
+        <xpath expr="//a[@href='/my/home'][@role='menuitem']" position="replace">
+            <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
+                <i class="oi oi-fw me-1 small text-primary-emphasis" data-icon="badge"/> حساب من
+            </a>
+        </xpath>
+    </template>
+
     <template id="search_results_fa" name="EOT: search results page in Persian" inherit_id="website.list_hybrid">
         <!-- Tab title fell back to the view name "Any Search Results". -->
         <xpath expr="//t[@t-call='website.layout']" position="before">
