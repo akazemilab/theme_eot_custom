@@ -177,7 +177,13 @@
             address. Neither is wanted: remove all three nodes.
         -->
         <xpath expr="//t[@t-set='logged_partner']" position="replace"/>
-        <xpath expr="//t[@t-set='contactus_form_values']" position="replace"/>
+        <!-- Keep the contactus_form_values hook (stock modules such as
+             website_crm xpath onto it; removing it made /contactus 500 once
+             website_crm was installed for Talent Search). Its old value used
+             logged_partner, so it is reset to an empty dict instead. -->
+        <xpath expr="//t[@t-set='contactus_form_values']" position="attributes">
+            <attribute name="t-value">{}</attribute>
+        </xpath>
         <xpath expr="//span[@data-for='contactus_form']" position="replace"/>
         <xpath expr="//div[@id='wrap']" position="replace">
             <div id="wrap" class="oe_structure eot-pg eot-pg-svc">

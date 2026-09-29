@@ -19,6 +19,8 @@ from urllib.parse import quote
 from odoo import http
 from odoo.http import request
 
+from ..models.library import WEBSITE_ID
+
 PRIVACY = "/حریم-خصوصی"
 CLASSES = "/کلاس-گروهی-آنلاین"
 ASSESSMENTS = "/آزمون-روانشناسی"
@@ -26,6 +28,11 @@ CONTACT = "/contactus"
 
 
 def _go(path):
+    # These retired URLs belong to eot.ir only. On any other website in the
+    # same database (e.g. Talent Search, website 2) answer a plain 404
+    # instead of sending visitors into eot.ir paths.
+    if not (request.env.website and request.env.website.id == WEBSITE_ID):
+        raise request.not_found()
     return request.redirect(quote(path), code=301, local=True)
 
 
