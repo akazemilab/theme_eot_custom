@@ -233,6 +233,18 @@ Rules:
   bracket pattern (`pkill -f "[-]d eot_m7test"`) and confirm the result
   (e.g. list `pg_database`) instead of trusting a missing echo.
 
+- **A second ad-hoc script for the same check means it should be an `eot`
+  command.** Milestone 8 rewrote route sweeps, signed-in renders, source
+  greps and the browser audit several times each; they are now tools.
+- **Python piped over ssh buffers stdout**: a polled job's log stays empty
+  until the end. Run the remote interpreter with `-u`.
+- **Push with an explicit `origin <branch>`** and read the ref line; a bare
+  `git push` without upstream failed silently and the VPS tested a stale
+  commit. Branch from `origin/main`, not a possibly stale local `main`.
+- **Check `<title>` too**: tab titles fall back to the view name in English
+  (`additional_title`, #28); body-text scans don't see them. `eot routes`
+  flags them.
+
 ## Owner's standing rules
 - No placeholders anywhere on the site (demo phones, yourcompany emails,
   lorem ipsum...). Remove them; real values are added deliberately later.
