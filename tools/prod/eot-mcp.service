@@ -1,0 +1,25 @@
+# /etc/systemd/system/eot-mcp.service on eot-odoo-prod.
+#
+# KillMode=process matters: `rehearse` deliberately leaves a detached Odoo
+# process serving :8070 after the tool call returns (torn down later by
+# `rehearse_stop`). Without this, the default KillMode=control-group means
+# `systemctl restart eot-mcp` (e.g. from `eot mcp-update`) SIGTERMs the
+# whole cgroup and kills that rehearsal too, even though it was started
+# with `setsid nohup` - setsid escapes the session, not the cgroup. Found
+# by testing audit --clone right after a gateway redeploy: the rehearsal
+# was already dead (ERR_CONNECTION_REFUSED on :8070).
+[Unit]
+Description=EOT MCP gateway (theme_eot_custom project tools)
+After=network.target
+
+[Service]
+Type=simple
+User=eotmcp
+Group=eotmcp
+Environment=MCP_TOKEN_FILE=/opt/eot-mcp/token.txt
+ExecStart=/usr/bin/python3 /opt/eot-mcp/mcp_server.py
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -11,10 +11,27 @@ Odoo 20 theme for eot.ir (website_id 1, db eot_main, server eot-odoo-prod
   owner's instruction; eot_main now holds website 1 only. deploy.sh checks that
   no theme view exists outside website 1.
 
-## Token efficiency: do the heavy work on the VPS
-Claude reaches the VPS (95.38.234.86) with `vps_exec`; the VPS reaches prod
-with `ssh eot-odoo-prod` (dedicated key). The `eot` toolkit on the VPS
-(source: `tools/vps/`, install: `tools/vps/install.sh`) returns short verdicts:
+## Reach for the gateway first - it needs no linked device
+`https://eot.innerquest.me/mcp` (source: `tools/prod/mcp_server.py`, a
+systemd service on eot-odoo-prod itself, `eot mcp-update` deploys it) covers
+day-to-day verification with NO device link at all: `deploy_theme`,
+`odoo_status`, `read_odoo_log`, `git_log`, `scss_check`, `check_site`,
+`check_links`, `placeholders`, `sql_query` (read-only SELECT/WITH),
+`rehearse`/`rehearse_stop`, `clone_user`, `audit` (headless Chromium, live
+or `clone: true`). Runs as the unprivileged `eotmcp` user with narrow,
+exact sudoers grants per tool - not a shell. Prod has 12 GB RAM (vs. the
+VPS's 1 GB), so audit and rehearse run directly here, no tunnel needed.
+KillMode=process on its unit matters: a plain restart would otherwise kill
+any rehearsal `setsid nohup`'d from inside it (setsid escapes the session,
+not the cgroup) - don't `eot mcp-update` while a rehearsal from the gateway
+is still serving.
+
+Everything below (the VPS `eot` toolkit) still exists for whatever the
+gateway doesn't cover - raw shell, git history greps, backups - and for
+using a linked device's browser pane. Claude reaches the VPS (95.38.234.86)
+with `vps_exec`; the VPS reaches prod with `ssh eot-odoo-prod` (dedicated
+key). The `eot` toolkit on the VPS (source: `tools/vps/`, install:
+`tools/vps/install.sh`) returns short verdicts:
 
     eot deploy <ref>      deploy; on failure prints the real ParseError
     eot check [url]       page + assets + "does the CSS actually parse"

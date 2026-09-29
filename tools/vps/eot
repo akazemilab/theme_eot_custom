@@ -96,9 +96,12 @@ case "${1:-help}" in
     for f in mcp_server.py mcp_scss_check.sh mcp_rehearse.sh mcp_rehearse_stop.sh mcp_clone_user.sh clone_user.py; do
       cat "$PRODTOOLS/$f" | prod "cat > /opt/eot-mcp/.new-$f"
     done
+    cat "$PRODTOOLS/eot-mcp.service" | prod "cat > /tmp/eot-mcp.service.new"
     prod 'set -e
       python3 -m py_compile /opt/eot-mcp/.new-mcp_server.py /opt/eot-mcp/.new-clone_user.py
       bash -n /opt/eot-mcp/.new-mcp_scss_check.sh /opt/eot-mcp/.new-mcp_rehearse.sh /opt/eot-mcp/.new-mcp_rehearse_stop.sh /opt/eot-mcp/.new-mcp_clone_user.sh
+      cmp -s /tmp/eot-mcp.service.new /etc/systemd/system/eot-mcp.service || { mv /tmp/eot-mcp.service.new /etc/systemd/system/eot-mcp.service; systemctl daemon-reload; }
+      rm -f /tmp/eot-mcp.service.new
       mv /opt/eot-mcp/.new-mcp_server.py       /opt/eot-mcp/mcp_server.py
       mv /opt/eot-mcp/.new-mcp_scss_check.sh   /opt/eot-mcp/scss_check.sh
       mv /opt/eot-mcp/.new-mcp_rehearse.sh     /opt/eot-mcp/rehearse.sh
