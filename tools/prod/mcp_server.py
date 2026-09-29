@@ -548,11 +548,19 @@ def call_tool(name, args):
         base = CLONE_ODOO if args.get("clone") else LOCAL_ODOO
         paths = args.get("paths") or ["/"]
         widths = args.get("widths") or [1280, 375]
-        rc, out, err = run(
-            [BROWSER_PY, __file__, "--audit-worker", base, json.dumps(paths), json.dumps(widths),
-             args.get("login") or "", args.get("password") or ""],
-            timeout=200,
-        )
+        # snap chromium needs a writable, non-root HOME for its own confined
+        # profile dirs - the systemd service sets none, so give it one here
+        # rather than in the shared `run()` helper (nothing else needs it).
+        env = dict(os.environ, HOME="/opt/eot-mcp/browser", XDG_CACHE_HOME="/opt/eot-mcp/browser/.cache")
+        try:
+            p = subprocess.run(
+                [BROWSER_PY, __file__, "--audit-worker", base, json.dumps(paths), json.dumps(widths),
+                 args.get("login") or "", args.get("password") or ""],
+                capture_output=True, text=True, timeout=200, env=env,
+            )
+            rc, out, err = p.returncode, p.stdout, p.stderr
+        except subprocess.TimeoutExpired:
+            rc, out, err = -1, "", "audit timed out after 200s - try fewer paths/widths"
         return rc == 0, (out + ("\n" + err if err and rc != 0 else "")).strip()[-6000:]
 
     return False, f"unknown tool {name!r}"
