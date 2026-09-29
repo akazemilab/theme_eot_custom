@@ -88,27 +88,44 @@ case "${1:-help}" in
 
   ssh)          shift; prod "$@" ;;
 
-  mcp-update)   # push tools/prod/mcp_server.py + mcp_scss_check.sh to eot-mcp
-                # on prod (the eot.innerquest.me connector - no device needed
-                # to reach it) and restart the service. Edit in this repo, not
-                # on prod: this is the same "don't round-trip files" rule as
+  mcp-update)   # push every tools/prod/mcp_*.py + mcp_*.sh + clone_user.py to
+                # eot-mcp on prod (the eot.innerquest.me connector - no device
+                # needed to reach it) and restart the service. Edit in this
+                # repo, not on prod: same "don't round-trip files" rule as
                 # the rest of the toolkit.
-    cat "$PRODTOOLS/mcp_server.py" | prod "cat > /opt/eot-mcp/mcp_server.py.new"
-    cat "$PRODTOOLS/mcp_scss_check.sh" | prod "cat > /opt/eot-mcp/scss_check.sh.new"
-    prod "set -e
-      python3 -m py_compile /opt/eot-mcp/mcp_server.py.new
-      bash -n /opt/eot-mcp/scss_check.sh.new
-      mv /opt/eot-mcp/mcp_server.py.new /opt/eot-mcp/mcp_server.py
-      mv /opt/eot-mcp/scss_check.sh.new /opt/eot-mcp/scss_check.sh
-      chown eotmcp:eotmcp /opt/eot-mcp/mcp_server.py /opt/eot-mcp/scss_check.sh
-      chmod 700 /opt/eot-mcp/mcp_server.py /opt/eot-mcp/scss_check.sh
+    for f in mcp_server.py mcp_scss_check.sh mcp_rehearse.sh mcp_rehearse_stop.sh mcp_clone_user.sh clone_user.py; do
+      cat "$PRODTOOLS/$f" | prod "cat > /opt/eot-mcp/.new-$f"
+    done
+    prod 'set -e
+      python3 -m py_compile /opt/eot-mcp/.new-mcp_server.py /opt/eot-mcp/.new-clone_user.py
+      bash -n /opt/eot-mcp/.new-mcp_scss_check.sh /opt/eot-mcp/.new-mcp_rehearse.sh /opt/eot-mcp/.new-mcp_rehearse_stop.sh /opt/eot-mcp/.new-mcp_clone_user.sh
+      mv /opt/eot-mcp/.new-mcp_server.py       /opt/eot-mcp/mcp_server.py
+      mv /opt/eot-mcp/.new-mcp_scss_check.sh   /opt/eot-mcp/scss_check.sh
+      mv /opt/eot-mcp/.new-mcp_rehearse.sh     /opt/eot-mcp/rehearse.sh
+      mv /opt/eot-mcp/.new-mcp_rehearse_stop.sh /opt/eot-mcp/rehearse_stop.sh
+      mv /opt/eot-mcp/.new-mcp_clone_user.sh   /opt/eot-mcp/clone_user.sh
+      mv /opt/eot-mcp/.new-clone_user.py       /opt/eot-mcp/clone_user.py
+      chown eotmcp:eotmcp /opt/eot-mcp/mcp_server.py
+      chown root:root /opt/eot-mcp/scss_check.sh /opt/eot-mcp/rehearse.sh /opt/eot-mcp/rehearse_stop.sh /opt/eot-mcp/clone_user.sh /opt/eot-mcp/clone_user.py
+      chmod 700 /opt/eot-mcp/mcp_server.py /opt/eot-mcp/scss_check.sh /opt/eot-mcp/rehearse.sh /opt/eot-mcp/rehearse_stop.sh /opt/eot-mcp/clone_user.sh
+      chmod 600 /opt/eot-mcp/clone_user.py
       rm -rf /opt/eot-mcp/__pycache__
-      line='eotmcp ALL=(root) NOPASSWD: /opt/eot-mcp/scss_check.sh'
-      grep -qxF \"\$line\" /etc/sudoers.d/eotmcp 2>/dev/null || { echo \"\$line\" >> /etc/sudoers.d/eotmcp; visudo -cf /etc/sudoers.d/eotmcp; }
+      lines=(
+        "eotmcp ALL=(root) NOPASSWD: /opt/eot-mcp/scss_check.sh"
+        "eotmcp ALL=(root) NOPASSWD: /opt/eot-mcp/rehearse.sh *"
+        "eotmcp ALL=(root) NOPASSWD: /opt/eot-mcp/rehearse_stop.sh *"
+        "eotmcp ALL=(root) NOPASSWD: /opt/eot-mcp/clone_user.sh *"
+        "eotmcp ALL=(postgres) NOPASSWD: /usr/bin/psql -d eot_main -At -F | -v ON_ERROR_STOP=1"
+      )
+      changed=0
+      for line in "${lines[@]}"; do
+        grep -qxF "$line" /etc/sudoers.d/eotmcp 2>/dev/null || { echo "$line" >> /etc/sudoers.d/eotmcp; changed=1; }
+      done
+      [ "$changed" = 1 ] && visudo -cf /etc/sudoers.d/eotmcp
       chmod 440 /etc/sudoers.d/eotmcp
       systemctl restart eot-mcp
       sleep 1
-      systemctl is-active eot-mcp" ;;
+      systemctl is-active eot-mcp' ;;
 
   # ---- background jobs ----------------------------------------------------
   bg)           shift; n=${1:?usage: eot bg NAME CMD...}; shift; bg "$n" "$@" ;;
@@ -207,8 +224,11 @@ eot rehearse-stop DB     stop+drop a rehearsal DB clone, with proof (pg/fs/proc)
 eot log [since] [pattern]  grouped error types + failing URLs (default last 30 min)
 eot status               service, deployed commit, both websites HTTP
 eot ssh CMD              run a command on eot-odoo-prod
-eot mcp-update           push tools/prod/mcp_server.py to the eot-mcp gateway on prod
-                         and restart it (see tools/prod/mcp_server.py's docstring)
+eot mcp-update           push every tools/prod/mcp_*.py/.sh to the eot-mcp gateway on
+                         prod and restart it (see tools/prod/mcp_server.py's docstring).
+                         That gateway (https://eot.innerquest.me/mcp, no device needed)
+                         now covers check_site/check_links/placeholders/scss_check/
+                         sql_query/rehearse/rehearse_stop/clone_user/audit too.
 eot update               git pull the toolkit (edit it in the theme repo, not on the VPS)
 
 background jobs (anything longer than one ~60 s call)

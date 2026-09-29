@@ -30,11 +30,29 @@ shell:
                     side of `eot check` / `eot links` / `eot placeholders`
                     (tools/vps/eotcheck.py), reimplemented against stdlib so
                     it can run under eotmcp's own account with zero grants.
-                    Never signs in and never touches a rehearsal clone -
-                    that stays on the `eot` toolkit, reachable only via a
-                    linked device, since it's a bigger privilege surface
-                    (account creation, DB clones) than this gateway should
-                    carry on a bearer-token HTTP endpoint.
+  - sql_query     : sudo access (as the postgres user, not root) to exactly
+                    one fixed psql invocation with fixed flags - the query
+                    text goes over stdin, so the sudoers grant never widens
+                    with the query. The tool itself refuses anything that
+                    isn't a single read-only SELECT/WITH statement before it
+                    ever reaches sudo.
+  - rehearse, rehearse_stop, clone_user : sudo access to three fixed,
+                    root-owned wrapper scripts under /opt/eot-mcp/ (same
+                    shape as deploy_theme). Each wrapper re-validates its own
+                    db argument (must start with `eot_`, never `eot_main`)
+                    before doing anything - the tool-level check and the
+                    wrapper's own check are independent, so a bug in one
+                    doesn't expose the live db.
+  - audit         : no sudo. Headless Chromium (installed via snap - see
+                    tools/vps/install.sh's note on why: Playwright's own CDN
+                    is geo-blocked here, same as the VPS) running as eotmcp,
+                    fetching static/tools/eot_audit.js over HTTP from the
+                    site itself rather than reading the repo, so it needs no
+                    filesystem grant either.
+
+This host has far more headroom than the VPS (12 GB RAM vs. 1 GB), so audit
+and rehearse run directly here rather than needing a second machine - no
+device, no tunnel.
 
 Auth: static bearer token from MCP_TOKEN_FILE. Never logs Authorization
 header, querystring, or tool arguments (deploy refs, grep patterns) - only
@@ -45,6 +63,7 @@ import logging
 import os
 import re
 import subprocess
+import sys
 import urllib.error
 import urllib.request
 from html.parser import HTMLParser
@@ -58,9 +77,19 @@ TOKEN = open(os.environ["MCP_TOKEN_FILE"]).read().strip()
 PROTOCOL_VERSION = "2025-06-18"
 DEPLOY_SCRIPT = "/opt/odoo/themes/theme_eot_custom/scripts/deploy.sh"
 SCSS_SCRIPT = "/opt/eot-mcp/scss_check.sh"
+REHEARSE_SCRIPT = "/opt/eot-mcp/rehearse.sh"
+REHEARSE_STOP_SCRIPT = "/opt/eot-mcp/rehearse_stop.sh"
+CLONE_USER_SCRIPT = "/opt/eot-mcp/clone_user.sh"
+BROWSER_PY = "/opt/eot-mcp/browser/venv/bin/python3"
+CHROME = "/snap/chromium/current/usr/lib/chromium-browser/chrome"
 REPO_DIR = "/opt/odoo/themes/theme_eot_custom"
-LOCAL_ODOO = "http://127.0.0.1:8069"  # never the rehearsal clone (:8070) - live only
+LOCAL_ODOO = "http://127.0.0.1:8069"  # live
+CLONE_ODOO = "http://127.0.0.1:8070"  # a rehearsal, if one is currently being served
 SITE_HOST = "www.eot.ir"
+
+
+def _valid_db(db):
+    return isinstance(db, str) and db.startswith("eot_") and not db.startswith("eot_main") and db.replace("_", "").isalnum()
 
 TOOLS = [
     {
@@ -133,6 +162,71 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {"limit": {"type": "integer", "description": "Max sitemap pages to scan, default 60, max 300."}},
+        },
+    },
+    {
+        "name": "sql_query",
+        "description": "Run a READ-ONLY query (SELECT or WITH only - anything else is refused) against the eot_main database and return compact pipe-separated rows.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "A single SELECT or WITH statement. No semicolons except one optional trailing one."},
+                "limit": {"type": "integer", "description": "Max rows to return, default 200, max 1000."},
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "rehearse",
+        "description": (
+            "Rehearse a branch/commit on a disposable clone of eot_main: restore the latest backup into DB, "
+            "upgrade theme_eot_custom from that ref, and serve it on :8070. NEVER touches the live database. "
+            "Takes 15-40s; call rehearse_stop when done. DB must start with 'eot_' and never be eot_main."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "ref": {"type": "string", "description": "Branch or commit, e.g. origin/fix/my-branch"},
+                "db": {"type": "string", "description": "Disposable database name, e.g. eot_rehearse_1. Must start with 'eot_'."},
+            },
+            "required": ["ref", "db"],
+        },
+    },
+    {
+        "name": "rehearse_stop",
+        "description": "Stop and drop a rehearsal clone started by `rehearse` (process, database, filestore), with proof it's actually gone. Refuses eot_main*.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"db": {"type": "string", "description": "The rehearsal database name to tear down."}},
+            "required": ["db"],
+        },
+    },
+    {
+        "name": "clone_user",
+        "description": "Create (or reset) a portal test user on a rehearsal clone (NEVER on eot_main) so signed-in pages (/my/*) can be checked. Returns a login and a one-time password.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"db": {"type": "string", "description": "The rehearsal database (from `rehearse`), not eot_main."}},
+            "required": ["db"],
+        },
+    },
+    {
+        "name": "audit",
+        "description": (
+            "Headless-Chromium design/quality audit (overflow, WCAG contrast, leftover English UI text, broken "
+            "images, heading font, tab title) of one or more paths, on LIVE by default. Set clone:true to audit "
+            "a rehearsal instead (after calling `rehearse`); add login/password (from `clone_user`) to also check "
+            "signed-in pages. Reports only pages with problems."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "paths": {"type": "array", "items": {"type": "string"}, "description": "Site-relative paths. Default ['/']. Max 15."},
+                "widths": {"type": "array", "items": {"type": "integer"}, "description": "Viewport widths to check. Default [1280, 375]."},
+                "clone": {"type": "boolean", "description": "Audit the rehearsal clone on :8070 instead of live. Default false."},
+                "login": {"type": "string", "description": "Optional: sign in first (clone only), from clone_user."},
+                "password": {"type": "string", "description": "Optional: password for login (clone only), from clone_user."},
+            },
         },
     },
 ]
@@ -292,6 +386,81 @@ def placeholders(limit=60):
     return True, "\n".join(out)
 
 
+SQL_OK_RE = re.compile(r"^\s*(select|with)\b", re.I)
+
+
+def sql_query(query, limit=200):
+    if not isinstance(query, str) or not query.strip():
+        return False, "empty query"
+    q = query.strip().rstrip(";").strip()
+    if ";" in q:
+        return False, "only a single statement is allowed (no ';' except one optional trailing one)"
+    if not SQL_OK_RE.match(q):
+        return False, "read-only: query must start with SELECT or WITH"
+    limit = min(int(limit or 200), 1000)
+    # psql reads the query from stdin - it's never part of the argv the
+    # sudoers rule has to match. A single-char, space-free delimiter keeps
+    # the sudoers Cmnd_Spec a plain exact match (no quoting to get wrong).
+    p = subprocess.run(
+        ["sudo", "-n", "-u", "postgres", "/usr/bin/psql", "-d", "eot_main", "-At", "-F", "|", "-v", "ON_ERROR_STOP=1"],
+        input=q, capture_output=True, text=True, timeout=25,
+    )
+    if p.returncode != 0:
+        return False, (p.stdout + p.stderr).strip()[-2000:]
+    lines = p.stdout.splitlines()
+    truncated = len(lines) > limit
+    return True, "\n".join(lines[:limit]) + (f"\n... ({len(lines) - limit} more rows)" if truncated else "")
+
+
+def audit_pages(paths, widths, base, login=None, password=None):
+    status, js, _ = http_get("/theme_eot_custom/static/tools/eot_audit.js", timeout=15)
+    if status != 200:
+        return False, f"could not fetch eot_audit.js from the running site (status {status})"
+    from playwright.sync_api import sync_playwright  # imported lazily: only needed for this tool
+
+    out, checked, bad = [], 0, 0
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(executable_path=CHROME, args=["--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"])
+        ctx = browser.new_context(locale="fa-IR")
+        ctx.add_cookies([{"name": "frontend_lang", "value": "fa_IR", "url": base}])
+        if login:
+            pg = ctx.new_page()
+            pg.goto(base + "/web/login", wait_until="load", timeout=30000)
+            pg.fill("input[name=login]", login)
+            pg.fill("input[name=password]", password or "")
+            pg.click("form.oe_login_form button[type=submit]")
+            pg.wait_for_load_state("load")
+            out.append("signed in: " + ("yes" if "/my" in pg.url or "/odoo" in pg.url else f"NO ({pg.url})"))
+            pg.close()
+        for path in paths[:15]:
+            if not _valid_path(path):
+                out.append(f"{path!r}: invalid path"); continue
+            for w in widths[:4]:
+                page = ctx.new_page()
+                page.set_viewport_size({"width": w, "height": 900})
+                try:
+                    resp = page.goto(base + path, wait_until="load", timeout=30000)
+                    page.wait_for_timeout(300)
+                    page.add_script_tag(content=js)
+                    res = page.evaluate("eotAudit.page(window)")
+                    res["status"] = resp.status if resp else 0
+                except Exception as e:  # noqa: BLE001
+                    res = {"ok": False, "problems": {"error": str(e).splitlines()[0][:160]}}
+                finally:
+                    page.close()
+                checked += 1
+                expected = 404 if path == "/this-page-does-not-exist" else 200
+                if res.get("status", expected) != expected:
+                    res["ok"] = False
+                    res.setdefault("problems", {})["status"] = res.get("status")
+                if not res.get("ok"):
+                    bad += 1
+                    out.append(f"{w:4d} {path}  {json.dumps(res.get('problems') or {}, ensure_ascii=False)}")
+        browser.close()
+    out.append(f"-- {checked} page-widths checked, {bad} with problems")
+    return True, "\n".join(out)
+
+
 def call_tool(name, args):
     if name == "deploy_theme":
         ref = args.get("ref", "")
@@ -347,6 +516,44 @@ def call_tool(name, args):
 
     if name == "placeholders":
         return placeholders(args.get("limit", 60))
+
+    if name == "sql_query":
+        return sql_query(args.get("query", ""), args.get("limit", 200))
+
+    if name == "rehearse":
+        ref, db = args.get("ref", ""), args.get("db", "")
+        if not ref or any(c.isspace() for c in ref) or ".." in ref:
+            return False, f"invalid ref: {ref!r}"
+        if not _valid_db(db):
+            return False, f"invalid db {db!r}: must start with 'eot_', never 'eot_main', alnum/underscore only"
+        rc, out, err = run(["sudo", "-n", REHEARSE_SCRIPT, ref, db], timeout=180)
+        return rc == 0, (out + ("\n" + err if err else "")).strip()[-6000:]
+
+    if name == "rehearse_stop":
+        db = args.get("db", "")
+        if not _valid_db(db):
+            return False, f"invalid db {db!r}: must start with 'eot_', never 'eot_main'"
+        rc, out, err = run(["sudo", "-n", REHEARSE_STOP_SCRIPT, db], timeout=30)
+        return rc == 0, (out + ("\n" + err if err else "")).strip()
+
+    if name == "clone_user":
+        db = args.get("db", "")
+        if not _valid_db(db):
+            return False, f"invalid db {db!r}: accounts are never created on eot_main"
+        rc, out, err = run(["sudo", "-n", CLONE_USER_SCRIPT, db], timeout=30)
+        text = (out + ("\n" + err if err else "")).strip()
+        return (rc == 0 and "EOT_CLONE_LOGIN=" in text), text
+
+    if name == "audit":
+        base = CLONE_ODOO if args.get("clone") else LOCAL_ODOO
+        paths = args.get("paths") or ["/"]
+        widths = args.get("widths") or [1280, 375]
+        rc, out, err = run(
+            [BROWSER_PY, __file__, "--audit-worker", base, json.dumps(paths), json.dumps(widths),
+             args.get("login") or "", args.get("password") or ""],
+            timeout=200,
+        )
+        return rc == 0, (out + ("\n" + err if err and rc != 0 else "")).strip()[-6000:]
 
     return False, f"unknown tool {name!r}"
 
@@ -422,5 +629,13 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--audit-worker":
+        # Re-exec of this file under BROWSER_PY (the venv with playwright
+        # installed) - the main service runs under the bare system python3,
+        # which doesn't have it. See call_tool's "audit" branch.
+        _, _, base, paths_json, widths_json, login, password = sys.argv
+        ok, text = audit_pages(json.loads(paths_json), json.loads(widths_json), base, login or None, password or None)
+        print(text)
+        sys.exit(0 if ok else 1)
     port = int(os.environ.get("MCP_PORT", "8091"))
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
