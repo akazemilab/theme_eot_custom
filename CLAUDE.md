@@ -57,6 +57,8 @@ before writing an ad-hoc script:
                           (overflow, WCAG contrast, English, images, h1 font)
     eot ship REF          deploy -> verify -> routes, detached
     eot scss | eot src REGEX [addon] | eot tpl mod.xmlid [N] [GREP] | eot fa "msgid"
+    eot seo test [--clone] | eot seo sweep   SEO acceptance test / sitemap-wide sweep
+                          (docs/seo_runbook.md); run after library/redirect/nginx changes
 
 VPS network (Iranian IP): files.pythonhosted.org, cdn.playwright.dev and
 storage.googleapis.com are blocked; pip uses mirror-pypi.runflare.com,
@@ -193,6 +195,24 @@ Rules:
 28. **`website.layout` builds `<title>` from `additional_title`**, falling
     back to the main object's/view's name ("Login", "My Portal"). Set
     `additional_title` in Persian for system pages.
+
+29. **Odoo 20 only honours proxy headers when `X-Forwarded-Host` is sent**
+    (`odoo/http/router.py`: ProxyFix runs only if HTTP_X_FORWARDED_HOST is
+    present). nginx sent only X-Forwarded-Proto, so the sitemap and
+    robots.txt said `http://`. Both vhosts now send it (SEO milestone).
+30. **Record ids from the old site were reused.** `/blog/<name>-<id>` URLs
+    from the old DB point at ids that now belong to other books/posts, and
+    werkzeug "fixes" the slug by redirecting to whatever owns the id. Never
+    write redirect targets with ids from another database; match by title
+    (`models/fa_text.py fa_match_key`). The guard is `models/seo.py`
+    `IrHttpSeo._match`. `website.rewrite` rules only apply when NO route
+    matched (`_serve_fallback`).
+31. **Anything raised in `ir.http._match` before `super()`** skips
+    http_routing's language setup: the 404 fallback then dies with
+    `'Request' object has no attribute 'lang'` (500). Call super first.
+32. **QWeb `t-out` HTML-escapes a plain str.** JSON-LD passed as
+    `structured_data` must be `Markup`, made script-safe first
+    (`<`, `>`, `&` as \u escapes) - see `controllers/seo_jsonld.render`.
 
 ## Verifying a design deploy
 1. `eot rehearse origin/<branch> eot_mNtest` -> `eot rehearse-log`

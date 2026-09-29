@@ -153,6 +153,17 @@ case "${1:-help}" in
     shift; ref=${1:?usage: eot ship REF}; me=$(self)
     bg ship "$me deploy '$ref' && echo '== verify' && $me verify && echo '== routes' && $me routes" ;;
 
+  # ---- SEO -------------------------------------------------------------------
+  seo)          # eot seo test [--clone] | sweep   (docs/seo_runbook.md)
+    shift
+    case "${1:-test}" in
+      test)  base=https://www.eot.ir; [ "${2:-}" = --clone ] && base=http://127.0.0.1:8070
+             scp -q "$SRC/eotseo_test.py" "$PROD:/tmp/eotseo_test.py" \
+               && bg seo-test "ssh $PROD python3 -u /tmp/eotseo_test.py $base" ;;
+      sweep) bg seo-sweep "$TOOLS/venv/bin/python -u $SRC/eotseo_sweep.py" ;;
+      *)     echo "usage: eot seo test [--clone] | eot seo sweep" ;;
+    esac ;;
+
   # ---- rendering / auditing ---------------------------------------------------
   render)       # eot render [--clone] [--portal] [--outline N] URL...  (rendered on prod, compact)
     shift; port=8069; extra=()
@@ -253,6 +264,13 @@ eot routes [--clone] [--portal]   every sitemap URL + system pages; prints probl
 eot audit [--clone] [--portal] [--widths 1280,375] [all|PATH...]
                          detached headless-Chromium audit (static/tools/eot_audit.js):
                          overflow, WCAG contrast, English, broken images, h1 font, title
+
+SEO (docs/seo_runbook.md)
+eot seo test [--clone]   acceptance test: robots/sitemap (https, no feeds, clean slugs),
+                         canonical/description/og:image/JSON-LD per template, old-URL
+                         redirects land on the right page. Detached: eot job seo-test
+eot seo sweep            every sitemap URL: status, canonical, title/description length,
+                         h1, og:image, JSON-LD types, img alt; slug hygiene. -> /root/eot-jobs/seo_sweep.tsv
 
 Odoo source
 eot scss                 compile the theme SCSS with libsass on prod
