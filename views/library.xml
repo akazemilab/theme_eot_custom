@@ -122,7 +122,7 @@
                         </a>
                         <h1 t-out="book.name"/>
                         <p t-if="book.eot_subtitle" class="eot-book-subtitle" t-out="book.eot_subtitle"/>
-                        <p class="eot-byline">نوشته <strong t-out="book.eot_authors"/></p>
+                        <p class="eot-byline">نوشته <strong><a t-if="book.eot_authors == 'دکتر ناصرالدین کاظمی حقیقی'" href="/دکتر-ناصرالدین-کاظمی-حقیقی" t-out="book.eot_authors"/><t t-else="" t-out="book.eot_authors"/></strong></p>
                         <p class="eot-lead" t-out="book.eot_description"/>
                         <dl class="eot-facts">
                             <div><dt>فصل</dt><dd t-out="chapter_count"/></div>
@@ -211,6 +211,7 @@
                         <header class="eot-reader-head">
                             <span t-if="post.eot_part" class="eot-kicker eot-kicker-sand" t-out="post.eot_part"/>
                             <h1><span t-if="post.eot_number" class="eot-chapter-n"><t t-out="fa(post.eot_number)"/>.</span> <t t-out="post.eot_title or post.name"/></h1>
+                            <span class="eot-meta eot-chapter-by">از کتاب <a t-att-href="book.eot_url()" t-out="book.name"/> · نوشته <t t-if="book.eot_authors == 'دکتر ناصرالدین کاظمی حقیقی'"><a href="/دکتر-ناصرالدین-کاظمی-حقیقی">دکتر ناصرالدین کاظمی حقیقی</a></t><t t-else="" t-out="book.eot_authors"/></span>
                             <span class="eot-meta"><t t-call="theme_eot_custom.lib_icon_clock"/><t t-out="minutes"/> مطالعه</span>
                         </header>
                         <div class="eot-prose" t-out="post.content"/>
@@ -333,7 +334,7 @@
                     </nav>
                     <h1 t-att-dir="'ltr' if post.eot_ltr else None" t-out="post.eot_title or post.name"/>
                     <div class="eot-article-facts">
-                        <span>نوشته <strong t-out="post.author_name or 'دکتر ناصرالدین کاظمی حقیقی'"/></span>
+                        <span>نوشته <strong><a t-if="(post.author_name or 'دکتر ناصرالدین کاظمی حقیقی') == 'دکتر ناصرالدین کاظمی حقیقی'" href="/دکتر-ناصرالدین-کاظمی-حقیقی">دکتر ناصرالدین کاظمی حقیقی</a><t t-else="" t-out="post.author_name"/></strong></span>
                         <span class="eot-meta"><t t-call="theme_eot_custom.lib_icon_clock"/><t t-out="reading"/> مطالعه</span>
                         <span class="eot-meta"><t t-call="theme_eot_custom.lib_meter" ticks="row['ticks']"/><t t-out="length_label"/></span>
                     </div>
@@ -464,7 +465,7 @@
                                 <t t-foreach="english" t-as="e"><span t-out="e"/><span t-if="not e_last" class="eot-dot">·</span></t>
                             </div>
                             <div class="eot-term-meta">
-                                <span>مدخل فرهنگنامه · نویسنده: <strong>دکتر ناصرالدین کاظمی حقیقی</strong></span>
+                                <span>مدخل فرهنگنامه · نویسنده: <strong><a href="/دکتر-ناصرالدین-کاظمی-حقیقی">دکتر ناصرالدین کاظمی حقیقی</a></strong></span>
                                 <span><t t-out="reading"/> مطالعه</span>
                             </div>
                         </header>

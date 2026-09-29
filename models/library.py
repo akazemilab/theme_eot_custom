@@ -26,6 +26,7 @@ from urllib.parse import unquote
 
 from lxml import html as lxml_html
 
+from .fa_text import fa_slug_text
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
@@ -297,7 +298,9 @@ class BlogPost(models.Model):
     def eot_url(self):
         self.ensure_one()
         blog = self.blog_id
-        slug = self.env['ir.http']._slug((self.id, self.eot_title or self.name))
+        # Persian-normalised title (no diacritics / hamza forms / chapter
+        # numbers): see models/fa_text.py. Any older slug still 301s here.
+        slug = self.env['ir.http']._slug((self.id, fa_slug_text(self.eot_title or self.name) or str(self.id)))
         if blog.eot_kind == 'glossary':
             return '/فرهنگنامه/%s' % slug
         if blog.eot_kind == 'articles':
