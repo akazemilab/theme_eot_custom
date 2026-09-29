@@ -124,6 +124,10 @@
     </template>
 
     <template id="search_results_fa" name="EOT: search results page in Persian" inherit_id="website.list_hybrid">
+        <!-- Tab title fell back to the view name "Any Search Results". -->
+        <xpath expr="//t[@t-call='website.layout']" position="before">
+            <t t-set="additional_title">نتایج جستجو</t>
+        </xpath>
         <xpath expr="//t[@t-if='not results']" position="replace">
             <t t-if="not results">
                 <div class="text-center">
