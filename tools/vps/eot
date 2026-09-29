@@ -91,8 +91,8 @@ case "${1:-help}" in
   # ---- background jobs ----------------------------------------------------
   bg)           shift; n=${1:?usage: eot bg NAME CMD...}; shift; bg "$n" "$@" ;;
   job)          shift; job "${1:?usage: eot job NAME [regex]}" "${2:-}" ;;
-  wait)         # eot wait NAME [SECS<=45]  -> block up to SECS for the job, then report
-    shift; n=${1:?usage: eot wait NAME [secs]}; s=${2:-40}; [ "$s" -gt 45 ] && s=45
+  wait)         # eot wait NAME [SECS<=30] (bridge cap ~60 s incl. a busy VPS)  -> block up to SECS for the job, then report
+    shift; n=${1:?usage: eot wait NAME [secs]}; s=${2:-25}; [ "$s" -gt 30 ] && s=30
     for _ in $(seq 1 "$s"); do [ -f "$JOBS/$n.rc" ] && break; sleep 1; done; job "$n" ;;
   jobs)         for f in "$JOBS"/*.log; do [ -e "$f" ] || continue; n=$(basename "$f" .log); printf '%-22s %s\n' "$n" "$( [ -f "$JOBS/$n.rc" ] && echo "done rc=$(cat "$JOBS/$n.rc")" || echo running)"; done ;;
 
@@ -190,7 +190,7 @@ eot update               git pull the toolkit (edit it in the theme repo, not on
 background jobs (anything longer than one ~60 s call)
 eot bg NAME CMD...       run CMD detached; log + exit code kept in /root/eot-jobs
 eot job NAME [REGEX]     state + tail (or REGEX-filtered) log     eot jobs   list all
-eot wait NAME [S<=45]    block up to S seconds for a job, then report
+eot wait NAME [S<=30]    block up to S seconds for a job, then report
 
 rehearsal / release
 eot backup [LABEL]       detached pg_dump + filestore tgz (rehearse restores the newest dump)
