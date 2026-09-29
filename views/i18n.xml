@@ -123,7 +123,32 @@
         </xpath>
     </template>
 
+    <!--
+        Signed-in account menu in the header (portal.user_dropdown and
+        portal.my_account_link): "Logout" / "My Account" have no fa.po entry
+        upstream. Elements copied from the Odoo 20 source, wording only.
+        Found by a signed-in clone render (eot render, clone and portal options).
+    -->
+    <template id="user_dropdown_logout_fa" name="EOT: account menu logout in Persian" inherit_id="portal.user_dropdown">
+        <xpath expr="//button[@id='o_logout']" position="replace">
+            <button id="o_logout" type="submit" class="btn w-100 ps-3 text-start">
+                <i class="oi oi-fw small text-primary-emphasis" data-icon="logout"/> خروج
+            </button>
+        </xpath>
+    </template>
+    <template id="my_account_link_fa" name="EOT: account menu link in Persian" inherit_id="portal.my_account_link">
+        <xpath expr="//a[@href='/my/home'][@role='menuitem']" position="replace">
+            <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
+                <i class="oi oi-fw me-1 small text-primary-emphasis" data-icon="badge"/> حساب من
+            </a>
+        </xpath>
+    </template>
+
     <template id="search_results_fa" name="EOT: search results page in Persian" inherit_id="website.list_hybrid">
+        <!-- Tab title fell back to the view name "Any Search Results". -->
+        <xpath expr="//t[@t-call='website.layout']" position="before">
+            <t t-set="additional_title">نتایج جستجو</t>
+        </xpath>
         <xpath expr="//t[@t-if='not results']" position="replace">
             <t t-if="not results">
                 <div class="text-center">
@@ -157,6 +182,11 @@
         that exist and are published (checked with `eot links`).
     -->
     <template id="page_404_fa" name="EOT: 404 page" inherit_id="http_routing.404">
+        <!-- Tab title: without additional_title it falls back to this view's
+             name ("Page Not Found"); found by `eot audit`. -->
+        <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
+            <t t-set="additional_title">صفحه پیدا نشد</t>
+        </xpath>
         <xpath expr="//div[@id='wrap']/div[hasclass('oe_structure')]" position="replace">
             <section class="eot-404 eot-grid-bg">
                 <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f3"/></div>
