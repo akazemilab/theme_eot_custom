@@ -26,7 +26,13 @@
         <xpath expr="//head/meta[last()]" position="after">
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=Estedad:wght@500;600;700&amp;display=swap"/>
+            <!-- Not render-blocking (SEO milestone): from Iranian networks this
+                 stylesheet took 0.3-0.6 s before anything could paint. Text
+                 now renders at once in the fallback font and swaps to
+                 Vazirmatn/Estedad when they arrive (display=swap, as before). -->
+            <link rel="stylesheet" media="print" onload="this.media='all'"
+                  href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=Estedad:wght@500;600;700&amp;display=swap"/>
+            <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=Estedad:wght@500;600;700&amp;display=swap"/></noscript>
         </xpath>
     </template>
 </odoo>

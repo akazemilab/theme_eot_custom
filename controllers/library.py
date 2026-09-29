@@ -16,6 +16,8 @@ import re
 from collections import OrderedDict
 from urllib.parse import unquote
 
+from urllib.parse import quote
+
 from werkzeug.exceptions import NotFound
 
 from odoo import http
@@ -23,9 +25,15 @@ from odoo.http import request
 
 from odoo.addons.website_blog.controllers.main import WebsiteBlog
 
+from ..models.fa_text import fa_fold_letters, fa_match_key
 from ..models.library import ALPHABET, ARTICLE_TOPICS, GLOSSARY_CATEGORIES, SHELVES, WEBSITE_ID
+from . import seo_jsonld as ld
 
 FA_DIGITS = str.maketrans('0123456789', '۰۱۲۳۴۵۶۷۸۹')
+
+# The visible lead of /کتب (views/library.xml, lib_books) - also its meta description.
+BOOKS_DESCRIPTION = ('آثار دکتر ناصرالدین کاظمی حقیقی در روان‌شناسی تعاملی، استعداد و تیزهوشی، خلاقیت، '
+                     'و روان‌شناسی جامعه، سازمان و فرهنگ؛ هر کتاب با فهرست کامل فصل‌ها و متن آنلاین.')
 
 # Shelf -> article topic used for "related articles" and back.
 SHELF_TOPIC = {
@@ -175,6 +183,10 @@ class EotLibrary(http.Controller):
             'glossary': glossary,
             'glossary_count': fa(len(self._posts(glossary))) if glossary else '',
             'additional_title': 'کتاب‌ها',
+            'eot_meta_description': BOOKS_DESCRIPTION,
+            'structured_data': ld.render(
+                ld.collection('کتاب‌ها', '/کتب', BOOKS_DESCRIPTION),
+                ld.breadcrumb([('خانه', '/'), ('کتاب‌ها', '/کتب')])),
         })
 
     def _book(self, slug):
@@ -188,6 +200,8 @@ class EotLibrary(http.Controller):
                 sitemap=lambda env, rule, qs: EotLibrary._sitemap_books(env, qs))
     def eot_book(self, book, **kw):
         self._check()
+        if fa_fold_letters(book) != book:
+            return request.redirect(quote('/کتب/%s' % fa_fold_letters(book)), code=301, local=True)
         book = self._book(book)
         chapters = self._posts(book, order='eot_number, id')
         if not chapters:
@@ -227,12 +241,17 @@ class EotLibrary(http.Controller):
             'reading': minutes_label(total) if total else '',
             'same_shelf': [self._book_card(b, counts) for b in same[:4]],
             'related_articles': [self._article_row(a) for a in articles],
+            'structured_data': ld.render(
+                ld.book(book),
+                ld.breadcrumb([('خانه', '/'), ('کتاب‌ها', '/کتب'), (book.name, book.eot_url())])),
         })
 
     @http.route(['/کتب/<string:book>/<string:chapter>'], type='http', auth='public', website=True,
                 sitemap=lambda env, rule, qs: EotLibrary._sitemap_posts(env, 'book', qs))
     def eot_chapter(self, book, chapter, **kw):
         self._check()
+        if fa_fold_letters(book) != book:
+            return request.redirect(quote('/کتب/%s/%s' % (fa_fold_letters(book), chapter)), code=301, local=True)
         book = self._book(book)
         post = self._item(book, chapter)
         redirect = self._canonical(post)
@@ -243,9 +262,17 @@ class EotLibrary(http.Controller):
         prev_ch = chapters[idx - 1] if idx > 0 else None
         next_ch = chapters[idx + 1] if idx + 1 < len(chapters) else None
         link = lambda c: c and {'name': c.eot_title or c.name, 'url': c.eot_url(), 'n': fa(c.eot_number or '')}
+        title = post.eot_title or post.name
+        full_title = '%s — %s' % (title, book.name)
         return self._render('theme_eot_custom.lib_chapter', {
             'main_object': post,
-            'additional_title': '%s — %s' % (post.eot_title or post.name, book.name),
+            # "<chapter> — <book> | هیجان اندیشه" stays under ~60 characters;
+            # longer ones drop the book name (it is in the page and the markup).
+            'additional_title': full_title if len(full_title) <= 45 else title,
+            'structured_data': ld.render(
+                ld.chapter(post, book),
+                ld.breadcrumb([('خانه', '/'), ('کتاب‌ها', '/کتب'), (book.name, book.eot_url()),
+                               (title, post.eot_url())])),
             'post': post,
             'book': book,
             'card': self._book_card(book, {book.id: len(chapters)}),
@@ -274,6 +301,9 @@ class EotLibrary(http.Controller):
         return self._render('theme_eot_custom.lib_articles', {
             'main_object': blog,
             'blog': blog,
+            'structured_data': ld.render(
+                ld.collection(blog.name, '/مقالات', blog.eot_description),
+                ld.breadcrumb([('خانه', '/'), ('مقالات', '/مقالات')])),
             'rows': rows,
             'total': fa(len(rows)),
             'topics': topics,
@@ -315,9 +345,11 @@ class EotLibrary(http.Controller):
         counts = self._chapter_counts(books)
         m = post.eot_minutes or 1
         toc = self._toc(post)
+        crumbs = [('خانه', '/'), ('مقالات', '/مقالات'), (post.eot_title or post.name, post.eot_url())]
         return self._render('theme_eot_custom.lib_article', {
             'main_object': post,
             'post': post,
+            'structured_data': ld.render(ld.article(post), ld.breadcrumb(crumbs)),
             'row': self._article_row(post),
             'reading': minutes_label(m),
             'length_label': {'short': 'مقاله کوتاه', 'medium': 'مقاله متوسط', 'long': 'مقاله بلند'}[length_bucket(m)],
@@ -351,6 +383,9 @@ class EotLibrary(http.Controller):
         return self._render('theme_eot_custom.lib_glossary', {
             'main_object': blog,
             'blog': blog,
+            'structured_data': ld.render(
+                ld.term_set(blog),
+                ld.breadcrumb([('خانه', '/'), ('فرهنگنامه', '/فرهنگنامه')])),
             'total': fa(len(terms)),
             'letters': letters,
             'groups': [{'c': l['c'], 'anchor': l['anchor'], 'count': l['count'], 'items': groups[l['c']]}
@@ -388,11 +423,16 @@ class EotLibrary(http.Controller):
         present = set(terms.mapped('eot_letter'))
         for i, c in enumerate(ALPHABET):
             letters.append({'c': c, 'on': c in present, 'anchor': 'l-%d' % i, 'current': c == post.eot_letter})
+        english = [e.strip() for e in (post.eot_english or '').split('؛') if e.strip()]
         return self._render('theme_eot_custom.lib_term', {
             'main_object': post,
             'post': post,
             'blog': blog,
-            'english': [e.strip() for e in (post.eot_english or '').split('؛') if e.strip()],
+            'english': english,
+            'structured_data': ld.render(
+                ld.term_set(blog), ld.term(post, english),
+                ld.breadcrumb([('خانه', '/'), ('فرهنگنامه', '/فرهنگنامه'),
+                               (post.eot_title or post.name, post.eot_url())])),
             'reading': minutes_label(post.eot_minutes or 1),
             'prev': prev_t and item(prev_t),
             'next': next_t and item(next_t),
@@ -450,23 +490,80 @@ def _sitemap_blog_filtered(env, rule, qs):
     yield from WebsiteBlog.sitemap_blog(env, rule, qs)
 
 
+def _sitemap_blog_feed_filtered(env, rule, qs):
+    # Website 1: feeds are disallowed in robots.txt, so keep them out of the
+    # sitemap (they were 23 of its URLs). Other websites keep their feeds.
+    if _site_env(env):
+        return
+    for blog in env['blog.blog'].search(env.website.website_domain()):
+        loc = '/blog/%s/feed' % env['ir.http']._slug(blog)
+        if not qs or qs.lower() in loc.lower():
+            yield {'loc': loc}
+
+
+def _url_segment_key(index):
+    """Match key of the /blog/... URL segment at `index`, without its trailing id."""
+    parts = [p for p in unquote(request.httprequest.path).split('/') if p]
+    if len(parts) <= index:
+        return ''
+    return fa_match_key(re.sub(r'-\d+$', '', parts[index]))
+
+
 class EotWebsiteBlog(WebsiteBlog):
     """Library blogs keep one address each: their stock /blog URLs 301 to
-    the library pages (website 1 only; other websites are unaffected)."""
+    the library pages (website 1 only; other websites are unaffected).
+
+    Old-site URLs reuse record ids that now belong to different books and
+    posts (e.g. /blog/خلاقیت-31 is the id of another book today). So on
+    website 1 the name in the URL must match the record; otherwise the
+    library item with that name is used, and if there is none: 404, never
+    somebody else's page."""
+
+    def _eot_blog_by_key(self, key):
+        blogs = request.env['blog.blog'].sudo().with_context(lang='fa_IR').search(
+            [('website_id', '=', WEBSITE_ID), ('eot_kind', '!=', False)])
+        return blogs.filtered(lambda b: fa_match_key(b.name) == key)[:1]
+
+    def _eot_post_by_key(self, key, prefer_blog=None):
+        blogs = request.env['blog.blog'].sudo().search(
+            [('website_id', '=', WEBSITE_ID), ('eot_kind', '!=', False)])
+        posts = request.env['blog.post'].sudo().with_context(lang='fa_IR').search(
+            [('blog_id', 'in', blogs.ids), ('is_published', '=', True)])
+        found = posts.filtered(lambda p: key in (fa_match_key(p.eot_title or ''), fa_match_key(p.name)))
+        if prefer_blog and len(found) > 1:
+            found = found.filtered(lambda p: p.blog_id == prefer_blog) or found
+        return found.sorted('id')[:1]
 
     @http.route(sitemap=_sitemap_blog_post_filtered)
     def blog_post(self, blog, blog_post, tag_id=None, page=1, enable_editor=None, **post):
-        if _is_library_site() and blog.sudo().eot_kind and not enable_editor:
-            target = blog_post.sudo().with_context(lang='fa_IR')
-            if target.is_published:
+        if _is_library_site() and not enable_editor:
+            target = blog_post.sudo().with_context(lang='fa_IR').exists()
+            key = _url_segment_key(2)
+            if target and target.blog_id.eot_kind and key and key not in (
+                    fa_match_key(target.eot_title or ''), fa_match_key(target.name)):
+                target = self._eot_post_by_key(key)
+                if not target:
+                    raise NotFound()
+            if target and target.blog_id.eot_kind and target.is_published:
                 return request.redirect(target.eot_url(), code=301, local=True)
         return super().blog_post(blog, blog_post, tag_id=tag_id, page=page, enable_editor=enable_editor, **post)
 
     @http.route(sitemap=_sitemap_blog_filtered)
     def blog(self, blog=None, tag=None, page=1, search=None, **opt):
         if _is_library_site():
-            if blog and blog.sudo().eot_kind:
-                return request.redirect(blog.sudo().eot_url(), code=301, local=True)
+            if blog:
+                target = blog.sudo().with_context(lang='fa_IR').exists()
+                key = _url_segment_key(1)
+                if target and key and key != fa_match_key(target.name):
+                    target = self._eot_blog_by_key(key)
+                    if not target:
+                        raise NotFound()
+                if target and target.eot_kind:
+                    return request.redirect(target.eot_url(), code=301, local=True)
             if not blog and not tag and not search:
                 return request.redirect('/مقالات', code=302, local=True)
         return super().blog(blog=blog, tag=tag, page=page, search=search, **opt)
+
+    @http.route(sitemap=_sitemap_blog_feed_filtered)
+    def blog_feed(self, blog, limit='15', **kwargs):
+        return super().blog_feed(blog, limit=limit, **kwargs)

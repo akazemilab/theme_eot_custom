@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        SEO milestone (docs/seo_audit_2026-09-29.md).
+
+        Meta description fallback: controller-rendered pages that have no SEO
+        record of their own (/کتب) pass `eot_meta_description` - the page's
+        own visible lead - and it is used when Odoo found no description.
+        Pages with a record-level description are unaffected.
+    -->
+    <template id="seo_meta_description" name="EOT SEO: meta description fallback" inherit_id="website.layout">
+        <xpath expr="//meta[@name='description']" position="attributes">
+            <attribute name="t-if">meta_description or eot_meta_description or editable</attribute>
+            <attribute name="t-att-content">meta_description or eot_meta_description</attribute>
+        </xpath>
+    </template>
+</odoo>
