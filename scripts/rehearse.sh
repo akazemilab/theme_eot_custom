@@ -15,7 +15,11 @@
 set -uo pipefail
 WT=/opt/odoo/rehearse_wt; FS=/opt/odoo/.local/share/Odoo/filestore
 PY=/opt/odoo/venv/bin/python3; BIN=/opt/odoo/odoo/odoo-bin
+# Other addons that live in eot_main must be on the path too, or the clone
+# loads them as "not installable, skipped" and no longer matches production
+# (Talent Search, website 2, since 2026-09-29: /opt/odoo/talentsearch/addons).
 AP=$WT,/opt/odoo/enterprise,/opt/odoo/odoo/addons
+[ -d /opt/odoo/talentsearch/addons ] && AP=/opt/odoo/talentsearch/addons,$AP
 REF=${1:-origin/main}
 DB=${2:-eot_rehearse_test}
 CLEANUP=${3:-}
