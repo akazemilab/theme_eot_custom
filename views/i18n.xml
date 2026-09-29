@@ -157,6 +157,11 @@
         that exist and are published (checked with `eot links`).
     -->
     <template id="page_404_fa" name="EOT: 404 page" inherit_id="http_routing.404">
+        <!-- Tab title: without additional_title it falls back to this view's
+             name ("Page Not Found"); found by `eot audit`. -->
+        <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
+            <t t-set="additional_title">صفحه پیدا نشد</t>
+        </xpath>
         <xpath expr="//div[@id='wrap']/div[hasclass('oe_structure')]" position="replace">
             <section class="eot-404 eot-grid-bg">
                 <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f3"/></div>
