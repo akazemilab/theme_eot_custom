@@ -81,7 +81,8 @@ with sync_playwright() as pw:
             browser.close()
             browser, ctx = launch()
         for w in widths:
-            pg = ctx.new_page(viewport={"width": w, "height": 900})
+            pg = ctx.new_page()
+            pg.set_viewport_size({"width": w, "height": 900})
             try:
                 resp = pg.goto(base + path, wait_until="load", timeout=60000)
                 pg.wait_for_timeout(400)
