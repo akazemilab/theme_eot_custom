@@ -12,8 +12,31 @@ PY="$TOOLS/venv/bin/python $SRC/eotcheck.py"
 PROD=eot-odoo-prod
 REPO=/opt/odoo/themes/theme_eot_custom
 
+PRODTOOLS=$SRC/../prod                     # scripts streamed to prod over ssh stdin
+JOBS=/root/eot-jobs; mkdir -p "$JOBS"
+CLONE_ENV=$JOBS/clone_user.env              # clone-only portal creds (chmod 600, never printed)
+BROWSER=/root/eot-browser/venv/bin/python   # playwright venv (optional, see install.sh)
+OPY=/opt/odoo/venv/bin/python3
+
 prod() { ssh -o BatchMode=yes -o ConnectTimeout=10 "$PROD" "$@"; }
 sql() { prod "sudo -u postgres psql -d eot_main -At -F ' | ' -v ON_ERROR_STOP=1" ; }
+is_live() { case "$1" in eot_main|eot_main_*) return 0 ;; esac; return 1; }
+
+# Background jobs: anything that outlives a ~60 s vps_exec call.
+# The job's command runs detached; its log and exit code land in $JOBS.
+bg() { # bg NAME CMD...
+  local n=$1; shift
+  rm -f "$JOBS/$n.rc"
+  setsid nohup bash -c "$* ; echo \$? > '$JOBS/$n.rc'" > "$JOBS/$n.log" 2>&1 < /dev/null &
+  echo "started job '$n'  (eot job $n | eot wait $n)"
+}
+job() { # job NAME [FILTER-REGEX]  -> state + filtered/tail log
+  local n=$1 f=${2:-}
+  [ -f "$JOBS/$n.log" ] || { echo "no job '$n'"; return 1; }
+  if [ -f "$JOBS/$n.rc" ]; then echo "[$n] done rc=$(cat "$JOBS/$n.rc")"; else echo "[$n] running ($(( $(date +%s) - $(stat -c %Y "$JOBS/$n.log") ))s since last output)"; fi
+  if [ -n "$f" ]; then grep -E "$f" "$JOBS/$n.log" | tail -25; else tail -12 "$JOBS/$n.log"; fi
+}
+self() { echo "$(readlink -f "$0")"; }
 
 case "${1:-help}" in
   check)        shift; $PY check "$@" ;;
@@ -65,6 +88,85 @@ case "${1:-help}" in
 
   ssh)          shift; prod "$@" ;;
 
+  # ---- background jobs ----------------------------------------------------
+  bg)           shift; n=${1:?usage: eot bg NAME CMD...}; shift; bg "$n" "$@" ;;
+  job)          shift; job "${1:?usage: eot job NAME [regex]}" "${2:-}" ;;
+  wait)         # eot wait NAME [SECS<=45]  -> block up to SECS for the job, then report
+    shift; n=${1:?usage: eot wait NAME [secs]}; s=${2:-40}; [ "$s" -gt 45 ] && s=45
+    for _ in $(seq 1 "$s"); do [ -f "$JOBS/$n.rc" ] && break; sleep 1; done; job "$n" ;;
+  jobs)         for f in "$JOBS"/*.log; do [ -e "$f" ] || continue; n=$(basename "$f" .log); printf '%-22s %s\n' "$n" "$( [ -f "$JOBS/$n.rc" ] && echo "done rc=$(cat "$JOBS/$n.rc")" || echo running)"; done ;;
+
+  # ---- rehearsal / release --------------------------------------------------
+  backup)       # eot backup [LABEL]  -> detached pg_dump + filestore tgz on prod (rehearse restores the newest)
+    shift; l=${1:-$(date +%Y%m%d-%H%M)}; ts=$(date +%Y%m%d-%H%M)
+    bg backup "ssh $PROD 'set -e; sudo -u postgres pg_dump -Fc eot_main -f /var/backups/odoo/eot_main_pre_${l}_$ts.dump; tar czf /var/backups/odoo/filestore_eot_main_pre_${l}_$ts.tgz -C /opt/odoo/.local/share/Odoo/filestore eot_main; ls -la /var/backups/odoo/*${l}_$ts*'" ;;
+  rehearse)     # eot rehearse REF [DB] [CLEANUP]  -> detached rehearsal; poll with eot job rehearse
+    shift; ref=${1:?usage: eot rehearse REF [DB] [cleanup-script]}; db=${2:-eot_rehearse_test}
+    is_live "$db" && { echo "!! refusing: '$db' is the live db"; exit 1; }
+    bg rehearse "ssh $PROD 'bash $REPO/scripts/rehearse.sh \"$ref\" \"$db\" ${3:-}'"
+    echo "verdict: eot job rehearse   (stages + real errors only)" ;;
+  rehearse-log) # filtered view of the rehearsal: stages and real errors (theme_paptic noise dropped)
+    job rehearse '^===|ERROR|Error|Traceback|ParseError|serving|no eot_main_pre' | grep -v theme_paptic ;;
+  ship)         # eot ship REF  -> deploy + verify + route sweep, detached (a deploy outlives one call)
+    shift; ref=${1:?usage: eot ship REF}; me=$(self)
+    bg ship "$me deploy '$ref' && echo '== verify' && $me verify && echo '== routes' && $me routes" ;;
+
+  # ---- rendering / auditing ---------------------------------------------------
+  render)       # eot render [--clone] [--portal] [--outline N] URL...  (rendered on prod, compact)
+    shift; port=8069; extra=()
+    while [ $# -gt 0 ] && [[ $1 == --* ]]; do
+      case $1 in --clone) port=8070 ;; --portal) extra+=(--portal) ;; --outline) extra+=(--outline "$2"); shift ;; --quiet|--sitemap) extra+=("$1") ;; esac; shift
+    done
+    pre=""; if [[ " ${extra[*]:-} " == *" --portal "* ]]; then
+      [ -f "$CLONE_ENV" ] || { echo "!! no clone user: eot clone-user DB"; exit 1; }
+      pre=$(sed 's/^\([A-Z_]*\)=\(.*\)$/import os; os.environ["\1"]="\2"/' "$CLONE_ENV"); fi
+    { printf '%s\n' "$pre"; cat "$PRODTOOLS/render.py"; } | prod "$OPY - --port $port ${extra[*]:-} $(printf "'%s' " "$@")" ;;
+  routes)       # eot routes [--clone] [--portal]  -> every sitemap URL + system pages; problems only
+    shift; "$(self)" render "$@" --sitemap --quiet ;;
+  clone-user)   # eot clone-user DB  -> portal user on a rehearsal clone; creds kept in a root-only file
+    shift; db=${1:?usage: eot clone-user DB}
+    is_live "$db" && { echo "!! refusing: accounts are never created on the live db ($db)"; exit 1; }
+    out=$(prod "sudo -u odoo env HOME=/opt/odoo $OPY /opt/odoo/odoo/odoo-bin shell -c /etc/odoo20.conf -d '$db' --no-http --log-level=error" < "$PRODTOOLS/clone_user.py" 2>&1)
+    umask 077; echo "$out" | grep -E '^EOT_CLONE_(LOGIN|PASSWORD)=' > "$CLONE_ENV"
+    if [ "$(wc -l < "$CLONE_ENV")" = 2 ]; then echo "clone user ready on $db: $(grep LOGIN "$CLONE_ENV" | cut -d= -f2) (password in $CLONE_ENV)"
+    else echo "!! failed:"; echo "$out" | grep -vE '^EOT_CLONE' | tail -6; rm -f "$CLONE_ENV"; exit 1; fi ;;
+  audit)        # eot audit [--clone] [--portal] [--widths 1280,375] [all|PATH...]  -> detached headless audit
+    shift; base=https://www.eot.ir; a=(); tunnel=""
+    while [ $# -gt 0 ] && [[ $1 == --* ]]; do
+      case $1 in
+        --clone)  base=http://127.0.0.1:18070; tunnel="ssh -fN -o ExitOnForwardFailure=yes -L 18070:127.0.0.1:8070 $PROD 2>/dev/null || true; " ;;
+        --portal) [ -f "$CLONE_ENV" ] || { echo "!! no clone user: eot clone-user DB"; exit 1; }
+                  a+=(--login "$(grep LOGIN "$CLONE_ENV" | cut -d= -f2)" --password "$(grep PASSWORD "$CLONE_ENV" | cut -d= -f2-)") ;;
+        --widths) a+=(--widths "$2"); shift ;;
+      esac; shift
+    done
+    [[ " ${a[*]:-} " == *" --login "* && $base != *127.0.0.1* ]] && { echo "!! --portal only with --clone"; exit 1; }
+    [ -x "$BROWSER" ] || { echo "!! no headless browser: bash tools/vps/install.sh --browser"; exit 1; }
+    bg audit "$tunnel$BROWSER $SRC/eotaudit.py --base $base $(printf "'%s' " "${a[@]}") $(printf "'%s' " "${@:-/}")"
+    echo "poll: eot job audit   (~25 s per page-width on this VPS)" ;;
+
+  # ---- Odoo source lookups (instead of grepping it through the conversation) ----
+  scss)         # eot scss  -> compile the theme's SCSS with libsass on prod (catches errors before an upgrade)
+    prod "cd $REPO && $OPY - <<'PY'
+import glob, sass
+bad = 0
+for f in sorted(glob.glob('static/src/scss/*.scss')):
+    try:
+        css = sass.compile(filename=f, output_style='compressed')
+        print('ok  %-40s %6d bytes%s' % (f, len(css), '  !! @import url' if '@import url' in open(f).read() else ''))
+    except sass.CompileError as e:
+        bad += 1; print('ERR', f, str(e).splitlines()[0][:200])
+raise SystemExit(bad)
+PY" ;;
+  src)          # eot src REGEX [addon]  -> matching lines in the Odoo 20 source (compact, capped)
+    shift; p=${1:?usage: eot src REGEX [addon]}; a=${2:-}
+    prod "cd /opt/odoo && grep -rnE --include='*.py' --include='*.xml' --include='*.js' --include='*.scss' -- $(printf '%q' "$p") odoo/addons/${a} enterprise/${a} odoo/odoo 2>/dev/null | cut -c1-220 | head -30" ;;
+  tpl)          # eot tpl module.xmlid [MAXLINES] [GREP]  -> a core template's source block
+    shift; prod "python3 - $(printf "'%s' " "$@")" < "$PRODTOOLS/tpl.py" ;;
+  fa)           # eot fa "msgid" [module]  -> is there a fa.po translation for this exact string?
+    shift; m=${1:?usage: eot fa \"English text\" [module]}; mod=${2:-*}
+    prod "grep -A1 -F -- $(printf '%q' "msgid \"$m\"") /opt/odoo/odoo/addons/$mod/i18n/fa.po /opt/odoo/enterprise/$mod/i18n/fa.po 2>/dev/null | grep -E 'msgstr' | sed 's#/opt/odoo/##' | head -8; echo '(empty msgstr or no line = untranslated -> patch in views/i18n.xml)'" ;;
+
   update)       # pull the latest toolkit from GitHub (source of truth: theme repo tools/vps)
     git -C "$SRC/../.." fetch -q origin main && git -C "$SRC/../.." checkout -q -B main origin/main && git -C "$SRC/../.." log --oneline -1 ;;
 
@@ -84,6 +186,32 @@ eot log [since] [pattern]  grouped error types + failing URLs (default last 30 m
 eot status               service, deployed commit, both websites HTTP
 eot ssh CMD              run a command on eot-odoo-prod
 eot update               git pull the toolkit (edit it in the theme repo, not on the VPS)
+
+background jobs (anything longer than one ~60 s call)
+eot bg NAME CMD...       run CMD detached; log + exit code kept in /root/eot-jobs
+eot job NAME [REGEX]     state + tail (or REGEX-filtered) log     eot jobs   list all
+eot wait NAME [S<=45]    block up to S seconds for a job, then report
+
+rehearsal / release
+eot backup [LABEL]       detached pg_dump + filestore tgz (rehearse restores the newest dump)
+eot rehearse REF [DB] [CLEANUP]   detached scripts/rehearse.sh; clone served on prod :8070
+eot rehearse-log         rehearsal stages + real errors only (theme_paptic noise dropped)
+eot clone-user DB        portal user on a CLONE (refuses eot_main*); creds stay in a root-only file
+eot ship REF             detached: deploy -> verify -> routes
+
+rendering / auditing
+eot render [--clone] [--portal] [--outline N] URL...   status, title, traceback, English leftovers,
+                         optional #wrap class tree - rendered on prod, never raw HTML
+eot routes [--clone] [--portal]   every sitemap URL + system pages; prints problems only
+eot audit [--clone] [--portal] [--widths 1280,375] [all|PATH...]
+                         detached headless-Chromium audit (static/tools/eot_audit.js):
+                         overflow, WCAG contrast, English, broken images, h1 font, title
+
+Odoo source
+eot scss                 compile the theme SCSS with libsass on prod
+eot src REGEX [addon]    grep the Odoo 20 source (30 lines max)
+eot tpl mod.xmlid [N] [GREP]   a core template's source (for i18n.xml / xpath patches)
+eot fa "msgid" [module]  does fa.po translate this string?
 EOF
     ;;
 esac
