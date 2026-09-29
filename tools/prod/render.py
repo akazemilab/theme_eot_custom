@@ -37,7 +37,8 @@ while args and args[0].startswith("--"):
     elif a == "--quiet":     # print only URLs with a problem (non-200, traceback, English)
         quiet = True
 # Pages that are not in the sitemap but visitors reach (auth, search, errors).
-SYSTEM = ["/web/login", "/web/signup", "/web/reset_password", "/my", "/search?search=%D8%AF%D8%B1%D9%85%D8%A7%D9%86",
+# /web/signup is deliberately absent: website 1 is invite-only (b2b), so it 404s.
+SYSTEM = ["/web/login", "/web/reset_password", "/my", "/website/search?search=%D8%AF%D8%B1%D9%85%D8%A7%D9%86",
           "/this-page-does-not-exist", "/contactus", "/about"]
 PORTAL = ["/my", "/my/home", "/my/account", "/my/addresses", "/my/security", "/my/conversations"]
 if portal and port == "8069":
@@ -118,12 +119,14 @@ for url in args:
     en = sorted({t[:50] for t in texts if re.search(r"[A-Za-z]{3,}", t) and not IGNORE.search(t) and len(t) < 120})
     trace = "Traceback" in html or "Internal Server Error" in html
     status_bad = r.status_code != EXPECT.get(url, 200)
+    ttl = unescape(title.group(1).strip()) if title else ""
+    title_en = bool(re.search(r"[A-Za-z]{3,}", ttl.split("|")[0]))  # view-name fallback, e.g. "Page Not Found"
     if quiet and url not in SYSTEM + PORTAL:
         en = []  # content pages carry deliberate English (article keywords); only UI pages are judged
-    if quiet and not (trace or status_bad or en):
+    if quiet and not (trace or status_bad or en or title_en):
         continue
-    bad += bool(trace or status_bad)
-    print("%s %s%s | %s" % (r.status_code, url, "  TRACEBACK" if trace else "", unescape(title.group(1).strip()) if title else "-"))
+    bad += bool(trace or status_bad or title_en)
+    print("%s %s%s%s | %s" % (r.status_code, url, "  TRACEBACK" if trace else "", "  ENGLISH-TITLE" if title_en else "", ttl or "-"))
     if en:
         print("   english:", "; ".join(en[:12]))
     if outline:
@@ -131,4 +134,4 @@ for url in args:
         o.feed(html)
         print("\n".join("   " + line for line in o.out[:120]))
 if len(args) > 1:
-    print("-- %d urls, %d broken (non-200 or traceback)" % (len(args), bad))
+    print("-- %d urls, %d broken (non-200, traceback or English title)" % (len(args), bad))

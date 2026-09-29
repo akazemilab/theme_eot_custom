@@ -26,7 +26,7 @@ from playwright.sync_api import sync_playwright
 
 CHROME = os.environ.get("EOT_CHROME", "/snap/chromium/current/usr/lib/chromium-browser/chrome")
 JS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "static", "tools", "eot_audit.js")
-SYSTEM = ["/web/login", "/web/signup", "/web/reset_password", "/search?search=درمان", "/this-page-does-not-exist"]
+SYSTEM = ["/web/login", "/web/reset_password", "/website/search?search=درمان", "/this-page-does-not-exist"]
 PORTAL = ["/my", "/my/account", "/my/addresses", "/my/security"]
 
 args = sys.argv[1:]
