@@ -49,7 +49,7 @@ import urllib.error
 import urllib.request
 from html.parser import HTMLParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import unquote, urljoin, urlparse
+from urllib.parse import quote, unquote, urljoin, urlparse
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 log = logging.getLogger("eot-mcp")
@@ -154,9 +154,12 @@ def run(cmd, timeout):
 
 
 def http_get(path, timeout=20):
-    """GET a path from the LIVE site on this box (never the :8070 clone)."""
+    """GET a path from the LIVE site on this box (never the :8070 clone).
+    Paths often carry raw Persian text (stored href attributes aren't always
+    percent-encoded - CLAUDE.md pitfall #13); urllib needs an ASCII URL."""
+    safe_path = quote(path, safe="/%?=&:@,;+")
     req = urllib.request.Request(
-        LOCAL_ODOO + path,
+        LOCAL_ODOO + safe_path,
         headers={"Host": SITE_HOST, "Cookie": "frontend_lang=fa_IR", "User-Agent": "eot-mcp-check/1.0"},
     )
     try:
