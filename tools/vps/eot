@@ -120,7 +120,7 @@ case "${1:-help}" in
     pre=""; if [[ " ${extra[*]:-} " == *" --portal "* ]]; then
       [ -f "$CLONE_ENV" ] || { echo "!! no clone user: eot clone-user DB"; exit 1; }
       pre=$(sed 's/^\([A-Z_]*\)=\(.*\)$/import os; os.environ["\1"]="\2"/' "$CLONE_ENV"); fi
-    { printf '%s\n' "$pre"; cat "$PRODTOOLS/render.py"; } | prod "$OPY - --port $port ${extra[*]:-} $(printf "'%s' " "$@")" ;;
+    { printf '%s\n' "$pre"; cat "$PRODTOOLS/render.py"; } | prod "$OPY -u - --port $port ${extra[*]:-} $(printf "'%s' " "$@")" ;;
   routes)       # eot routes [--clone] [--portal]  -> every sitemap URL + system pages; problems only
     shift; "$(self)" render "$@" --sitemap --quiet ;;
   clone-user)   # eot clone-user DB  -> portal user on a rehearsal clone; creds kept in a root-only file
