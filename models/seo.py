@@ -127,13 +127,25 @@ class IrHttpSeo(models.AbstractModel):
 
     @classmethod
     def _match(cls, path_info):
+        # super() first: http_routing's _match sets request.lang, which the
+        # 404 fallback needs. Werkzeug's own slug-fix redirect (RequestRedirect)
+        # and "no route" (NotFound) are re-examined before they are raised.
+        try:
+            res = super()._match(path_info)
+        except (RequestRedirect, NotFound):
+            cls._eot_blog_guard(path_info)
+            raise
+        cls._eot_blog_guard(path_info)
+        return res
+
+    @classmethod
+    def _eot_blog_guard(cls, path_info):
         if path_info.startswith('/blog/') and request and request.env.context.get('host_id') == WEBSITE_ID:
             target = cls._eot_blog_target(path_info)
             if target is False:
                 raise NotFound()
             if target:
                 raise _Moved(quote(target, safe='/'))
-        return super()._match(path_info)
 
     @classmethod
     def _eot_blog_target(cls, path_info):
