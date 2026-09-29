@@ -24,6 +24,29 @@ with `ssh eot-odoo-prod` (dedicated key). The `eot` toolkit on the VPS
     eot find "text"       which view contains a string
     eot view ID | eot sql "..." | eot log | eot status | eot text URL
 
+Added after milestone 8 (`eot help` has the full list). Reach for these
+before writing an ad-hoc script:
+
+    eot bg NAME CMD / job NAME [regex] / wait NAME / jobs
+                          anything > 60 s runs detached; log + rc in /root/eot-jobs
+    eot backup [LABEL]    pg_dump + filestore tgz (what rehearse restores)
+    eot rehearse REF [DB] then `eot rehearse-log`   (stages + real errors only)
+    eot clone-user DB     portal user on a CLONE only; creds never printed
+    eot render [--clone] [--portal] [--outline N] URL...
+                          status, title, tracebacks, English UI text, #wrap tree
+    eot routes [--clone] [--portal]   whole sitemap + system pages, problems only
+    eot audit [--clone] [--portal] [--widths ..] [all|PATH...]
+                          headless Chromium running static/tools/eot_audit.js
+                          (overflow, WCAG contrast, English, images, h1 font)
+    eot ship REF          deploy -> verify -> routes, detached
+    eot scss | eot src REGEX [addon] | eot tpl mod.xmlid [N] [GREP] | eot fa "msgid"
+
+VPS network (Iranian IP): files.pythonhosted.org, cdn.playwright.dev and
+storage.googleapis.com are blocked; pip uses mirror-pypi.runflare.com,
+Chromium comes from snap (see tools/vps/install.sh --browser). Headless
+Chromium needs ~13 s to launch and ~25 s per page on 1 GB RAM: always a
+background job. `--clone` audits tunnel VPS:18070 -> prod 127.0.0.1:8070.
+
 Rules:
 - Never pull big payloads (view arch, CSS, HTML, logs) into the conversation;
   grep/parse on the VPS and print only the answer.
@@ -154,17 +177,21 @@ Rules:
     back to the main object's/view's name ("Login", "My Portal"). Set
     `additional_title` in Persian for system pages.
 
-## Verifying a design deploy (milestone 8)
-- The built-in browser can only reach the live domains. Rehearse on the
-  clone first (no 500s, `m8_portal.py`-style signed-in render with a
-  clone-only portal user), then deploy and audit live.
-- Audit from the DOM, not screenshots: load each page in a same-origin
-  iframe at 1280px and 375px and check scrollWidth, every text node's WCAG
-  contrast against its real background, English text, broken images and
-  heading fonts. Screenshots after a programmatic scroll are often stale.
-- Account pages can't be viewed live without an account: render them on the
-  clone, save stripped snapshots under static/ temporarily, audit them with
-  the live stylesheets injected, then delete the snapshots.
+## Verifying a design deploy
+1. `eot rehearse origin/<branch> eot_mNtest` -> `eot rehearse-log`
+2. `eot routes --clone`; `eot clone-user eot_mNtest`; `eot routes --clone --portal`
+3. `eot audit --clone --portal all` (background; `eot job audit`)
+4. `eot rehearse-stop eot_mNtest`, then `eot ship origin/<branch>` and
+   `eot audit all` against live.
+- Audit from the DOM (static/tools/eot_audit.js), not screenshots:
+  scrollWidth, every text node's WCAG contrast against its real background,
+  English text, broken images, heading fonts. Screenshots after a
+  programmatic scroll are often stale. The browser pane is for looking at a
+  design, not for bulk checks; if needed there,
+  `await import('/theme_eot_custom/static/tools/eot_audit.js')` and use
+  `eotAudit.start(paths, 375)` / `eotAudit.report()`.
+- Never create or sign in to accounts on the live DB; signed-in checks run
+  on the clone only (eot refuses eot_main*).
 
 ## Tools added in milestone 6
     scripts/rehearse.sh [ref] [db] [cleanup-script]
