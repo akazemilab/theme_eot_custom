@@ -8,6 +8,8 @@ records' dates are import timestamps, not real publication dates.
 """
 import json
 
+from markupsafe import Markup
+
 from odoo.http import request
 
 from ..models.seo import FOUNDER, FOUNDER_URL, share_image_url
@@ -55,7 +57,11 @@ def breadcrumb(items):
 def render(*schemas):
     website = request.env.website
     graph = [website._prepare_jsonld_vals()] + [s for s in schemas if s]
-    return json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False)
+    text = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False)
+    # Script-safe: no "</script>" or HTML-significant characters can close the
+    # tag; then Markup so QWeb's t-out does not HTML-escape the JSON.
+    text = text.replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026')
+    return Markup(text)
 
 
 def book(blog, chapter_count=None):

@@ -12,11 +12,17 @@
 - Organization / WebSite JSON-LD enrichment, using only facts that are
   shown on the site (contact page, homepage, founder page).
 """
+import re
+from urllib.parse import quote, unquote
+
+from werkzeug.exceptions import NotFound
+from werkzeug.routing import RequestRedirect
+
 from odoo import models
 from odoo.http import request
 
 from .library import WEBSITE_ID
-from .fa_text import fa_slug_text, fa_fold_letters  # noqa: F401 (re-exported)
+from .fa_text import fa_fold_letters, fa_match_key, fa_slug_text  # noqa: F401 (re-exported)
 
 FOUNDER = 'دکتر ناصرالدین کاظمی حقیقی'
 FOUNDER_URL = '/دکتر-ناصرالدین-کاظمی-حقیقی'
@@ -100,3 +106,75 @@ class WebsiteSeo(models.Model):
                 'publisher': {'@id': base + '/#organization'},
             })
         return schemas
+
+
+class _Moved(RequestRedirect):
+    code = 301
+
+
+class IrHttpSeo(models.AbstractModel):
+    """Old-site /blog/... URLs on eot.ir carry record ids that now belong to
+    OTHER books and posts (the database was rebuilt), e.g. /blog/خلاقیت-31
+    is today the id of «آموزش و پرورش برای استعداد و تیزهوشی». Werkzeug
+    fixes a wrong slug by redirecting to the id's record *before* any
+    controller runs, which sent visitors and Google to the wrong book.
+
+    So on website 1, before routing: when the name in a /blog/ URL does not
+    match the record behind its id, send the request to the library item
+    with that name, or - if there is none - on to the normal fallback
+    (website.rewrite rules, then 404). Never to another record's page."""
+    _inherit = 'ir.http'
+
+    @classmethod
+    def _match(cls, path_info):
+        if path_info.startswith('/blog/') and request and request.env.context.get('host_id') == WEBSITE_ID:
+            target = cls._eot_blog_target(path_info)
+            if target is False:
+                raise NotFound()
+            if target:
+                raise _Moved(quote(target, safe='/'))
+        return super()._match(path_info)
+
+    @classmethod
+    def _eot_blog_target(cls, path_info):
+        """None: route normally. False: no such item. str: redirect there."""
+        parts = [p for p in unquote(path_info).split('/') if p]
+        if len(parts) < 2:
+            return None
+        env = request.env(su=True)
+        strip = lambda seg: re.sub(r'-\d+$', '', seg)
+        rid = lambda seg: int(re.search(r'-(\d+)$', seg).group(1)) if re.search(r'-(\d+)$', seg) else None
+        blog_id = rid(parts[1])
+        if blog_id is None:
+            return None
+        blog = env['blog.blog'].with_context(lang='fa_IR').browse(blog_id).exists()
+        library = env['blog.blog'].with_context(lang='fa_IR').search(
+            [('website_id', '=', WEBSITE_ID), ('eot_kind', '!=', False)])
+        post_like = len(parts) >= 3 and parts[2] not in ('page', 'tag', 'feed')
+        if not post_like:
+            key = fa_match_key(strip(parts[1]))
+            if blog and key in (fa_match_key(blog.name), fa_match_key(blog.seo_name or '')):
+                return None
+            if blog and not blog.eot_kind and blog.website_id.id not in (False, WEBSITE_ID):
+                return None
+            if len(parts) >= 3 and parts[2] == 'feed':
+                return False
+            same = library.filtered(lambda b: fa_match_key(b.name) == key)[:1]
+            return same.eot_url() if same else False
+        post_id = rid(parts[2])
+        if post_id is None:
+            return None
+        post = env['blog.post'].with_context(lang='fa_IR').browse(post_id).exists()
+        key = fa_match_key(strip(parts[2]))
+        if post and key in (fa_match_key(post.eot_title or ''), fa_match_key(post.name),
+                            fa_match_key(post.seo_name or '')):
+            return None
+        if post and not post.blog_id.eot_kind:
+            return None
+        posts = env['blog.post'].with_context(lang='fa_IR').search(
+            [('blog_id', 'in', library.ids), ('is_published', '=', True)])
+        found = posts.filtered(lambda p: key in (fa_match_key(p.eot_title or ''), fa_match_key(p.name)))
+        if len(found) > 1 and 'glossary' in parts[1]:
+            found = found.filtered(lambda p: p.blog_id.eot_kind == 'glossary') or found
+        found = found.sorted('id')[:1]
+        return found.eot_url() if found else False
