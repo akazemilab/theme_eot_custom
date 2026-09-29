@@ -118,6 +118,8 @@ for url in args:
     en = sorted({t[:50] for t in texts if re.search(r"[A-Za-z]{3,}", t) and not IGNORE.search(t) and len(t) < 120})
     trace = "Traceback" in html or "Internal Server Error" in html
     status_bad = r.status_code != EXPECT.get(url, 200)
+    if quiet and url not in SYSTEM + PORTAL:
+        en = []  # content pages carry deliberate English (article keywords); only UI pages are judged
     if quiet and not (trace or status_bad or en):
         continue
     bad += bool(trace or status_bad)
