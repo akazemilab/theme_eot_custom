@@ -13,6 +13,8 @@ website module's own privacy stub). A route is matched before any page.
                                      installed; nothing leads there)
     /my/psychological-results     -> /آزمون-روانشناسی (demo results page of
                                      an uninstalled module)
+    /كتب, /كتب/...                -> /کتب/... (the books section typed on an
+                                     Arabic keyboard: ك instead of ک)
 """
 from urllib.parse import quote
 
@@ -54,3 +56,7 @@ class EotRetiredUrls(http.Controller):
     @http.route(["/my/psychological-results"], type="http", auth="public", website=True, sitemap=False)
     def eot_psy_results(self, **kw):
         return _go(ASSESSMENTS)
+
+    @http.route(["/كتب", "/كتب/<path:rest>"], type="http", auth="public", website=True, sitemap=False)
+    def eot_books_arabic_kaf(self, rest=None, **kw):
+        return _go("/کتب" + ("/" + rest if rest else ""))
