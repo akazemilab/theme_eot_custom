@@ -11,6 +11,8 @@ Baseline and findings: `docs/seo_audit_2026-09-29.md`. Fixes shipped in mileston
 | Same against a rehearsal clone | `eot rehearse origin/<branch> eot_xtest` → `eot seo test --clone` | same |
 | Every sitemap URL | `eot seo sweep` then `eot job seo-sweep` (~5 min) | per-section verdicts; rows in `/root/eot-jobs/seo_sweep.tsv` |
 | Persian URL quality (length, letter forms, ids, slug vs title, typed variants, internal links) | `eot seo urls` then `eot job seo-urls` (~4 min; run after `seo sweep` for the slug/title check) | ok/WARN/FAIL lines |
+| Old posts with no page any more (list for the owner to restore) | `eot seo missing` (`--count` for the number) | count + `id\|title` lines; file `/root/eot-jobs/seo_missing.tsv` |
+| Clean up after an SEO round | `eot seo clean` | removes scratch, lists rehearsal DBs still alive |
 | Design/English/overflow | `eot audit all` / gateway `audit` | unchanged tools |
 
 Run `eot seo test` after every deploy that touches the library, redirects, `views/seo.xml`,
@@ -61,3 +63,19 @@ indexing are Google's decision and usually take days to weeks.
 
 Old-era striking-distance queries whose pages no longer exist (گلوبالیسم، هویت فردی، تصور و
 مفهوم، نگهداری ذهنی، آگاهی و اراده) will not come back unless that content is republished.
+
+## Working rules learned in this program
+
+- Data that has to reach the owner as a file (CSV, list) can only travel VPS -> chat through
+  `vps_read_file` and then be written again in the container (no shared disk; the device
+  bridge needs a connected folder). So make the VPS print the SMALLEST useful form (ids +
+  titles, no URLs the reader can rebuild), read it ONCE, write the file from that. Never dump
+  it a second time. If a connected folder exists on the owner's computer, prefer writing there.
+- The redirect/404 decisions live in `website_rewrite` (website 1), not in scratch files:
+  `redirect_type='404'` rows = old posts with no counterpart. Query the table, don't rebuild
+  the map by hand.
+- Write scratch under `/root/seo` and finish with `eot seo clean`; anything reusable becomes an
+  `eot` command in the same round (a second ad-hoc script = a missing command).
+- Search Console: the API tools are read-only and live on the owner's computer; sitemap
+  submit / Request indexing / Validate fix need a Google-signed-in browser. Ask for the sign-in
+  at the START of the program, not at the end, or the UI tasks stall.

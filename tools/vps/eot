@@ -38,6 +38,23 @@ job() { # job NAME [FILTER-REGEX]  -> state + filtered/tail log
 }
 self() { echo "$(readlink -f "$0")"; }
 
+MISSING_PY='
+import sys, re, urllib.parse as u
+rows = [l.strip() for l in sys.stdin if l.strip()]
+out, seen = [], set()
+for r in rows:
+    segs = u.unquote(r).strip("/").split("/")
+    if len(segs) < 3 or segs[2] in ("page", "tag", "feed"):
+        continue
+    m = re.search(r"-(\d+)$", segs[-1])
+    title = re.sub(r"-\d+$", "", segs[-1]).replace("-", " ")
+    out.append("%s|%s|/%s" % (m.group(1) if m else "?", title, "/".join(segs[:2])))
+open("/root/eot-jobs/seo_missing.tsv", "w").write("\n".join(out) + "\n")
+print(len(out), "old posts with no page (404 rules). file: /root/eot-jobs/seo_missing.tsv")
+if sys.argv[1] != "--count":
+    print("\n".join(o.rsplit("|", 1)[0] for o in out))
+'
+
 case "${1:-help}" in
   check)        shift; $PY check "$@" ;;
   placeholders) shift; $PY placeholders "$@" ;;
@@ -162,7 +179,19 @@ case "${1:-help}" in
                && bg seo-test "ssh $PROD python3 -u /tmp/eotseo_test.py $base" ;;
       sweep) bg seo-sweep "$TOOLS/venv/bin/python -u $SRC/eotseo_sweep.py" ;;
       urls)  bg seo-urls "$TOOLS/venv/bin/python -u $SRC/eotseo_urls.py" ;;
-      *)     echo "usage: eot seo test [--clone] | eot seo sweep | eot seo urls" ;;
+      missing) # old posts with no page any more (404 rewrite rules of website 1), ready for the owner
+             # eot seo missing          -> count + "id|title" lines, saved to $JOBS/seo_missing.tsv
+             # eot seo missing --count  -> count only
+             sql <<'SQL' | python3 -c "$MISSING_PY" "${2:-}"
+SELECT url_from FROM website_rewrite WHERE website_id=1 AND redirect_type='404' AND url_from LIKE '/blog/%' ORDER BY id;
+SQL
+             ;;
+      clean) # remove SEO scratch (VPS + prod /tmp) and list rehearsal clones still alive
+             rm -f "$JOBS"/seo_*.log "$JOBS"/seo_*.rc; rm -rf /root/seo
+             prod 'rm -f /tmp/eotseo_test*.py /tmp/eot_*.py /tmp/eot_*.tsv /tmp/eot_*.sql /tmp/eotlog.txt /tmp/seotest.py'
+             echo "left on prod /tmp: $(prod 'ls /tmp | grep -c -E "^eot"')  (share images are kept on purpose)"
+             echo "rehearsal DBs: $(sql <<< "SELECT string_agg(datname, ' ') FROM pg_database WHERE datname ~ 'test|rehearse'")" ;;
+      *)     echo "usage: eot seo test [--clone] | sweep | urls | missing [--count] | clean" ;;
     esac ;;
 
   # ---- rendering / auditing ---------------------------------------------------
@@ -275,6 +304,9 @@ eot seo sweep            every sitemap URL: status, canonical, title/description
 eot seo urls             Persian URL quality: length, clean letter forms, ids, slug vs title,
                          typed/linked variants (ي/ك, half-space, slash, NFD, apex) end on the
                          canonical URL, internal links hit 200 directly. Detached: eot job seo-urls
+eot seo missing [--count] old posts that no longer exist (404 rewrite rules of website 1):
+                         count + "id|title" lines, saved to /root/eot-jobs/seo_missing.tsv
+eot seo clean            remove SEO scratch on the VPS and prod /tmp, list rehearsal DBs
 
 Odoo source
 eot scss                 compile the theme SCSS with libsass on prod
