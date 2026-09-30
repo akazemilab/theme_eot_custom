@@ -213,6 +213,13 @@ Rules:
 32. **QWeb `t-out` HTML-escapes a plain str.** JSON-LD passed as
     `structured_data` must be `Markup`, made script-safe first
     (`<`, `>`, `&` as \u escapes) - see `controllers/seo_jsonld.render`.
+33. **Odoo 20 caches anonymous `website.page` HTML** (website_page.py
+    `_get_response`, 1 h) keyed by website/lang/path only - not host, not
+    bot. The `<head>` depends on the host (noindex when it isn't the website
+    domain), so one visit to odoo.innerquest.me (or a 127.0.0.1 probe) put
+    `noindex` on the live homepage. The theme adds host root + bot flag to
+    the key (`models/seo.py WebsitePageSeo`). When a page differs between
+    `/` and `/?x=1`, suspect this cache (query strings bypass it).
 
 ## Verifying a design deploy
 1. `eot rehearse origin/<branch> eot_mNtest` -> `eot rehearse-log`
