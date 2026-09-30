@@ -154,14 +154,15 @@ case "${1:-help}" in
     bg ship "$me deploy '$ref' && echo '== verify' && $me verify && echo '== routes' && $me routes" ;;
 
   # ---- SEO -------------------------------------------------------------------
-  seo)          # eot seo test [--clone] | sweep   (docs/seo_runbook.md)
+  seo)          # eot seo test [--clone] | sweep | urls   (docs/seo_runbook.md)
     shift
     case "${1:-test}" in
       test)  base=https://www.eot.ir; [ "${2:-}" = --clone ] && base=http://127.0.0.1:8070
              scp -q "$SRC/eotseo_test.py" "$PROD:/tmp/eotseo_test.py" \
                && bg seo-test "ssh $PROD python3 -u /tmp/eotseo_test.py $base" ;;
       sweep) bg seo-sweep "$TOOLS/venv/bin/python -u $SRC/eotseo_sweep.py" ;;
-      *)     echo "usage: eot seo test [--clone] | eot seo sweep" ;;
+      urls)  bg seo-urls "$TOOLS/venv/bin/python -u $SRC/eotseo_urls.py" ;;
+      *)     echo "usage: eot seo test [--clone] | eot seo sweep | eot seo urls" ;;
     esac ;;
 
   # ---- rendering / auditing ---------------------------------------------------
@@ -271,6 +272,9 @@ eot seo test [--clone]   acceptance test: robots/sitemap (https, no feeds, clean
                          redirects land on the right page. Detached: eot job seo-test
 eot seo sweep            every sitemap URL: status, canonical, title/description length,
                          h1, og:image, JSON-LD types, img alt; slug hygiene. -> /root/eot-jobs/seo_sweep.tsv
+eot seo urls             Persian URL quality: length, clean letter forms, ids, slug vs title,
+                         typed/linked variants (ي/ك, half-space, slash, NFD, apex) end on the
+                         canonical URL, internal links hit 200 directly. Detached: eot job seo-urls
 
 Odoo source
 eot scss                 compile the theme SCSS with libsass on prod
