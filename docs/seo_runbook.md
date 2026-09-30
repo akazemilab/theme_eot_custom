@@ -10,6 +10,7 @@ Baseline and findings: `docs/seo_audit_2026-09-29.md`. Fixes shipped in mileston
 | Acceptance test (robots, sitemap, per-template tags + JSON-LD, 20 redirect cases) | `eot seo test` then `eot job seo-test` | ok/FAIL lines, `RESULT: N failures` |
 | Same against a rehearsal clone | `eot rehearse origin/<branch> eot_xtest` → `eot seo test --clone` | same |
 | Every sitemap URL | `eot seo sweep` then `eot job seo-sweep` (~5 min) | per-section verdicts; rows in `/root/eot-jobs/seo_sweep.tsv` |
+| Persian URL quality (length, letter forms, ids, slug vs title, typed variants, internal links) | `eot seo urls` then `eot job seo-urls` (~4 min; run after `seo sweep` for the slug/title check) | ok/WARN/FAIL lines |
 | Design/English/overflow | `eot audit all` / gateway `audit` | unchanged tools |
 
 Run `eot seo test` after every deploy that touches the library, redirects, `views/seo.xml`,
@@ -31,7 +32,11 @@ Run `eot seo test` after every deploy that touches the library, redirects, `view
 - **Share image / descriptions**: `models/seo.py` (`_default_website_meta` for library
   blogs/posts, falls back to the website's Default Social Share Image, else the logo);
   `/کتب` description via `eot_meta_description` (`views/seo.xml`).
-- **Slugs**: `models/fa_text.py` `fa_slug_text()`; old slugs 301 by trailing id.
+- **Slugs**: `models/fa_text.py` `fa_slug_text()`; old slugs 301 by trailing id. Book slugs (no id)
+  match loosely via `fa_match_key` (`controllers/library.py _book_slug`); `/كتب/...` → `/کتب/...`.
+- **Page cache**: `models/seo.py WebsitePageSeo._get_cache_key` adds host root + bot flag, so a
+  render on odoo.innerquest.me (noindex there) is never served to www.eot.ir. `eot seo test`
+  checks this every run.
 
 ## Search Console (property `sc-domain:eot.ir`)
 
