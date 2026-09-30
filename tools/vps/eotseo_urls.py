@@ -98,7 +98,7 @@ STOP = {'و', 'در', 'به', 'از', 'با', 'یک', 'این', 'برای', 'ه�
 
 def tokens(s):
     s = unicodedata.normalize('NFC', s or '')
-    s = re.sub('[ً-ٰٟـ]', '', s).replace('ي', 'ی').replace('ك', 'ک').replace('آ', 'ا')
+    s = re.sub('[ً-ٰٟـ]', '', s).replace('ي', 'ی').replace('ك', 'ک').replace('آ', 'ا').replace('ء', '').lower()
     return {t for t in TOKEN_SPLIT.split(s) if len(t) > 1 and not t.isdigit() and t not in STOP}
 
 
@@ -150,7 +150,7 @@ def main():
             tt = tokens(t)
             if s and len(s & tt) / len(s) < 0.6:
                 weak.append((p, t))
-        say('ok' if len(weak) <= len(items) * .02 else 'WARN', 'slug text matches the page title (>=60%% of slug words)',
+        say('ok' if len(weak) <= len(items) * .02 else 'WARN', 'slug text matches the page title (>=60% of slug words)',
             '%d weak: %s' % (len(weak), ' | '.join('%s ~ %s' % (a.rsplit('/', 1)[1][:30], b[:30]) for a, b in weak[:3])))
     else:
         print('info no %s yet (run `eot seo sweep` first) - slug/title check skipped' % SWEEP)
@@ -197,12 +197,15 @@ def main():
     with cf.ThreadPoolExecutor(4) as ex:
         for name, verdict, detail in ex.map(run, cases):
             results[name][verdict] += 1
-            if verdict in ('DUPLICATE', 'WRONG', 'ok-long'):
+            if verdict != 'ok':
                 bad.append((verdict, detail))
     for name, c in results.items():
         level = 'FAIL' if c['DUPLICATE'] or c['WRONG'] else 'WARN' if c['404'] or c['ok-long'] else 'ok'
         say(level, 'variant %-22s' % name, dict(c).__repr__())
-    for verdict, (k, name, st, hops, p, final) in bad[:6]:
+    by_kind = collections.Counter((v, d[1], d[0]) for v, d in bad)
+    for (v, name, k), n in sorted(by_kind.items()):
+        print('     %-9s %-22s on %-8s x%d' % (v, name, k, n))
+    for verdict, (k, name, st, hops, p, final) in [b for b in bad if b[0] != '404'][:4]:
         print('     %s %s %s: %s hops=%s -> %s' % (verdict, k, name, st, hops, final.replace(BASE, '')[:70]))
 
     # 4. internal links -----------------------------------------------------------
