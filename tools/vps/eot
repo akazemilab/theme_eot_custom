@@ -187,7 +187,7 @@ SELECT url_from FROM website_rewrite WHERE website_id=1 AND redirect_type='404' 
 SQL
              ;;
       clean) # remove SEO scratch (VPS + prod /tmp) and list rehearsal clones still alive
-             rm -f "$JOBS"/seo_*.log "$JOBS"/seo_*.rc; rm -rf /root/seo
+             rm -f "$JOBS"/seo_*.log "$JOBS"/seo_*.rc; find /root/seo -mindepth 1 -maxdepth 1 ! -name og -exec rm -rf {} + 2>/dev/null; true
              prod 'rm -f /tmp/eotseo_test*.py /tmp/eot_*.py /tmp/eot_*.tsv /tmp/eot_*.sql /tmp/eotlog.txt /tmp/seotest.py'
              echo "left on prod /tmp: $(prod 'ls /tmp | grep -c -E "^eot"')  (share images are kept on purpose)"
              echo "rehearsal DBs: $(sql <<< "SELECT string_agg(datname, ' ') FROM pg_database WHERE datname ~ 'test|rehearse'")" ;;
