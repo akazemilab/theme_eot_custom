@@ -139,6 +139,13 @@ cases = [
     ('/مقالات/هیجان-اندیشه-و-شخصیّت-1990', r'^/مقالات/هیجان-اندیشه-و-شخصیت-1990$'),
     ('/کتب/روانشناسي-انتظار', r'^/کتب/روانشناسی-انتظار$'),
     ('/en', r'^/$'),
+    # milestone 9.1: typed/linked book slug variants
+    ('/كتب/روانشناسی-انتظار', r'^/کتب/روانشناسی-انتظار$'),
+    ('/کتب/روانشناسی\u200cانتظار', r'^/کتب/روانشناسی-انتظار$'),
+    ('/کتب/روانشناسی انتظار', r'^/کتب/روانشناسی-انتظار$'),
+    ('/کتب/روانشناسی\u200cانتظار/x-%s' % (re.search(r'-(\d+)$', next((p for p in paths if p.startswith('/کتب/روانشناسی-انتظار/')), '-0')).group(1)),
+     r'^/کتب/روانشناسی-انتظار/.+-\d+$'),
+    ('/کتب/کتابی-که-وجود-ندارد', 404),
 ]
 for src, exp in cases:
     hops, final, st = chain(src)
@@ -147,5 +154,28 @@ for src, exp in cases:
     else:
         check('redirect %s' % src[:55], st == 200 and re.search(exp, final) is not None and len(hops) <= 3,
               '%s -> %s' % (hops, final[:60]))
+
+
+# 4. homepage links go straight to 200 ----------------------------------------
+home = page('/')['body']
+lib_links = sorted({urllib.parse.unquote(h) for h in re.findall(r'href="(/(?:%D9%85|%DA%A9|%D9%81|مقالات|کتب|فرهنگنامه)[^"#?]*)"', home)})
+redirecting = [h for h in lib_links if get(h)[0] != 200]
+check('homepage library links answer 200 directly', not redirecting, '%d links, bad: %s' % (len(lib_links), redirecting[:3]))
+
+# 5. a render on another host must not leak into www.eot.ir (page cache) --------
+# Odoo caches anonymous page HTML; the <head> carries noindex on non-canonical
+# hosts. Render '/' and '/about' on the admin host first, then check the site.
+for path in ('/', '/about'):
+    try:
+        if CLONE:
+            h = dict(HDR, Host='odoo.innerquest.me', **{'X-Forwarded-Host': 'odoo.innerquest.me'})
+            OP.open(urllib.request.Request(BASE + enc(path), headers=h), timeout=60).read()
+        else:
+            OP.open(urllib.request.Request('https://odoo.innerquest.me' + enc(path), headers=HDR), timeout=60).read()
+    except Exception as e:
+        print('info could not render %s on the admin host: %s' % (path, e))
+    body = page(path)['body']
+    head = body.split('</head>')[0]
+    check('no noindex on %s after an admin-host render' % path, 'content="noindex"' not in head)
 
 print('\nRESULT: %d failures' % len(FAIL), FAIL[:10])

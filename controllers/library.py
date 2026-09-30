@@ -189,6 +189,20 @@ class EotLibrary(http.Controller):
                 ld.breadcrumb([('خانه', '/'), ('کتاب‌ها', '/کتب')])),
         })
 
+    def _book_slug(self, slug):
+        """The canonical slug for a typed/linked book slug. Books have no id
+        in their URL, so match loosely: Arabic-keyboard letters, diacritics,
+        half-space / space / hyphen differences all lead to the one book whose
+        slug has the same fa_match_key. Unknown slugs are returned unchanged
+        (and 404 in _book)."""
+        key = fa_match_key(slug)
+        books = request.env['blog.blog'].sudo().search(
+            [('website_id', '=', WEBSITE_ID), ('eot_kind', '=', 'book')])
+        hits = [b.eot_slug for b in books if b.eot_slug and fa_match_key(b.eot_slug) == key]
+        if slug in hits or len(hits) != 1:
+            return slug
+        return hits[0]
+
     def _book(self, slug):
         book = request.env['blog.blog'].sudo().with_context(lang='fa_IR').search(
             [('website_id', '=', WEBSITE_ID), ('eot_kind', '=', 'book'), ('eot_slug', '=', slug)], limit=1)
@@ -200,8 +214,9 @@ class EotLibrary(http.Controller):
                 sitemap=lambda env, rule, qs: EotLibrary._sitemap_books(env, qs))
     def eot_book(self, book, **kw):
         self._check()
-        if fa_fold_letters(book) != book:
-            return request.redirect(quote('/کتب/%s' % fa_fold_letters(book)), code=301, local=True)
+        slug = self._book_slug(book)
+        if slug != book:
+            return request.redirect(quote('/کتب/%s' % slug), code=301, local=True)
         book = self._book(book)
         chapters = self._posts(book, order='eot_number, id')
         if not chapters:
@@ -250,8 +265,9 @@ class EotLibrary(http.Controller):
                 sitemap=lambda env, rule, qs: EotLibrary._sitemap_posts(env, 'book', qs))
     def eot_chapter(self, book, chapter, **kw):
         self._check()
-        if fa_fold_letters(book) != book:
-            return request.redirect(quote('/کتب/%s/%s' % (fa_fold_letters(book), chapter)), code=301, local=True)
+        slug = self._book_slug(book)
+        if slug != book:
+            return request.redirect(quote('/کتب/%s/%s' % (slug, chapter)), code=301, local=True)
         book = self._book(book)
         post = self._item(book, chapter)
         redirect = self._canonical(post)

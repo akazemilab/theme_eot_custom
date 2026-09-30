@@ -190,3 +190,21 @@ class IrHttpSeo(models.AbstractModel):
             found = found.filtered(lambda p: p.blog_id.eot_kind == 'glossary') or found
         found = found.sorted('id')[:1]
         return found.eot_url() if found else False
+
+
+class WebsitePageSeo(models.Model):
+    """Odoo 20 caches anonymous website.page HTML keyed only by website, lang,
+    cookies flag, path and debug (website_page._get_cache_key). But the <head>
+    of that HTML depends on the request host: website.layout adds
+    <meta name="robots" content="noindex"> when the host is not the website
+    domain (odoo.innerquest.me, 127.0.0.1), and data-tracking-enabled depends on
+    bot detection. One render on the admin host was then served, noindex and
+    all, to www.eot.ir visitors and Googlebot for up to an hour. Keying the
+    cache by host root and bot flag keeps those renders apart (all websites)."""
+    _inherit = 'website.page'
+
+    def _get_cache_key(self, request):
+        return super()._get_cache_key(request) + (
+            request.httprequest.url_root,
+            request.env['ir.http'].is_a_bot(),
+        )
