@@ -32,7 +32,7 @@ from . import seo_jsonld as ld
 FA_DIGITS = str.maketrans('0123456789', '۰۱۲۳۴۵۶۷۸۹')
 
 # The visible lead of /کتب (views/library.xml, lib_books) - also its meta description.
-BOOKS_DESCRIPTION = ('آثار دکتر ناصرالدین کاظمی حقیقی در روان‌شناسی تعاملی، استعداد و تیزهوشی، خلاقیت، '
+BOOKS_DESCRIPTION = ('آثار دکتر ناصرالدّین کاظمی حقیقی در روان‌شناسی تعاملی، استعداد و تیزهوشی، خلاقیت، '
                      'و روان‌شناسی جامعه، سازمان و فرهنگ؛ هر کتاب با فهرست کامل فصل‌ها و متن آنلاین.')
 
 # Shelf -> article topic used for "related articles" and back.
@@ -125,7 +125,7 @@ class EotLibrary(http.Controller):
             'shelf': blog.eot_shelf,
             'count': count,
             'count_label': 'اثر تک‌بخشی' if count == 1 else '%s فصل' % fa(count),
-            'co': blog.eot_authors if blog.eot_authors and blog.eot_authors != 'دکتر ناصرالدین کاظمی حقیقی' else '',
+            'co': blog.eot_authors if blog.eot_authors and blog.eot_authors.replace('\u0651', '') != 'دکتر ناصرالدین کاظمی حقیقی' else '',
             'size': 'eot-cover-s' if len(blog.name) > 34 else 'eot-cover-m' if len(blog.name) > 20 else '',
         }
 

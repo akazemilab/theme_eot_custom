@@ -38,7 +38,7 @@ PARAM_PUBLISHED = 'theme_eot_custom.library_published'
 
 ARTICLES_BLOG = 'مقالات'
 GLOSSARY_BLOG = 'فرهنگنامه روان‌شناسی تعاملی'
-DEFAULT_AUTHOR = 'دکتر ناصرالدین کاظمی حقیقی'
+DEFAULT_AUTHOR = 'دکتر ناصرالدّین کاظمی حقیقی'
 
 # key: (label, order)
 SHELVES = {

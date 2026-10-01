@@ -44,12 +44,12 @@
                     <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f2"/><span class="eot-f3"/><span class="eot-f4"/></div>
                     <div class="container">
                         <div class="eot-h-hero-in">
-                            <span class="eot-tag"><span class="eot-pdot"/>علم • تجربه • رشد انسانی</span>
+                            <span class="eot-tag"><span class="eot-pdot"/>خرد • دانش • تجربه برای رشد انسانی</span>
                             <h1 class="eot-h-title">مؤسسه تعاملی <span class="eot-hl">هیجان اندیشه</span></h1>
                             <p class="eot-h-lead">نهادی علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی. این مجموعه (شماره ثبت ۴۵۴۷۷) بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است.</p>
                             <div class="eot-actions">
-                                <a href="/about" class="btn btn-primary">بیشتر با هیجان اندیشه آشنا شوید</a>
-                                <a href="#founder" class="btn btn-outline-primary">آشنایی با بنیان‌گذار</a>
+                                <a href="/about" class="btn btn-primary">آشنایی بیشتر با هیجان اندیشه</a>
+                                <a href="#founder" class="btn btn-outline-primary">آشنایی با بنیانگذار</a>
                             </div>
                             <dl class="eot-h-stats">
                                 <div><dt>۲۰</dt><dd>کتاب و اثر بلند</dd></div>
@@ -58,9 +58,9 @@
                             </dl>
                         </div>
                         <div class="eot-h-pillars">
-                            <div class="eot-glass eot-top eot-c-pink"><span class="eot-idx">۰۱</span><h2>مشاوره</h2><p>کاربرد دانش روان‌شناسی برای شناخت، تصمیم‌گیری، حمایت و مداخله حرفه‌ای.</p></div>
-                            <div class="eot-glass eot-top eot-c-mint"><span class="eot-idx">۰۲</span><h2>آموزش</h2><p>تبدیل مفاهیم علمی به یادگیری روشن، ساختاریافته و قابل استفاده.</p></div>
-                            <div class="eot-glass eot-top eot-c-blue"><span class="eot-idx">۰۳</span><h2>پژوهش</h2><p>توسعه دانش، ابزارهای سنجش و محتوای تخصصی در حوزه‌های روان‌شناسی و نخبگی.</p></div>
+                            <div class="eot-glass eot-top eot-c-pink"><span class="eot-idx">۰۱</span><h2>آموزش</h2><p>تبدیل مفاهیم علمی به یادگیری روشن، ساختاریافته و قابل استفاده.</p></div>
+                            <div class="eot-glass eot-top eot-c-mint"><span class="eot-idx">۰۲</span><h2>پژوهش</h2><p>توسعه دانش، ابزارهای سنجش و محتوای تخصصی در حوزه‌های روان‌شناسی و نخبگی.</p></div>
+                            <div class="eot-glass eot-top eot-c-blue"><span class="eot-idx">۰۳</span><h2>مشاوره</h2><p>کاربرد دانش روان‌شناسی برای شناخت، تصمیم‌گیری، حمایت و مداخله حرفه‌ای.</p></div>
                         </div>
                     </div>
                 </section>
@@ -83,15 +83,15 @@
                 <section id="founder" class="eot-h-founder">
                     <div class="container">
                         <figure class="eot-h-portrait">
-                            <img src="/web/image/836-bdfdb71c/h33-1.svg" alt="دکتر ناصرالدین کاظمی حقیقی" loading="lazy"/>
+                            <img src="/web/image/836-bdfdb71c/h33-1.svg" alt="دکتر ناصرالدّین کاظمی حقیقی" loading="lazy"/>
                         </figure>
                         <div class="eot-h-founder-txt">
-                            <span class="eot-tag"><span class="eot-pdot eot-c-pink"/>بنیان‌گذار هیجان اندیشه</span>
-                            <h2 class="eot-h2">دکتر ناصرالدین کاظمی حقیقی</h2>
-                            <p class="eot-h-founder-lead">روان‌شناس، پژوهشگر و نظریه‌پرداز مکتب روان‌شناسی تعاملی و بنیان‌گذار مؤسسه تعاملی هیجان اندیشه.</p>
+                            <span class="eot-tag"><span class="eot-pdot eot-c-pink"/>بنیانگذار هیجان اندیشه</span>
+                            <h2 class="eot-h2">دکتر ناصرالدّین کاظمی حقیقی</h2>
+                            <p class="eot-h-founder-lead">نظریه‌پرداز مکتب روان‌شناسی تعاملی و بنیانگذار مؤسسه تعاملی هیجان اندیشه.</p>
                             <p class="eot-muted">فعالیت‌های علمی و حرفه‌ای ایشان با روان‌شناسی تعاملی و موضوعاتی مانند استعداد، خلاقیت، تیزهوشی، آموزش و روان‌شناسی کودکان استثنایی پیوند دارد. مکتب روان‌شناسی تعاملی بر نگاه نظام‌مند به انسان و ارتباط میان اندیشه، هیجان، تجربه و محیط تأکید می‌کند.</p>
                             <ol class="eot-h-roles">
-                                <li><span class="eot-idx">۰۱</span><strong>بنیان‌گذاری</strong><span>بنیان‌گذار مؤسسه تعاملی هیجان اندیشه و شکل‌دهنده چارچوب روان‌شناسی تعاملی.</span></li>
+                                <li><span class="eot-idx">۰۱</span><strong>بنیانگذاری</strong><span>بنیانگذار مکتب روانشناسی تعاملی و پی‌ریزی مؤسسه تعاملی هیجان اندیشه.</span></li>
                                 <li><span class="eot-idx">۰۲</span><strong>تألیف و پژوهش</strong><span>تولید آثار و محتوای تخصصی در روان‌شناسی، استعداد، خلاقیت و آموزش.</span></li>
                                 <li><span class="eot-idx">۰۳</span><strong>آموزش حرفه‌ای</strong><span>پشتیبانی نظری از آموزش‌ها، کارورزی و توسعه مسیرهای حرفه‌ای روان‌شناسی.</span></li>
                             </ol>
@@ -244,7 +244,7 @@
                 <!-- Closing statement -->
                 <section class="eot-h-close eot-grid-bg">
                     <div class="container">
-                        <p>«مؤسسه تعاملی هیجان اندیشه» (شماره ثبت ۴۵۴۷۷)، نهاد تخصصی برآمده از مکتب روان‌شناسی تعاملی دکتر کاظمی حقیقی، در حوزه‌های آموزش، تشخیص، درمان و پژوهش فعالیت می‌کند.</p>
+                        <p>مؤسسه تعاملی هیجان اندیشه (شماره ثبت ۴۵۴۷۷) برای گسترش روانشناسی تعاملی پی‌ریزی شده و در این مسیر مرکز خدمات روانشناسی ایران‌اندیش (شماره نظام ۳۲۷) تأسیس گردید. فعالیت مؤسسه در حوزه‌های تشخیص، آموزش، پژوهش، راهنمایی، مشاوره و حمایت است.</p>
                         <a href="/about" class="btn btn-primary">درباره هیجان اندیشه</a>
                     </div>
                 </section>

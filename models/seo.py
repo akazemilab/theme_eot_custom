@@ -24,7 +24,12 @@ from odoo.http import request
 from .library import WEBSITE_ID
 from .fa_text import fa_fold_letters, fa_match_key, fa_slug_text  # noqa: F401 (re-exported)
 
-FOUNDER = 'دکتر ناصرالدین کاظمی حقیقی'
+FOUNDER = 'دکتر ناصرالدّین کاظمی حقیقی'
+
+
+def is_founder(name):
+    """True for the founder's name with or without the tashdid on «ناصرالدّین»."""
+    return (name or '').replace('\u0651', '').strip() == FOUNDER.replace('\u0651', '')
 FOUNDER_URL = '/دکتر-ناصرالدین-کاظمی-حقیقی'
 
 def _on_site(env):

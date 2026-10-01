@@ -12,7 +12,7 @@ from markupsafe import Markup
 
 from odoo.http import request
 
-from ..models.seo import FOUNDER, FOUNDER_URL, share_image_url
+from ..models.seo import FOUNDER, FOUNDER_URL, is_founder, share_image_url
 
 
 def _base():
@@ -28,15 +28,15 @@ def _org_ref():
 
 
 def _person(name):
-    person = {'@type': 'Person', 'name': name}
-    if name == FOUNDER:
+    person = {'@type': 'Person', 'name': FOUNDER if is_founder(name) else name}
+    if is_founder(name):
         person['url'] = _abs(FOUNDER_URL)
     return person
 
 
 def _authors(text):
     text = (text or FOUNDER).strip()
-    if text == FOUNDER:
+    if is_founder(text):
         return [_person(FOUNDER)]
     # "A و B" / "A، B، C" -> several people (as printed in the byline)
     parts = [p.strip() for p in text.replace(' و ', '،').split('،') if p.strip()]
