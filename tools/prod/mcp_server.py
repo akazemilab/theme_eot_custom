@@ -200,6 +200,26 @@ TOOLS = [
         },
     },
     {
+        "name": "odoo_replace_text",
+        "description": (
+            "Exact text replacement inside ONE ir.ui.view's arch (all languages that contain it), "
+            "without moving the arch through chat. Refuses unless `old` occurs exactly once in each "
+            "language copy it changes. Only edits the text you give; use dry_run first. "
+            "A later theme deploy re-applies theme views from git and overwrites this."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "view_id": {"type": "integer"},
+                "old": {"type": "string", "description": "Exact existing text (plain text, no markup needed)"},
+                "new": {"type": "string"},
+                "langs": {"type": "array", "items": {"type": "string"}, "description": "Default [\"fa_IR\",\"en_US\"]"},
+                "dry_run": {"type": "boolean", "description": "Default true. Set false to write."},
+            },
+            "required": ["view_id", "old", "new"],
+        },
+    },
+    {
         "name": "rehearse",
         "description": (
             "Rehearse a branch/commit on a disposable clone of eot_main: restore the latest backup into DB, "
@@ -496,6 +516,38 @@ def odoo_execute(model, method, args=None, kwargs=None, confirm=False):
     return True, out
 
 
+def odoo_replace_text(view_id, old, new, langs=None, dry_run=True):
+    import xmlrpc.client
+    if not isinstance(view_id, int) or not isinstance(old, str) or not old.strip() or not isinstance(new, str):
+        return False, "need integer view_id and non-empty old/new strings"
+    if "<" in old or "<" in new or ">" in old or ">" in new or "&" in new:
+        return False, "plain text only (no <, >, & in old/new); structural edits belong in the theme"
+    langs = langs or ["fa_IR", "en_US"]
+    try:
+        sess = _odoo_login()
+        ex = lambda m, meth, a, kw=None: sess["models"].execute_kw(ODOO_DB, sess["uid"], sess["key"], m, meth, a, kw or {})
+        report, plan = [], []
+        for lang in langs:
+            arch = ex("ir.ui.view", "read", [[view_id], ["arch_db"]], {"context": {"lang": lang}})[0]["arch_db"]
+            n = arch.count(old)
+            if n != 1:
+                return False, f"{lang}: old text occurs {n} times (need exactly 1); nothing changed"
+            plan.append((lang, arch.replace(old, new)))
+            report.append(f"{lang}: 1 match")
+        if dry_run:
+            return True, "DRY RUN ok - " + "; ".join(report)
+        for lang, arch2 in plan:
+            ex("ir.ui.view", "write", [[view_id], {"arch_db": arch2}], {"context": {"lang": lang}})
+        for lang, _ in plan:
+            arch = ex("ir.ui.view", "read", [[view_id], ["arch_db"]], {"context": {"lang": lang}})[0]["arch_db"]
+            if new not in arch or old in arch:
+                return False, f"{lang}: verification failed after write"
+        log.info("odoo_replace_text view=%s", view_id)
+        return True, "WRITTEN and verified - " + "; ".join(report)
+    except xmlrpc.client.Fault as e:
+        return False, "Odoo error: " + str(e.faultString)[-1500:]
+
+
 def audit_pages(paths, widths, base, login=None, password=None):
     status, js, _ = http_get("/theme_eot_custom/static/tools/eot_audit.js", timeout=15)
     if status != 200:
@@ -606,6 +658,9 @@ def call_tool(name, args):
 
     if name == "odoo_execute":
         return odoo_execute(args.get("model", ""), args.get("method", ""), args.get("args"), args.get("kwargs"), args.get("confirm", False))
+
+    if name == "odoo_replace_text":
+        return odoo_replace_text(args.get("view_id"), args.get("old", ""), args.get("new", ""), args.get("langs"), args.get("dry_run", True))
 
     if name == "rehearse":
         ref, db = args.get("ref", ""), args.get("db", "")
