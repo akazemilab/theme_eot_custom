@@ -136,6 +136,14 @@
             </button>
         </xpath>
     </template>
+    <template id="user_dropdown_apps_fa" name="EOT: account menu backend link in Persian" inherit_id="portal.user_dropdown">
+        <!-- "Apps" (internal users only) has no fa.po entry for this template. -->
+        <xpath expr="//a[@id='o_backend_user_dropdown_link']" position="replace">
+            <a groups="base.group_user" href="/odoo" role="menuitem" class="dropdown-item ps-3" id="o_backend_user_dropdown_link">
+                <i class="oi oi-fw me-1 small text-primary-emphasis" data-icon="grid_view"/> برنامه‌ها
+            </a>
+        </xpath>
+    </template>
     <template id="my_account_link_fa" name="EOT: account menu link in Persian" inherit_id="portal.my_account_link">
         <xpath expr="//a[@href='/my/home'][@role='menuitem']" position="replace">
             <a href="/my/home" role="menuitem" class="dropdown-item ps-3">

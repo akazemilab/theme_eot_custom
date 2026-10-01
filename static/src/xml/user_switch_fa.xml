@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Login page user switcher (OWL template web.login_user_switch, Odoo 20):
+    "Choose a user" / "Use another user" are JS strings with no fa.po entry.
+    Elements copied from web/static/src/core/user_switch/user_switch.xml,
+    wording only.
+-->
+<templates xml:space="preserve">
+    <t t-inherit="web.login_user_switch" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_user_switch')]/p" position="replace">
+            <p>یک کاربر را انتخاب کنید</p>
+        </xpath>
+        <xpath expr="//i[@data-icon='close']" position="attributes">
+            <attribute name="title">حذف این کاربر از فهرست</attribute>
+        </xpath>
+        <xpath expr="//span[hasclass('ms-1')]" position="replace">
+            <span class="ms-1">ورود با کاربر دیگر</span>
+        </xpath>
+        <xpath expr="//button[hasclass('o_user_switch_btn')]" position="replace">
+            <button type="button" class="o_user_switch_btn btn btn-sm btn-link m-0 p-0" tabindex="1" t-on-click="() => this.toggleFormDisplay()">
+                انتخاب کاربر
+            </button>
+        </xpath>
+    </t>
+</templates>

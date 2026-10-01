@@ -55,8 +55,8 @@
     --eot-shadow-sm: 0 6px 18px rgba(6, 46, 51, .06);
 
     // Type
-    --eot-font: 'Vazirmatn', 'Odoo Unicode Support Noto', Tahoma, sans-serif;
-    --eot-display: 'Estedad', 'Vazirmatn', 'Odoo Unicode Support Noto', sans-serif;
+    --eot-font: 'EOT FD', 'Vazirmatn', 'Odoo Unicode Support Noto', Tahoma, sans-serif;
+    --eot-display: 'EOT FD', 'Estedad', 'Vazirmatn', 'Odoo Unicode Support Noto', sans-serif;
 
     // Legacy names still read by older rules / inline styles
     --eot-primary: var(--eot-teal);
@@ -705,6 +705,59 @@ summary:focus-visible {
 }
 @media (min-width: 768px) { .eot-h-pillars { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
+// Hero, girih variant (approved 2026-10-01): centred IranNastaliq title on a
+// faint gold girih pattern with a soft light behind the title.
+$eot-gold: #B08A2E;
+$eot-girih: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88'%3E%3Cg fill='none' stroke='%23B08A2E' stroke-opacity='.16' stroke-width='1'%3E%3Crect x='24' y='24' width='40' height='40'/%3E%3Crect x='24' y='24' width='40' height='40' transform='rotate(45 44 44)'/%3E%3Cpath d='M0 44H16M72 44H88M44 0V16M44 72V88'/%3E%3Ccircle cx='44' cy='44' r='6'/%3E%3C/g%3E%3C/svg%3E";
+$eot-star: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='%23C9A24A' stroke='%238C6A1E' stroke-width='.6'%3E%3Crect x='6' y='6' width='12' height='12'/%3E%3Crect x='6' y='6' width='12' height='12' transform='rotate(45 12 12)'/%3E%3C/g%3E%3Ccircle cx='12' cy='12' r='2.2' fill='%23FFF6DA'/%3E%3C/svg%3E";
+
+.eot-h-girih {
+    background-color: var(--eot-mist);
+    background-image:
+        radial-gradient(ellipse at 50% 30%, rgba(246, 250, 251, .96) 0, rgba(246, 250, 251, .75) 45%, rgba(246, 250, 251, .2) 100%),
+        url($eot-girih);
+    background-size: auto, 88px 88px;
+
+    .eot-h-hero-in { align-items: center; text-align: center; gap: 1.5rem; padding: 5.5rem 0 3rem; }
+    .eot-tag { align-self: center; border-color: rgba(176, 138, 46, .45); }
+    .eot-pdot { background: $eot-gold; box-shadow: 0 0 0 4px rgba(227, 199, 122, .45); }
+    .eot-h-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'EOT Nastaliq', var(--eot-display);
+        font-weight: 400;
+        font-size: inherit;
+        line-height: 1.35;
+    }
+    .eot-h-t1 { font-size: clamp(2.25rem, 5.5vw, 4rem); }
+    .eot-h-t2 { font-size: clamp(3.5rem, 11vw, 8.5rem); line-height: 1.25; color: var(--eot-teal); }
+    .eot-h-lead { max-width: 46rem; }
+    .eot-actions { justify-content: center; }
+    .eot-h-stats {
+        width: 100%;
+        margin-inline: auto;
+        border-top-color: rgba(176, 138, 46, .35);
+        > div { text-align: center; }
+        > div:first-child { padding-inline-start: 1.75rem; }
+        > div + div { border-inline-start-color: rgba(176, 138, 46, .35); }
+    }
+}
+.eot-h-orn {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    width: min(20rem, 74%);
+    &::before, &::after { content: ""; flex: 1; height: 1px; }
+    &::before { background: linear-gradient(90deg, $eot-gold, transparent); }
+    &::after { background: linear-gradient(270deg, $eot-gold, transparent); }
+    i { width: 22px; height: 22px; background: url($eot-star) center / contain no-repeat; }
+}
+@media (max-width: 575.98px) {
+    .eot-h-girih .eot-h-stats > div,
+    .eot-h-girih .eot-h-stats > div:first-child { padding-inline: .5rem; }
+}
+
 // Sister-brand strip ------------------------------------------------------
 .eot-h-brands {
     background: var(--eot-mist);
@@ -1208,4 +1261,30 @@ summary:focus-visible {
         font-size: .9375rem;
     }
     .eot-404-links a:hover { border-color: var(--eot-teal); color: var(--eot-teal); }
+}// ---------------------------------------------------------------------------
+// Self-hosted fonts (static/src/fonts, SIL OFL - licences next to the files)
+// 'EOT FD': Vazirmatn's Farsi-Digits build, limited to the ten ASCII digits
+// by unicode-range. Put first in every stack, it makes any Latin digit Odoo
+// prints (phones, dates, counts in core templates) render as Persian digits
+// without touching the data. 'EOT Nastaliq': IranNastaliq (font-store web
+// build) for the homepage hero title only.
+// ---------------------------------------------------------------------------
+@each $w, $file in (400: 'Regular', 500: 'Medium', 600: 'SemiBold', 700: 'Bold') {
+    @font-face {
+        font-family: 'EOT FD';
+        src: url('/theme_eot_custom/static/src/fonts/Vazirmatn-FD-#{$file}.woff2') format('woff2');
+        font-weight: $w;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+0030-0039;
+    }
 }
+@font-face {
+    font-family: 'EOT Nastaliq';
+    src: url('/theme_eot_custom/static/src/fonts/IranNastaliq-Web.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+}
+
+

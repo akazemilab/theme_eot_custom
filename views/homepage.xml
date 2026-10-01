@@ -39,13 +39,14 @@
         <xpath expr="//div[@id='wrap']" position="replace">
             <div id="wrap" class="oe_structure eot-h">
 
-                <!-- Hero: no photo. Colour field + grid, stats strip, pillars. -->
-                <section class="eot-h-hero eot-grid-bg">
-                    <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f2"/><span class="eot-f3"/><span class="eot-f4"/></div>
+                <!-- Hero (2026-10-01, owner-approved sample 1-alef-1): IranNastaliq title,
+                     faint gold girih pattern with a soft light behind the title, gold star divider. -->
+                <section class="eot-h-hero eot-h-girih">
                     <div class="container">
                         <div class="eot-h-hero-in">
                             <span class="eot-tag"><span class="eot-pdot"/>خرد • دانش • تجربه برای رشد انسانی</span>
-                            <h1 class="eot-h-title">مؤسسه تعاملی <span class="eot-hl">هیجان اندیشه</span></h1>
+                            <h1 class="eot-h-title"><span class="eot-h-t1">مؤسسه تعاملی</span> <span class="eot-h-t2">هیجان اندیشه</span></h1>
+                            <span class="eot-h-orn" aria-hidden="true"><i/></span>
                             <p class="eot-h-lead">نهادی علمی و تخصصی در حوزه روان‌شناسی و آموزش و پرورش نخبگی؛ با تمرکز بر پیوند دانش علمی، تجربه حرفه‌ای و کاربردهای واقعی روان‌شناسی در زندگی. این مجموعه (شماره ثبت ۴۵۴۷۷) بر پایه مکتب «روان‌شناسی تعاملی» شکل گرفته است.</p>
                             <div class="eot-actions">
                                 <a href="/about" class="btn btn-primary">آشنایی بیشتر با هیجان اندیشه</a>

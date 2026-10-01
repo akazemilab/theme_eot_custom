@@ -221,6 +221,21 @@ Rules:
     the key (`models/seo.py WebsitePageSeo`). When a page differs between
     `/` and `/?x=1`, suspect this cache (query strings bypass it).
 
+34. **A theme view edited in the DB is frozen, and its fa_IR copy goes stale.**
+    Any RPC/editor write sets `arch_updated`; theme upgrades then skip that
+    view (homepage_content and lib_books were). Odoo also keeps "similar"
+    old fa_IR terms when the en_US source changes, so small text fixes
+    (tashdid, ZWNJ) never reach Persian visitors. Make content changes in
+    git; if a view was edited live, copy the text into git, write
+    `arch_updated: false` and deploy. Migration 20.0.9.2.0 drops fa_IR copies
+    of theme views (the source text is already Persian).
+35. **Two Odoo connectors exist.** The laptop-bridged `odoo` MCP points at an
+    old database (database.uuid 98b98775...). Live eot_main is only the
+    `eot.innerquest.me` gateway (uuid 9f658a4b...). Check before any write.
+36. **Self-hosted fonts:** static/src/fonts (OFL). 'EOT FD' = Vazirmatn Farsi
+    digits limited to U+0030-0039, first in every stack, so core templates'
+    Latin digits render Persian. 'EOT Nastaliq' = IranNastaliq for the hero.
+
 ## Verifying a design deploy
 1. `eot rehearse origin/<branch> eot_mNtest` -> `eot rehearse-log`
 2. `eot routes --clone`; `eot clone-user eot_mNtest`; `eot routes --clone --portal`
