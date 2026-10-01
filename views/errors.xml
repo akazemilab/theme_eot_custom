@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Odoo-rendered error pages (404 lives in i18n.xml). Persian, in the
+        site's style. Debug/editor mode keeps core's detailed block.
+        Preview: /error-preview (controllers/error_preview.py).
+    -->
+    <template id="page_400_fa" name="EOT: 400 page" inherit_id="http_routing.400">
+        <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
+            <t t-set="additional_title">درخواست نامعتبر</t>
+        </xpath>
+        <xpath expr="//t[@t-call='http_routing.http_error_container']" position="replace">
+            <t t-if="editable or debug"><t t-call="http_routing.http_error_container"/></t>
+            <section t-else="" class="eot-404 eot-grid-bg">
+                <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f3"/></div>
+                <div class="container">
+                    <span class="eot-404-code" aria-hidden="true">۴۰۰</span>
+                    <h1>درخواست درست نبود</h1>
+                    <p>سرور نتوانست درخواست شما را بفهمد. صفحه را دوباره بارگذاری کنید یا از صفحهٔ اصلی ادامه دهید.</p>
+                    <div class="eot-actions">
+                        <a href="/" class="btn btn-primary">صفحه اصلی</a>
+                        <a href="javascript:history.back()" class="btn btn-outline-primary">بازگشت</a>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <template id="page_403_fa" name="EOT: 403 page" inherit_id="http_routing.403">
+        <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
+            <t t-set="additional_title">دسترسی ممنوع</t>
+        </xpath>
+        <xpath expr="//t[@t-call='http_routing.http_error_container']" position="replace">
+            <t t-if="editable or debug"><t t-call="http_routing.http_error_container"/></t>
+            <section t-else="" class="eot-404 eot-grid-bg">
+                <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f3"/></div>
+                <div class="container">
+                    <span class="eot-404-code" aria-hidden="true">۴۰۳</span>
+                    <h1>دسترسی به این صفحه مجاز نیست</h1>
+                    <p>برای دیدن این بخش باید وارد حساب کاربری مناسب شوید یا اجازهٔ دسترسی داشته باشید.</p>
+                    <div class="eot-actions">
+                        <a href="/web/login" class="btn btn-primary">ورود به حساب</a>
+                        <a href="/" class="btn btn-outline-primary">صفحه اصلی</a>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!-- Every other status without its own template (405, 415, 422, 429...). -->
+    <template id="page_http_error_fa" name="EOT: generic HTTP error" inherit_id="http_routing.http_error">
+        <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
+            <t t-set="additional_title">خطا در انجام درخواست</t>
+        </xpath>
+        <xpath expr="//div[@id='wrap']/div[hasclass('oe_structure')]" position="replace">
+            <t t-set="eot_msgs" t-value="{
+                405: 'این روش درخواست برای این نشانی مجاز نیست.',
+                408: 'زمان درخواست به پایان رسید. دوباره تلاش کنید.',
+                410: 'این صفحه دیگر وجود ندارد.',
+                413: 'حجم اطلاعات ارسالی از حد مجاز بیشتر است.',
+                415: 'نوع فایل یا اطلاعات ارسالی پذیرفته نمی‌شود.',
+                422: 'اطلاعات ارسالی قابل پردازش نبود. آن را بررسی و دوباره ارسال کنید.',
+                429: 'درخواست‌های شما بیش از حد مجاز است. کمی صبر کنید و دوباره تلاش کنید.',
+                503: 'سرویس موقتاً در دسترس نیست. چند دقیقهٔ دیگر دوباره تلاش کنید.',
+            }"/>
+            <section class="eot-404 eot-grid-bg">
+                <div class="eot-h-field" aria-hidden="true"><span class="eot-f1"/><span class="eot-f3"/></div>
+                <div class="container">
+                    <span class="eot-404-code" aria-hidden="true"><t t-out="status_code"/></span>
+                    <h1>درخواست انجام نشد</h1>
+                    <p t-out="eot_msgs.get(status_code, 'مشکلی در انجام درخواست پیش آمد. دوباره تلاش کنید یا از صفحهٔ اصلی ادامه دهید.')"/>
+                    <div class="eot-actions">
+                        <a href="/" class="btn btn-primary">صفحه اصلی</a>
+                        <a href="javascript:history.back()" class="btn btn-outline-primary">بازگشت</a>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+    <!--
+        500 renders with no theme assets (cursor may be broken), so the body is
+        fully inline-styled and uses no variables except status_code.
+    -->
+    <template id="page_500_fa" name="EOT: 500 page" inherit_id="http_routing.500">
+        <xpath expr="//div[@id='wrapwrap']" position="replace">
+            <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;text-align:center;direction:rtl;font-family:Vazirmatn,Tahoma,'Segoe UI',sans-serif;background:#F6FAFB;color:#3B5256">
+                <main style="max-width:34rem;display:flex;flex-direction:column;align-items:center;gap:1.1rem">
+                    <span style="font-size:.95rem;color:#005C65;font-weight:700">مؤسسه تعاملی هیجان اندیشه</span>
+                    <span style="font-size:3.2rem;line-height:1;color:#B08A2E;font-weight:700">۵۰۰</span>
+                    <span style="display:block;height:1px;width:14rem;max-width:70%;background:linear-gradient(90deg,transparent,#B08A2E,transparent)"/>
+                    <h1 style="margin:0;color:#062E33;font-size:1.9rem;line-height:1.5">مشکلی در سرور پیش آمد</h1>
+                    <p style="margin:0;line-height:2;font-size:1.05rem">خطایی ناخواسته رخ داد و درخواست شما انجام نشد. ما از آن مطلع می‌شویم. چند دقیقهٔ دیگر دوباره تلاش کنید.</p>
+                    <a href="/" style="display:inline-block;padding:.7rem 1.4rem;border-radius:999px;background:#005C65;color:#fff;text-decoration:none;font-weight:600">بازگشت به صفحهٔ اصلی</a>
+                </main>
+            </div>
+            <t t-if="editable or debug"><t t-call="http_routing.http_error_debug"/></t>
+        </xpath>
+    </template>
+</odoo>

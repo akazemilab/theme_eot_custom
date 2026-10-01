@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>پیش‌نمایش صفحه‌های خطا | هیجان اندیشه</title>
+<style>:root{--ink:#062E33;--body:#3B5256;--teal:#005C65;--mist:#F6FAFB;--gold:#B08A2E}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:flex;align-items:center;justify-content:center;padding:24px 16px;
+ font-family:Vazirmatn,"Vazir",Tahoma,"Segoe UI",sans-serif;color:var(--body);text-align:center;
+ background-color:var(--mist);
+ background-image:radial-gradient(ellipse at 50% 35%,rgba(246,250,251,.97) 0,rgba(246,250,251,.75) 45%,rgba(246,250,251,.2) 100%),
+ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88'%3E%3Cg fill='none' stroke='%23B08A2E' stroke-opacity='.16' stroke-width='1'%3E%3Crect x='24' y='24' width='40' height='40'/%3E%3Crect x='24' y='24' width='40' height='40' transform='rotate(45 44 44)'/%3E%3Cpath d='M0 44H16M72 44H88M44 0V16M44 72V88'/%3E%3Ccircle cx='44' cy='44' r='6'/%3E%3C/g%3E%3C/svg%3E");
+ background-size:auto,88px 88px}
+main{max-width:34rem;display:flex;flex-direction:column;align-items:center;gap:1.25rem}
+.brand{font-size:.95rem;color:var(--teal);font-weight:700}
+.code{font-size:3.2rem;line-height:1;color:var(--gold);font-weight:700;letter-spacing:.02em}
+h1{margin:0;color:var(--ink);font-size:clamp(1.6rem,5vw,2.2rem);line-height:1.5}
+p{margin:0;line-height:2;font-size:1.05rem}
+.orn{display:flex;align-items:center;gap:.75rem;width:min(16rem,70%)}
+.orn::before,.orn::after{content:"";flex:1;height:1px}
+.orn::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.orn::after{background:linear-gradient(270deg,var(--gold),transparent)}
+.orn svg{flex:0 0 20px;width:20px;height:20px;display:block}
+.spin{width:38px;height:38px;border-radius:50%;border:3px solid rgba(0,92,101,.15);border-top-color:var(--teal);animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+a.btn{display:inline-block;padding:.7rem 1.4rem;border-radius:999px;background:var(--teal);color:#fff;text-decoration:none;font-weight:600}
+a.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.small{font-size:.9rem;color:#4A5F62}
+body{display:block}main{margin:0 auto;max-width:42rem;align-items:stretch;text-align:right}
+table{border-collapse:collapse;width:100%;background:#fff}td{padding:.7rem .9rem;border:1px solid #d8e6e2}a{color:var(--teal)}</style></head>
+<body><main><h1>صفحه‌های خطا</h1>
+<p>برای دیدن هر صفحه روی عنوانش بزنید. صفحه‌های «اودو» از خود سایت و با قالب آن نمایش داده می‌شوند؛ صفحه‌های «nginx» وقتی اودو در دسترس نباشد یا درخواست به آن نرسد.</p>
+<table><tr><td>۴۰۰</td><td><a href="/error-preview/400">درخواست نامعتبر</a></td><td>سایت (اودو)</td></tr>
+<tr><td>۴۰۳</td><td><a href="/error-preview/403">دسترسی ممنوع</a></td><td>سایت (اودو)</td></tr>
+<tr><td>۴۰۴</td><td><a href="/error-preview/404">صفحه پیدا نشد</a></td><td>سایت (اودو)</td></tr>
+<tr><td>۴۰۵ و مشابه</td><td><a href="/error-preview/405">سایر خطاهای ۴xx (مثلاً روش نامجاز)</a></td><td>سایت (اودو)</td></tr>
+<tr><td>۵۰۰</td><td><a href="/error-preview/500">خطای داخلی سرور</a></td><td>سایت (اودو)</td></tr>
+<tr><td>۴۱۳</td><td><a href="/theme_eot_custom/static/errors/413.html">حجم زیاد ارسال</a></td><td>nginx</td></tr>
+<tr><td>۴۲۹</td><td><a href="/theme_eot_custom/static/errors/429.html">درخواست زیاد</a></td><td>nginx</td></tr>
+<tr><td>۵۰۲</td><td><a href="/theme_eot_custom/static/errors/502.html">اودو در حال راه‌اندازی</a></td><td>nginx</td></tr>
+<tr><td>۵۰۳</td><td><a href="/theme_eot_custom/static/errors/503.html">سرویس موقتاً در دسترس نیست</a></td><td>nginx</td></tr>
+<tr><td>۵۰۴</td><td><a href="/theme_eot_custom/static/errors/504.html">پاسخ دیر رسید</a></td><td>nginx</td></tr></table></main></body></html>
