@@ -177,6 +177,29 @@ TOOLS = [
         },
     },
     {
+        "name": "odoo_execute",
+        "description": (
+            "Call any Odoo ORM method on the eot_main database as the dedicated "
+            "MCP user (read, create, write). Use for small content edits "
+            "(ir.ui.view arch, website.page, ir.model.data, translations) instead of a "
+            "theme redeploy. ALWAYS read the target records first and tell the user "
+            "what will change. unlink needs confirm=true. Writes to security/automation "
+            "models are refused. Note: a later theme deploy re-applies theme views from "
+            "git and overwrites DB edits to them - keep structure in the theme."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "model": {"type": "string", "description": "e.g. ir.ui.view, website.page, res.partner"},
+                "method": {"type": "string", "description": "e.g. search_read, read, write, create, fields_get, search_count"},
+                "args": {"type": "array", "description": "Positional args (domain, ids, values...)"},
+                "kwargs": {"type": "object", "description": "Named args (fields, limit, order, context)"},
+                "confirm": {"type": "boolean", "description": "Required true for unlink."},
+            },
+            "required": ["model", "method"],
+        },
+    },
+    {
         "name": "rehearse",
         "description": (
             "Rehearse a branch/commit on a disposable clone of eot_main: restore the latest backup into DB, "
@@ -412,6 +435,67 @@ def sql_query(query, limit=200):
     return True, "\n".join(lines[:limit]) + (f"\n... ({len(lines) - limit} more rows)" if truncated else "")
 
 
+ODOO_ENV_FILE = os.environ.get("ODOO_ENV_FILE", "/opt/eot-mcp/odoo.env")
+ODOO_DB = "eot_main"
+# Models whose writes could change who can do what, run code, or leak secrets.
+ODOO_WRITE_DENY = {
+    "res.users", "res.groups", "res.users.apikeys", "ir.rule", "ir.model.access",
+    "ir.config_parameter", "ir.cron", "ir.actions.server", "base.automation",
+    "ir.model", "ir.model.fields", "ir.module.module", "ir.mail_server",
+    "res.users.log", "ir.attachment",
+}
+ODOO_READ_METHODS = {"search", "read", "search_read", "search_count", "fields_get", "name_search",
+                     "read_group", "name_get", "default_get", "check_access_rights"}
+ODOO_WRITE_METHODS = {"write", "create", "unlink", "copy"}
+_odoo_session = {}
+
+
+def _odoo_login():
+    import xmlrpc.client
+    if "uid" in _odoo_session:
+        return _odoo_session
+    cfg = {}
+    for line in open(ODOO_ENV_FILE, encoding="utf-8"):
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            cfg[k.strip()] = v.strip().strip("'\"")
+    common = xmlrpc.client.ServerProxy(LOCAL_ODOO + "/xmlrpc/2/common", allow_none=True)
+    uid = common.authenticate(ODOO_DB, cfg["ODOO_LOGIN"], cfg["ODOO_API_KEY"], {})
+    if not uid:
+        raise RuntimeError("Odoo authentication failed for the MCP user")
+    _odoo_session.update(uid=uid, key=cfg["ODOO_API_KEY"],
+                         models=xmlrpc.client.ServerProxy(LOCAL_ODOO + "/xmlrpc/2/object", allow_none=True))
+    return _odoo_session
+
+
+def odoo_execute(model, method, args=None, kwargs=None, confirm=False):
+    import xmlrpc.client
+    if not (isinstance(model, str) and re.fullmatch(r"[a-z0-9_.]+", model)):
+        return False, "invalid model"
+    if not (isinstance(method, str) and re.fullmatch(r"[a-z][a-z0-9_]*", method)) or method.startswith("_"):
+        return False, "invalid method (private/underscore methods are refused)"
+    if method not in ODOO_READ_METHODS | ODOO_WRITE_METHODS:
+        return False, "method not allowed; allowed: " + ", ".join(sorted(ODOO_READ_METHODS | ODOO_WRITE_METHODS))
+    if method in ODOO_WRITE_METHODS and model in ODOO_WRITE_DENY:
+        return False, f"writes to {model} are refused through this tool"
+    if method == "unlink" and confirm is not True:
+        return False, "unlink requires confirm=true after the user explicitly approved it"
+    args, kwargs = list(args or []), dict(kwargs or {})
+    if method in ("search_read", "search", "read_group") and "limit" not in kwargs:
+        kwargs["limit"] = 50
+    try:
+        sess = _odoo_login()
+        res = sess["models"].execute_kw(ODOO_DB, sess["uid"], sess["key"], model, method, args, kwargs)
+    except xmlrpc.client.Fault as e:
+        return False, "Odoo error: " + str(e.faultString)[-1500:]
+    out = json.dumps({"ok": True, "result": res}, ensure_ascii=False, default=str)
+    if len(out) > 30000:
+        out = out[:30000] + " ...[truncated; narrow fields/limit]"
+    log.info("odoo_execute %s.%s", model, method)  # never log args/values
+    return True, out
+
+
 def audit_pages(paths, widths, base, login=None, password=None):
     status, js, _ = http_get("/theme_eot_custom/static/tools/eot_audit.js", timeout=15)
     if status != 200:
@@ -519,6 +603,9 @@ def call_tool(name, args):
 
     if name == "sql_query":
         return sql_query(args.get("query", ""), args.get("limit", 200))
+
+    if name == "odoo_execute":
+        return odoo_execute(args.get("model", ""), args.get("method", ""), args.get("args"), args.get("kwargs"), args.get("confirm", False))
 
     if name == "rehearse":
         ref, db = args.get("ref", ""), args.get("db", "")
