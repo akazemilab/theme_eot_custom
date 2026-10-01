@@ -21,7 +21,7 @@ if not u:
         'name': 'MCP (Claude)', 'login': '$LOGIN', 'email': '$LOGIN',
         'group_ids': [(6, 0, [env.ref('base.group_user').id, env.ref('website.group_website_designer').id])],
     })
-key = env['res.users.apikeys'].with_user(u)._generate(None, 'eot-mcp', datetime.datetime.now() + datetime.timedelta(days=85))
+key = env['res.users.apikeys'].with_user(u)._generate("rpc", 'eot-mcp', datetime.datetime.now() + datetime.timedelta(days=85))
 env.cr.commit()
 print('KEY=' + key)
 PY
