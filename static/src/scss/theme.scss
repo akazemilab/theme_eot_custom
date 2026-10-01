@@ -747,7 +747,8 @@ $eot-star: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox
     display: flex;
     align-items: center;
     gap: .75rem;
-    width: min(20rem, 74%);
+    width: 20rem;
+    max-width: 74%;
     &::before, &::after { content: ""; flex: 1; height: 1px; }
     &::before { background: linear-gradient(90deg, $eot-gold, transparent); }
     &::after { background: linear-gradient(270deg, $eot-gold, transparent); }
