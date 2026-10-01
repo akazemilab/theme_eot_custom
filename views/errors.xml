@@ -9,6 +9,8 @@
         <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
             <t t-set="additional_title">درخواست نامعتبر</t>
         </xpath>
+        <!-- core's pre-made English block (data view custom_oe_structure_400_layout_1) -->
+        <xpath expr="//div[@id='oe_structure_400_layout_1']" position="replace"/>
         <xpath expr="//t[@t-call='http_routing.http_error_container']" position="replace">
             <t t-if="editable or debug"><t t-call="http_routing.http_error_container"/></t>
             <section t-else="" class="eot-404 eot-grid-bg">
@@ -30,6 +32,8 @@
         <xpath expr="//t[@t-call='web.frontend_layout']" position="before">
             <t t-set="additional_title">دسترسی ممنوع</t>
         </xpath>
+        <!-- core's pre-made English block (data view custom_oe_structure_403_layout_1) -->
+        <xpath expr="//div[@id='oe_structure_403_layout_1']" position="replace"/>
         <xpath expr="//t[@t-call='http_routing.http_error_container']" position="replace">
             <t t-if="editable or debug"><t t-call="http_routing.http_error_container"/></t>
             <section t-else="" class="eot-404 eot-grid-bg">
@@ -83,6 +87,7 @@
         fully inline-styled and uses no variables except status_code.
     -->
     <template id="page_500_fa" name="EOT: 500 page" inherit_id="http_routing.500">
+        <xpath expr="//title" position="replace"><title>خطای سرور | هیجان اندیشه</title></xpath>
         <xpath expr="//div[@id='wrapwrap']" position="replace">
             <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;text-align:center;direction:rtl;font-family:Vazirmatn,Tahoma,'Segoe UI',sans-serif;background:#F6FAFB;color:#3B5256">
                 <main style="max-width:34rem;display:flex;flex-direction:column;align-items:center;gap:1.1rem">
