@@ -709,7 +709,6 @@ summary:focus-visible {
 // faint gold girih pattern with a soft light behind the title.
 $eot-gold: #B08A2E;
 $eot-girih: "data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2788%27%20height=%2788%27%3E%3Cg%20fill=%27none%27%20stroke=%27%23B08A2E%27%20stroke-opacity=%27.16%27%20stroke-width=%271%27%3E%3Crect%20x=%2724%27%20y=%2724%27%20width=%2740%27%20height=%2740%27/%3E%3Crect%20x=%2724%27%20y=%2724%27%20width=%2740%27%20height=%2740%27%20transform=%27rotate%2845%2044%2044%29%27/%3E%3Cpath%20d=%27M0%2044H16M72%2044H88M44%200V16M44%2072V88%27/%3E%3Ccircle%20cx=%2744%27%20cy=%2744%27%20r=%276%27/%3E%3C/g%3E%3C/svg%3E";
-$eot-star: "data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2024%2024%27%3E%3Cg%20fill=%27%23C9A24A%27%20stroke=%27%238C6A1E%27%20stroke-width=%27.6%27%3E%3Crect%20x=%276%27%20y=%276%27%20width=%2712%27%20height=%2712%27/%3E%3Crect%20x=%276%27%20y=%276%27%20width=%2712%27%20height=%2712%27%20transform=%27rotate%2845%2012%2012%29%27/%3E%3C/g%3E%3Ccircle%20cx=%2712%27%20cy=%2712%27%20r=%272.2%27%20fill=%27%23FFF6DA%27/%3E%3C/svg%3E";
 
 .eot-h-girih {
     background-color: var(--eot-mist);
@@ -752,7 +751,7 @@ $eot-star: "data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%2
     &::before, &::after { content: ""; flex: 1; height: 1px; }
     &::before { background: linear-gradient(90deg, $eot-gold, transparent); }
     &::after { background: linear-gradient(270deg, $eot-gold, transparent); }
-    i { width: 22px; height: 22px; background: url($eot-star) center / contain no-repeat; }
+    svg { flex: 0 0 22px; width: 22px; height: 22px; display: block; }
 }
 @media (max-width: 575.98px) {
     .eot-h-girih .eot-h-stats > div,
