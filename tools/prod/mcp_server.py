@@ -367,6 +367,13 @@ def check_site(paths):
             verdict = f"~{rules} rules"
             if rules < 5 and len(ctext) > 10000:
                 verdict += f" !! BROKEN (big file, ~no rules); starts: {ctext[:100]!r}"
+            # A failed SCSS/rtlcss compile still serves a big file full of rules
+            # (Odoo's error fallback), so the rule count alone passed it.
+            err = re.search(r"(This error occurred while compiling the bundle|rtlcss: error|Internal Error: [^\\\n]{0,80})", ctext)
+            if err:
+                verdict += f" !! COMPILE ERROR: {err.group(0)[:120]}"
+            if "/web.assets_frontend" in cpath and "--eot-theme" not in ctext:
+                verdict += " !! theme CSS missing from bundle"
             out.append(f"  css {cstatus} {len(ctext) // 1024}KB {cpath[-70:]} | {verdict}")
     return True, "\n".join(out)
 

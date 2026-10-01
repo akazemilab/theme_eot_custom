@@ -235,6 +235,14 @@ Rules:
 36. **Self-hosted fonts:** static/src/fonts (OFL). 'EOT FD' = Vazirmatn Farsi
     digits limited to U+0030-0039, first in every stack, so core templates'
     Latin digits render Persian. 'EOT Nastaliq' = IranNastaliq for the hero.
+37. **A broken frontend bundle can still look "fine" by rule count.** When
+    SCSS or rtlcss fails, Odoo serves an error stylesheet that still has
+    thousands of rules (and no theme CSS). Two ways it bit us (2026-10-01):
+    `min(20rem, 74%)` is a Sass function in libsass ("Incompatible units"),
+    write `width: 20rem; max-width: 74%`; and quotes/parentheses/spaces
+    inside an inline SVG data URI broke rtlcss ("Unclosed string") - percent
+    -encode them (%27 %28 %29 %20). `check_site` now flags compile errors
+    and a frontend bundle without the theme marker.
 
 ## Verifying a design deploy
 1. `eot rehearse origin/<branch> eot_mNtest` -> `eot rehearse-log`
