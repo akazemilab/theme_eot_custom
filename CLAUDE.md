@@ -318,3 +318,12 @@ Rules:
   Run `eot placeholders` after every deploy.
 - Check the result yourself; don't ask the owner to test on their phone.
 - Milestone flow: mockup → approval → branch → deploy → verify → merge to main.
+
+38. **Every theme change to a view's markup needs a fresh stale-fa_IR drop.**
+    Odoo re-creates an `fa_IR` arch copy that merges the OLD markup with the
+    new (2026-10-02: homepage showed the hero title twice, old text spans plus
+    the new SVG ones). After changing structure of a theme view, add
+    `migrations/<new version>/end-migrate.py` (copy 20.0.9.5.2's) and bump the
+    manifest, or Persian visitors keep seeing the old markup. Check with
+    `sql_query`: `select jsonb_object_keys(arch_db) ...` / count occurrences
+    of the old class in `arch_db::text`.
