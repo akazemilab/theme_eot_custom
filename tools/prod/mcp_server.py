@@ -68,6 +68,8 @@ import urllib.error
 import urllib.request
 from html.parser import HTMLParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+import mcp_ts  # tools-VPS tools (ts, eot_vps, vps_*) over a forced-command ssh key - see mcp_ts.py
 from urllib.parse import quote, unquote, urljoin, urlparse
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -763,13 +765,21 @@ class Handler(BaseHTTPRequestHandler):
         elif method == "ping":
             self._send(200, {"jsonrpc": "2.0", "id": rid, "result": {}})
         elif method == "tools/list":
-            self._send(200, {"jsonrpc": "2.0", "id": rid, "result": {"tools": TOOLS}})
+            self._send(200, {"jsonrpc": "2.0", "id": rid, "result": {"tools": TOOLS + mcp_ts.TOOLS}})
         elif method == "tools/call":
             name = req.get("params", {}).get("name")
             args = req.get("params", {}).get("arguments", {}) or {}
-            if name not in {t["name"] for t in TOOLS}:
+            if name not in {t["name"] for t in TOOLS} | mcp_ts.NAMES:
                 self._send(200, {"jsonrpc": "2.0", "id": rid,
                                   "error": {"code": -32602, "message": f"unknown tool {name!r}"}})
+                return
+            if name in mcp_ts.NAMES:
+                try:
+                    ok, content = mcp_ts.call(name, args)
+                except Exception as e:
+                    log.exception("tool %s failed", name)
+                    ok, content = False, [{"type": "text", "text": f"internal error: {e}"}]
+                self._send(200, {"jsonrpc": "2.0", "id": rid, "result": {"content": content, "isError": not ok}})
                 return
             try:
                 ok, text = call_tool(name, args)

@@ -110,24 +110,25 @@ case "${1:-help}" in
                 # needed to reach it) and restart the service. Edit in this
                 # repo, not on prod: same "don't round-trip files" rule as
                 # the rest of the toolkit.
-    for f in mcp_server.py mcp_scss_check.sh mcp_rehearse.sh mcp_rehearse_stop.sh mcp_clone_user.sh clone_user.py; do
+    for f in mcp_server.py mcp_ts.py mcp_scss_check.sh mcp_rehearse.sh mcp_rehearse_stop.sh mcp_clone_user.sh clone_user.py; do
       cat "$PRODTOOLS/$f" | prod "cat > /opt/eot-mcp/.new-$f"
     done
     cat "$PRODTOOLS/eot-mcp.service" | prod "cat > /tmp/eot-mcp.service.new"
     prod 'set -e
-      python3 -m py_compile /opt/eot-mcp/.new-mcp_server.py /opt/eot-mcp/.new-clone_user.py
+      python3 -m py_compile /opt/eot-mcp/.new-mcp_server.py /opt/eot-mcp/.new-mcp_ts.py /opt/eot-mcp/.new-clone_user.py
       bash -n /opt/eot-mcp/.new-mcp_scss_check.sh /opt/eot-mcp/.new-mcp_rehearse.sh /opt/eot-mcp/.new-mcp_rehearse_stop.sh /opt/eot-mcp/.new-mcp_clone_user.sh
       cmp -s /tmp/eot-mcp.service.new /etc/systemd/system/eot-mcp.service || { mv /tmp/eot-mcp.service.new /etc/systemd/system/eot-mcp.service; systemctl daemon-reload; }
       rm -f /tmp/eot-mcp.service.new
       mv /opt/eot-mcp/.new-mcp_server.py       /opt/eot-mcp/mcp_server.py
+      mv /opt/eot-mcp/.new-mcp_ts.py           /opt/eot-mcp/mcp_ts.py
       mv /opt/eot-mcp/.new-mcp_scss_check.sh   /opt/eot-mcp/scss_check.sh
       mv /opt/eot-mcp/.new-mcp_rehearse.sh     /opt/eot-mcp/rehearse.sh
       mv /opt/eot-mcp/.new-mcp_rehearse_stop.sh /opt/eot-mcp/rehearse_stop.sh
       mv /opt/eot-mcp/.new-mcp_clone_user.sh   /opt/eot-mcp/clone_user.sh
       mv /opt/eot-mcp/.new-clone_user.py       /opt/eot-mcp/clone_user.py
-      chown eotmcp:eotmcp /opt/eot-mcp/mcp_server.py
+      chown eotmcp:eotmcp /opt/eot-mcp/mcp_server.py /opt/eot-mcp/mcp_ts.py
       chown root:root /opt/eot-mcp/scss_check.sh /opt/eot-mcp/rehearse.sh /opt/eot-mcp/rehearse_stop.sh /opt/eot-mcp/clone_user.sh /opt/eot-mcp/clone_user.py
-      chmod 700 /opt/eot-mcp/mcp_server.py /opt/eot-mcp/scss_check.sh /opt/eot-mcp/rehearse.sh /opt/eot-mcp/rehearse_stop.sh /opt/eot-mcp/clone_user.sh
+      chmod 700 /opt/eot-mcp/mcp_server.py /opt/eot-mcp/mcp_ts.py /opt/eot-mcp/scss_check.sh /opt/eot-mcp/rehearse.sh /opt/eot-mcp/rehearse_stop.sh /opt/eot-mcp/clone_user.sh
       chmod 600 /opt/eot-mcp/clone_user.py
       rm -rf /opt/eot-mcp/__pycache__
       lines=(
