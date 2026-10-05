@@ -23,7 +23,7 @@ TOOLS = [
     {'name': 'ts', 'description': (
         'Run the Talent Search `ts` toolkit on the tools VPS (no device needed). args = the words after `ts`, e.g. '
         '["slots"], ["check"], ["rehearse","eot_ts90","","ts_panel"], ["wait","reh_eot_ts90"], ["keep","eot_ts91","ts_panel"] '
-        '(slot 1), ["test","eot_ts91","ts_http_pv3.py"], ["db","errors","eot_ts91"], ["dump","check"], ["shots","eot_ts91"], '
+        '(slot 1), ["test","eot_ts91","tests_x.py"] (short suites) or ["testjob","eot_ts91","ts_http_pv3.py"] then ["wait","test_eot_ts91"], ["db","errors","eot_ts91"], ["dump","check"], ["shots","eot_ts91"], '
         '["push","msg"], ["ship","INS","UPG","LABEL"] (confirm=true), ["live"]. Not exposed: bg, domain, guard. '
         'Each call must end within ~55 s: long work runs as a job and is followed with ["wait",NAME] (blocks <= 40 s). '
         'Returns the command output (verdict lines).'),

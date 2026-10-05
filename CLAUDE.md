@@ -26,6 +26,16 @@ any rehearsal `setsid nohup`'d from inside it (setsid escapes the session,
 not the cgroup) - don't `eot mcp-update` while a rehearsal from the gateway
 is still serving.
 
+Since 2026-10-05 the gateway also reaches the tools VPS without any device:
+`eot_vps` (the `eot` toolkit below, allow-listed), `ts` (Talent Search),
+`vps_read`/`vps_write`/`vps_patch`/`vps_git` (repos on the VPS, incl.
+/root/eot-tools/repo), `vps_image` (screenshots), `vps_inspect` (read-only
+diagnostics). Source: tools/prod/mcp_ts.py here; the VPS side is
+talentsearch_odoo/tools/gw/ts_gw.py behind a forced-command ssh key (prod's
+eotmcp -> root@VPS, command="/usr/local/bin/ts-gw", from=prod). No raw shell.
+A new gateway tool only appears in claude.ai after the owner reconnects the
+connector (its tool list is cached).
+
 Everything below (the VPS `eot` toolkit) still exists for whatever the
 gateway doesn't cover - raw shell, git history greps, backups - and for
 using a linked device's browser pane. Claude reaches the VPS (95.38.234.86)
