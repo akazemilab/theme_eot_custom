@@ -13,6 +13,7 @@
   shown on the site (contact page, homepage, founder page).
 """
 import re
+from datetime import datetime
 from urllib.parse import quote, unquote
 
 from werkzeug.exceptions import NotFound
@@ -23,6 +24,10 @@ from odoo.http import request
 
 from .library import WEBSITE_ID
 from .fa_text import fa_fold_letters, fa_match_key, fa_slug_text  # noqa: F401 (re-exported)
+
+# Records created before this day are the 2026-09-25 import: their dates are not
+# real publication dates. Newer records are real articles and keep their dates.
+IMPORT_CUTOFF = datetime(2026, 9, 26)
 
 FOUNDER = 'دکتر ناصرالدّین کاظمی حقیقی'
 
@@ -76,8 +81,9 @@ class BlogPostSeo(models.Model):
                 res['default_meta_description'] = self.eot_excerpt
                 og['og:description'] = self.eot_excerpt
             # Import timestamps, not real publication dates: don't claim them.
-            og.pop('article:published_time', None)
-            og.pop('article:modified_time', None)
+            if self.create_date and self.create_date < IMPORT_CUTOFF:
+                og.pop('article:published_time', None)
+                og.pop('article:modified_time', None)
         return res
 
 

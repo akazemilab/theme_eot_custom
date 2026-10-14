@@ -3,8 +3,8 @@
 Every value comes from what the page itself shows: titles, the byline
 (book authors / the founder for articles and glossary entries), the
 visible breadcrumb trail, English equivalents on glossary entries and the
-visible description.  Publication dates are left out on purpose: the
-records' dates are import timestamps, not real publication dates.
+visible description.  Publication dates are left out for the 2026-09-25 import
+(import timestamps, not real dates) and emitted for newer articles.
 """
 import json
 
@@ -12,7 +12,7 @@ from markupsafe import Markup
 
 from odoo.http import request
 
-from ..models.seo import FOUNDER, FOUNDER_URL, is_founder, share_image_url
+from ..models.seo import FOUNDER, FOUNDER_URL, IMPORT_CUTOFF, is_founder, share_image_url
 
 
 def _base():
@@ -117,6 +117,9 @@ def article(post):
         vals['articleSection'] = post.eot_topic
     if post.eot_words:
         vals['wordCount'] = post.eot_words
+    if post.create_date and post.create_date >= IMPORT_CUTOFF:
+        vals['datePublished'] = (post.published_date or post.create_date).isoformat() + 'Z'
+        vals['dateModified'] = (post.write_date or post.create_date).isoformat() + 'Z'
     return vals
 
 
