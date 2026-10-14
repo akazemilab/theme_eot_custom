@@ -60,7 +60,7 @@
                         <aside class="eot-side-stack">
                             <h2 class="eot-kicker" style="font-family: inherit;">مطالعه آثار و منابع</h2>
                             <a href="/کتب" class="eot-card eot-count-link"><b>۲۰</b><span><strong>کتاب‌ها</strong><small>کتاب و اثر بلند</small></span></a>
-                            <a href="/مقالات" class="eot-card eot-count-link"><b>۱۴۲</b><span><strong>مقالات</strong><small>مقاله منتشرشده</small></span></a>
+                            <a href="/مقالات" class="eot-card eot-count-link"><b t-out="request.env['blog.post'].eot_article_count()"/><span><strong>مقالات</strong><small>مقاله منتشرشده</small></span></a>
                             <a href="/فرهنگنامه" class="eot-card eot-count-link"><b><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#005C65" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></b><span><strong>فرهنگنامه</strong><small>روان‌شناسی تعاملی</small></span></a>
                             <div class="eot-link-list"><a href="/about" style="background: #F2F8F8;">درباره هیجان اندیشه<span>←</span></a></div>
                         </aside>

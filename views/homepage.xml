@@ -54,7 +54,7 @@
                             </div>
                             <dl class="eot-h-stats">
                                 <div><dt>۲۰</dt><dd>کتاب و اثر بلند</dd></div>
-                                <div><dt>۱۴۲</dt><dd>مقاله منتشرشده</dd></div>
+                                <div><dt t-out="request.env['blog.post'].eot_article_count()"/><dd>مقاله منتشرشده</dd></div>
                                 <div><dt>۴ دهه</dt><dd>تجربه علمی و حرفه‌ای</dd></div>
                             </dl>
                         </div>
@@ -204,40 +204,17 @@
                     <div class="container">
                         <div class="eot-h-head">
                             <span class="eot-tag"><span class="eot-pdot eot-c-orange"/>مقالات دکتر کاظمی حقیقی</span>
-                            <h2 class="eot-h2">۱۴۲ مقاله منتشرشده</h2>
+                            <h2 class="eot-h2"><t t-out="request.env['blog.post'].eot_article_count()"/> مقاله منتشرشده</h2>
                             <a href="/مقالات" class="btn btn-primary">مشاهده همه مقالات</a>
                         </div>
                         <div class="eot-h-alist">
-                            <a class="eot-h-art" href="/مقالات/هوش-موفق-1983">
-                                <span class="eot-idx">۰۱</span>
-                                <span class="eot-h-art-t">هوش موفق</span>
-                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
-                            </a>
-                            <a class="eot-h-art" href="/مقالات/نظریه-هیجان-اندیشه-1974">
-                                <span class="eot-idx">۰۲</span>
-                                <span class="eot-h-art-t">نظریه هیجان اندیشه</span>
-                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
-                            </a>
-                            <a class="eot-h-art" href="/مقالات/مفهوم-روانشناسی-تعاملی-و-گستره-آن-1964">
-                                <span class="eot-idx">۰۳</span>
-                                <span class="eot-h-art-t">مفهوم روان‌شناسی تعاملی و گستره آن</span>
-                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
-                            </a>
-                            <a class="eot-h-art" href="/مقالات/نقش-خانواده-در-پیشرفت-تحصیلی-تیزهوشان-1976">
-                                <span class="eot-idx">۰۴</span>
-                                <span class="eot-h-art-t">نقش خانواده در پیشرفت تحصیلی تیزهوشان</span>
-                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
-                            </a>
-                            <a class="eot-h-art" href="/مقالات/هوش-و-خلاقیت-در-گستره-تیزهوشی-1984">
-                                <span class="eot-idx">۰۵</span>
-                                <span class="eot-h-art-t">هوش و خلّاقیّت در گستره تیزهوشی</span>
-                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
-                            </a>
-                            <a class="eot-h-art" href="/مقالات/مبانی-نظری-نخبگی-1958">
-                                <span class="eot-idx">۰۶</span>
-                                <span class="eot-h-art-t">مبانی نظری نخبگی</span>
-                                <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
-                            </a>
+                            <t t-foreach="request.env['blog.post'].eot_latest_articles(6)" t-as="a">
+                                <a class="eot-h-art" t-att-href="a['url']">
+                                    <span class="eot-idx" t-out="a['idx']"/>
+                                    <span class="eot-h-art-t" t-out="a['title']"/>
+                                    <span class="eot-h-art-go"><svg class="eot-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span>
+                                </a>
+                            </t>
                         </div>
                     </div>
                 </section>

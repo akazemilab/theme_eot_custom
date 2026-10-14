@@ -309,6 +309,24 @@ class BlogPost(models.Model):
             return '/کتب/%s/%s' % (blog.eot_slug, slug)
         return '/blog/%s/%s' % (self.env['ir.http']._slug(blog), self.env['ir.http']._slug(self))
 
+    @api.model
+    def eot_article_count(self):
+        """Published articles on the library site, as Persian digits (never hard-code it in views)."""
+        n = self.sudo().search_count([('blog_id.eot_kind', '=', 'articles'),
+                                      ('blog_id.website_id', '=', WEBSITE_ID),
+                                      ('is_published', '=', True)])
+        return str(n).translate(str.maketrans('0123456789', '\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9'))
+
+    @api.model
+    def eot_latest_articles(self, limit=6):
+        """Newest published articles for the home page: [{'idx', 'title', 'url'}]."""
+        posts = self.sudo().with_context(lang='fa_IR').search(
+            [('blog_id.eot_kind', '=', 'articles'), ('blog_id.website_id', '=', WEBSITE_ID),
+             ('is_published', '=', True)], order='published_date desc, id desc', limit=limit)
+        fa = str.maketrans('0123456789', '\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9')
+        return [{'idx': ('%02d' % i).translate(fa), 'title': p.eot_title or p.name, 'url': p.eot_url()}
+                for i, p in enumerate(posts, 1)]
+
     # ------------------------------------------------------------------
     @api.model
     def _eot_sync_posts(self, blogs):
