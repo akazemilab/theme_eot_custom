@@ -63,6 +63,7 @@ import logging
 import os
 import re
 import subprocess
+import time
 import sys
 import urllib.error
 import urllib.request
@@ -226,7 +227,7 @@ TOOLS = [
         "description": (
             "Rehearse a branch/commit on a disposable clone of eot_main: restore the latest backup into DB, "
             "upgrade theme_eot_custom from that ref, and serve it on :8070. NEVER touches the live database. "
-            "Takes 15-40s; call rehearse_stop when done. DB must start with 'eot_' and never be eot_main."
+            "Runs detached (often 1-3 min): if the reply says still running, call again with the same ref and db to poll. Call rehearse_stop when done. DB must start with 'eot_' and never be eot_main."
         ),
         "inputSchema": {
             "type": "object",
@@ -606,6 +607,57 @@ def audit_pages(paths, widths, base, login=None, password=None):
     return True, "\n".join(out)
 
 
+REHEARSE_STATE = "/tmp/eot-mcp-rehearse"
+
+
+def rehearse_detached(ref, db):
+    """Start (or poll) a rehearsal. Same ref+db again = status/result of that run."""
+    os.makedirs(REHEARSE_STATE, exist_ok=True)
+    logf, pidf = f"{REHEARSE_STATE}/{db}.log", f"{REHEARSE_STATE}/{db}.pid"
+
+    def alive():
+        try:
+            pid, r = open(pidf).read().split(" ", 1)
+            try:
+                os.waitpid(int(pid), os.WNOHANG)  # reap our own finished child
+            except ChildProcessError:
+                pass
+            os.kill(int(pid), 0)
+            return r.strip()
+        except Exception:
+            return None
+
+    def tail():
+        try:
+            return open(logf, encoding="utf-8", errors="replace").read()[-6000:]
+        except OSError:
+            return ""
+
+    running = alive()
+    if running is None and os.path.exists(pidf):
+        done_ref = open(pidf).read().split(" ", 1)[1].strip()
+        if done_ref == ref:
+            os.remove(pidf)
+            text = tail()
+            return "EXIT=0" in text, "finished:\n" + text
+    if running is not None:
+        if running != ref:
+            return False, f"a rehearsal of {running!r} is still running on {db}; wait or use another db"
+    else:
+        with open(logf, "w") as lf:
+            p = subprocess.Popen(
+                ["sh", "-c", 'sudo -n "$0" "$1" "$2"; echo "EXIT=$?"', REHEARSE_SCRIPT, ref, db],
+                stdout=lf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
+        with open(pidf, "w") as f:
+            f.write(f"{p.pid} {ref}")
+    for _ in range(40):  # wait up to ~80s inside this request
+        if alive() is None:
+            return rehearse_detached(ref, db)
+        time.sleep(2)
+    return True, ("still running - call rehearse again with the same ref and db to get the result.\n"
+                  + tail()[-1500:])
+
+
 def call_tool(name, args):
     if name == "deploy_theme":
         ref = args.get("ref", "")
@@ -677,8 +729,7 @@ def call_tool(name, args):
             return False, f"invalid ref: {ref!r}"
         if not _valid_db(db):
             return False, f"invalid db {db!r}: must start with 'eot_', never 'eot_main', alnum/underscore only"
-        rc, out, err = run(["sudo", "-n", REHEARSE_SCRIPT, ref, db], timeout=180)
-        return rc == 0, (out + ("\n" + err if err else "")).strip()[-6000:]
+        return rehearse_detached(ref, db)
 
     if name == "rehearse_stop":
         db = args.get("db", "")
@@ -772,6 +823,15 @@ class Handler(BaseHTTPRequestHandler):
             if name not in {t["name"] for t in TOOLS} | mcp_ts.NAMES:
                 self._send(200, {"jsonrpc": "2.0", "id": rid,
                                   "error": {"code": -32602, "message": f"unknown tool {name!r}"}})
+                return
+            schema = next((t.get("inputSchema") or {} for t in TOOLS + mcp_ts.TOOLS if t["name"] == name), {})
+            allowed = set((schema.get("properties") or {}).keys())
+            unknown = sorted(set(args) - allowed)
+            if unknown:
+                self._send(200, {"jsonrpc": "2.0", "id": rid, "result": {
+                    "content": [{"type": "text", "text": f"refused: {name} has no argument(s) {unknown}; "
+                                 f"allowed: {sorted(allowed) or 'none'}. Nothing was run."}],
+                    "isError": True}})
                 return
             if name in mcp_ts.NAMES:
                 try:
