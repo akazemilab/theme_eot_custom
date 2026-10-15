@@ -12,6 +12,11 @@ Odoo 20 theme for eot.ir (website_id 1, db eot_main, server eot-odoo-prod
   no theme view exists outside website 1.
 
 ## Reach for the gateway first - it needs no linked device
+Gateway rules (2026-10-15): undeclared tool arguments are refused (there is no
+dry run on `deploy_theme`); `rehearse` is detached - call again with the same
+ref/db to poll, use `origin/<branch>` refs; requests die at 60s at the proxy.
+Article work: docs/article_routine.md + tools/articles/eot_article_prep.py.
+
 `https://eot.innerquest.me/mcp` (source: `tools/prod/mcp_server.py`, a
 systemd service on eot-odoo-prod itself, `eot mcp-update` deploys it) covers
 day-to-day verification with NO device link at all: `deploy_theme`,
