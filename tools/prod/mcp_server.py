@@ -650,7 +650,7 @@ def rehearse_detached(ref, db):
                 stdout=lf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
         with open(pidf, "w") as f:
             f.write(f"{p.pid} {ref}")
-    for _ in range(40):  # wait up to ~80s inside this request
+    for _ in range(20):  # wait up to ~40s: the proxy in front cuts requests at 60s
         if alive() is None:
             return rehearse_detached(ref, db)
         time.sleep(2)
